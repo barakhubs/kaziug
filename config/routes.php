@@ -15,6 +15,7 @@ use App\Controllers\Admin\SocialProfilesController;
 use App\Controllers\Admin\SubscribersController;
 use App\Controllers\Public\SubscriptionController;
 use App\Controllers\Public\CategoryController;
+use App\Controllers\Public\ContactController;
 use App\Controllers\Public\HealthController;
 use App\Controllers\Public\JobListController;
 use App\Controllers\Public\JobShowController;
@@ -36,6 +37,11 @@ return static function (Router $r): void {
         $r->get('/jobs/{slug:[a-z0-9-]+}', [JobShowController::class, 'show']);
         $r->get('/categories/{slug:[a-z0-9-]+}', [CategoryController::class, 'show']);
         $r->get('/saved', [SavedJobsController::class, 'index']);
+
+        $r->get('/contact', [ContactController::class, 'showContact']);
+        $r->post('/contact', [ContactController::class, 'sendContact']);
+        $r->get('/cv-help', [ContactController::class, 'showCvHelp']);
+        $r->post('/cv-help', [ContactController::class, 'sendCvHelp']);
 
         $r->post('/subscribe', [SubscriptionController::class, 'subscribe']);
         $r->get('/subscribe/confirm/{token:[A-Za-z0-9_-]+}', [SubscriptionController::class, 'showConfirm']);

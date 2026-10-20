@@ -40,6 +40,14 @@ $err = static fn (string $key): string => isset($errors[$key]) ? 'has-error' : '
       <textarea name="footer_text" rows="2" maxlength="500"><?= e($v('footer_text')) ?></textarea>
       <?= $this->insert('partials/field_error', ['field' => 'footer_text']) ?>
     </label>
+    <label class="<?= $err('whatsapp_number') ?>">WhatsApp number <span class="hint">(shown on the Contact and CV help pages; include the country code)</span>
+      <input type="tel" name="whatsapp_number" value="<?= e($v('whatsapp_number') !== '' && ctype_digit((string) $v('whatsapp_number')) ? '+' . $v('whatsapp_number') : $v('whatsapp_number')) ?>" placeholder="+256 772 123456">
+      <?= $this->insert('partials/field_error', ['field' => 'whatsapp_number']) ?>
+    </label>
+    <label class="<?= $err('cv_service_price') ?>">CV service price (UGX)
+      <input name="cv_service_price" inputmode="numeric" value="<?= e($v('cv_service_price')) ?>" class="short">
+      <?= $this->insert('partials/field_error', ['field' => 'cv_service_price']) ?>
+    </label>
     <label class="full <?= $err('meta_description') ?>">Default meta description <span class="hint">(for search engines; up to 300 characters)</span>
       <textarea name="meta_description" rows="2" maxlength="300"><?= e($v('meta_description')) ?></textarea>
       <?= $this->insert('partials/field_error', ['field' => 'meta_description']) ?>

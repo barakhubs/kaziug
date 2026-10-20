@@ -62,6 +62,8 @@ use App\Services\Contracts\NewsletterServiceInterface;
 use App\Services\NewsletterService;
 use App\Services\Contracts\DashboardServiceInterface;
 use App\Services\DashboardService;
+use App\Services\ContactService;
+use App\Services\Contracts\ContactServiceInterface;
 use App\Services\Contracts\JobSearchServiceInterface;
 use App\Services\Contracts\SettingsReaderInterface;
 use App\Services\JobSearchService;
@@ -172,4 +174,5 @@ return static function (Container $c, Config $config): void {
     $c->bind(SubscriberAdminServiceInterface::class, SubscriberAdminService::class);
     $c->bind(NewsletterServiceInterface::class, NewsletterService::class);
     $c->bind(DashboardServiceInterface::class, DashboardService::class);
+    $c->bind(ContactServiceInterface::class, ContactService::class);
 };

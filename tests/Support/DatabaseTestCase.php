@@ -56,7 +56,9 @@ abstract class DatabaseTestCase extends TestCase
         $list = implode(', ', array_map(static fn (array $t): string => '"' . $t['tablename'] . '"', $tables));
         $this->db->unprepared("TRUNCATE {$list} RESTART IDENTITY CASCADE");
 
-        // Restore default settings rows; the migration's INSERT is idempotent.
-        $this->db->unprepared((string) file_get_contents($config->string('paths.migrations') . '/0011_settings.sql'));
+        // Restore default settings rows; the migrations' INSERTs are idempotent.
+        foreach (['0011_settings.sql', '0016_contact_settings.sql'] as $file) {
+            $this->db->unprepared((string) file_get_contents($config->string('paths.migrations') . '/' . $file));
+        }
     }
 }

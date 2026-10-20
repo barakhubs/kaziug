@@ -38,8 +38,9 @@ final class PhpMailerTransport implements MailerInterface
             }
 
             $mail->setFrom($this->config->fromEmail, $this->config->fromName, false);
-            if ($this->config->replyTo !== '') {
-                $mail->addReplyTo($this->config->replyTo);
+            $replyTo = $message->replyTo ?? $this->config->replyTo;
+            if ($replyTo !== '') {
+                $mail->addReplyTo($replyTo);
             }
             $mail->addAddress($message->toEmail, $message->toName ?? '');
             foreach ($message->headers as $name => $value) {

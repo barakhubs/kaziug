@@ -27,12 +27,20 @@ final class SiteSettingsValidator
             'jobs_per_page' => 'required|integer:1,100',
             'meta_description' => 'max:300',
             'maintenance_mode' => 'boolean',
+            'whatsapp_number' => 'max:30',
+            'cv_service_price' => 'integer:0,100000000',
         ]);
-        if ($result->fails()) {
-            return [[], $result->errors];
-        }
-
+        $errors = $result->errors;
         $data = $result->data;
+
+        // WhatsApp links need the full international number: country code first, no leading 0.
+        $whatsapp = preg_replace('/[\s\-().]/', '', (string) ($data['whatsapp_number'] ?? '')) ?? '';
+        if ($whatsapp !== '' && !isset($errors['whatsapp_number']) && preg_match('/^\+?[1-9]\d{7,14}$/', $whatsapp) !== 1) {
+            $errors['whatsapp_number'] = 'Use the international format with the country code, e.g. +256 772 123456.';
+        }
+        if ($errors !== []) {
+            return [[], $errors];
+        }
 
         return [[
             'site_name' => (string) $data['site_name'],
@@ -43,6 +51,8 @@ final class SiteSettingsValidator
             'jobs_per_page' => (int) IntegerRule::toInt($data['jobs_per_page']),
             'meta_description' => (string) ($data['meta_description'] ?? ''),
             'maintenance_mode' => (bool) $data['maintenance_mode'],
+            'whatsapp_number' => ltrim($whatsapp, '+'),
+            'cv_service_price' => $data['cv_service_price'] === null ? 100000 : (int) IntegerRule::toInt($data['cv_service_price']),
         ], []];
     }
 }

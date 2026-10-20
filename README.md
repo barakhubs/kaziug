@@ -5,12 +5,14 @@ No web framework: a small front controller, router, DI container and middleware 
 server-rendered PHP templates and a little vanilla JavaScript for progressive enhancement.
 
 **Public site:** job search (PostgreSQL full-text) with filters, sorting and pagination in the URL,
-job pages with JSON-LD `JobPosting`, category pages, saved jobs (in the browser), and a
-double-opt-in newsletter.
+job pages with JSON-LD `JobPosting` and "how to apply" details, category pages, saved jobs (in the
+browser), a double-opt-in newsletter, a Contact page and a paid CV help page (form + WhatsApp).
 
-**Back office (`/admin`):** dashboard, jobs (status workflow, history, bulk actions), categories,
-social profiles, newsletters (preview, test, send now or schedule, delivery tracking), subscribers
-(CSV import/export), SMTP settings, site settings (logo, maintenance mode), account and audit log.
+**Back office (`/admin`):** dashboard, jobs (status workflow, history, bulk actions, details page),
+categories, newsletters (preview, test, send now or schedule, delivery tracking), subscribers (CSV
+import/export), Settings with tabs (General: site details, logo, WhatsApp number, CV price,
+maintenance mode · Social profiles · Email/SMTP), account and audit log. Lists are sortable,
+searchable and paginated with a rows-per-page choice.
 
 ---
 
@@ -251,12 +253,14 @@ for `/admin`) → controller → service → repository.
 
 ### Routes
 
-Public: `GET /`, `GET /jobs/{slug}`, `GET /categories/{slug}`, `GET /saved`, `POST /subscribe`,
+Public: `GET /`, `GET /jobs/{slug}`, `GET /categories/{slug}`, `GET /saved`, `GET|POST /contact`,
+`GET|POST /cv-help`, `POST /subscribe`,
 `GET|POST /subscribe/confirm/{token}`, `GET|POST /unsubscribe/{token}`, `GET /media/logo`, `GET /health`.
 
 Admin (all behind auth except login): `/admin/login`, `/admin/logout`, `/admin` (dashboard),
-`/admin/jobs…`, `/admin/categories…`, `/admin/social…`, `/admin/newsletters…`,
-`/admin/subscribers…`, `/admin/settings`, `/admin/settings/smtp…`, `/admin/account…`,
+`/admin/jobs…` (list, `/{id}` details, `/{id}/edit`), `/admin/categories…`, `/admin/newsletters…`,
+`/admin/subscribers…`, `/admin/settings` (General), `/admin/settings/social…`,
+`/admin/settings/smtp…`, `/admin/account…`,
 `/admin/audit`. The full list is `config/routes.php`.
 
 ---
@@ -339,7 +343,9 @@ Admin (all behind auth except login): `/admin/login`, `/admin/logout`, `/admin` 
 | Inactive categories | Hidden from filters and their page returns 404; their published jobs stay listed. |
 | Job status flow | draft → published → closed → archived, plus *unpublish* (published → draft) and *reopen* (closed → published). Archived is final. Every change is recorded in `job_status_history`. `published_at` is set on the first publish and kept on re-publish. |
 | Public visibility | Only `published`, not deleted, and not past `expires_at`. Defined once in `PgJobRepository::VISIBLE`. |
-| Applying | Jobs have optional `apply_url` / `apply_email`; without either the page says to contact the company. |
+| Applying | Every job needs application details: a link (application page / more info), an email, or both. Jobs created before this rule (e.g. the seeded ones) ask for them on their next edit. |
+| Contact and CV help forms | Messages are **emailed** to the contact email from Settings (Reply-To = the visitor) and **not stored**. No CV upload: visitors send their CV afterwards by email or WhatsApp. Same spam protection as the subscribe form (CSRF, honeypot, fill time, 5 per hour per IP). If the contact email or SMTP isn't set, the form is hidden and WhatsApp is offered. |
+| WhatsApp | Number entered in international format under Settings → General; links use `https://wa.me/<digits>` with a pre-filled message. The CV price (default UGX 100,000) is set there too. |
 | Saved jobs | Stay in `localStorage` (same key as the prototype); `/saved?ids=` renders whichever are still visible. |
 | Subscriber CSV import | Imported rows become **active** only after the admin confirms that everyone in the file already consented (the import is audited). |
 | Confirmation emails | Sent synchronously when someone subscribes (they're one-off and transactional, not newsletters); on SMTP failure the subscriber stays pending and can submit again. |

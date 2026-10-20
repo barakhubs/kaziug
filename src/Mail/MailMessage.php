@@ -14,6 +14,8 @@ final class MailMessage
         public readonly string $text,
         public readonly ?string $toName = null,
         public readonly array $headers = [],
+        /** Overrides the SMTP settings' reply-to, e.g. a visitor's address on contact-form mail. */
+        public readonly ?string $replyTo = null,
     ) {
     }
 }

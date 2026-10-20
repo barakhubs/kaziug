@@ -41,6 +41,12 @@ final class ThrottlePolicy
         return new self(20, 3600, 60, 3600);
     }
 
+    /** Contact and CV-help forms, per IP: 5 messages per hour, then 15 min and up. */
+    public static function contactPerIp(): self
+    {
+        return new self(5, 3600, 900, 86400);
+    }
+
     /** Newsletter subscribe form, per IP: 5 submissions per hour, then 15 min and up. */
     public static function subscribePerIp(): self
     {

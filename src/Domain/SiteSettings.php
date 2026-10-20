@@ -15,6 +15,8 @@ final class SiteSettings
         'jobs_per_page' => 8,
         'meta_description' => 'Find jobs in Uganda.',
         'maintenance_mode' => false,
+        'whatsapp_number' => '',
+        'cv_service_price' => 100000,
     ];
 
     public function __construct(
@@ -27,6 +29,8 @@ final class SiteSettings
         public readonly string $metaDescription,
         public readonly bool $maintenanceMode,
         public readonly ?string $logoVersion,
+        public readonly string $whatsappNumber = '',
+        public readonly int $cvServicePrice = 100000,
     ) {
     }
 
@@ -45,12 +49,43 @@ final class SiteSettings
             (string) $v['meta_description'],
             (bool) $v['maintenance_mode'],
             $logoVersion,
+            preg_replace('/\D/', '', (string) $v['whatsapp_number']) ?? '',
+            max(0, (int) $v['cv_service_price']),
         );
     }
 
     public function hasLogo(): bool
     {
         return $this->logoVersion !== null;
+    }
+
+    public function hasWhatsapp(): bool
+    {
+        return $this->whatsappNumber !== '';
+    }
+
+    /** wa.me click-to-chat link, optionally with a pre-filled message; null when no number is set. */
+    public function whatsappLink(string $message = ''): ?string
+    {
+        if (!$this->hasWhatsapp()) {
+            return null;
+        }
+
+        return 'https://wa.me/' . $this->whatsappNumber . ($message !== '' ? '?text=' . rawurlencode($message) : '');
+    }
+
+    /** "+256 772 123456" style display of the stored digits. */
+    public function whatsappDisplay(): string
+    {
+        $d = $this->whatsappNumber;
+        if ($d === '') {
+            return '';
+        }
+        if (str_starts_with($d, '256') && strlen($d) === 12) {
+            return '+256 ' . substr($d, 3, 3) . ' ' . substr($d, 6);
+        }
+
+        return '+' . $d;
     }
 
     /** @return array<string, mixed> */
@@ -65,6 +100,8 @@ final class SiteSettings
             'jobs_per_page' => $this->jobsPerPage,
             'meta_description' => $this->metaDescription,
             'maintenance_mode' => $this->maintenanceMode,
+            'whatsapp_number' => $this->whatsappNumber,
+            'cv_service_price' => $this->cvServicePrice,
         ];
     }
 }
