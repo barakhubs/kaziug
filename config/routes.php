@@ -7,7 +7,11 @@ use App\Controllers\Admin\AuthController;
 use App\Controllers\Admin\CategoriesController;
 use App\Controllers\Admin\JobsController;
 use App\Controllers\Admin\DashboardController;
+use App\Controllers\Public\CategoryController;
 use App\Controllers\Public\HealthController;
+use App\Controllers\Public\JobListController;
+use App\Controllers\Public\JobShowController;
+use App\Controllers\Public\SavedJobsController;
 use App\Core\Http\Router;
 use App\Middleware\Authenticate;
 use App\Middleware\IdleTimeout;
@@ -18,6 +22,10 @@ use App\Middleware\IdleTimeout;
  */
 return static function (Router $r): void {
     // --- Public -------------------------------------------------------------------------
+    $r->get('/', [JobListController::class, 'index']);
+    $r->get('/jobs/{slug:[a-z0-9-]+}', [JobShowController::class, 'show']);
+    $r->get('/categories/{slug:[a-z0-9-]+}', [CategoryController::class, 'show']);
+    $r->get('/saved', [SavedJobsController::class, 'index']);
     $r->get('/health', [HealthController::class, 'show']);
 
     // --- Admin: sign-in (no auth) --------------------------------------------------------

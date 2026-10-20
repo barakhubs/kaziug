@@ -25,7 +25,14 @@ use App\Middleware\VerifyCsrfToken;
 use App\Repositories\Contracts\AdminUserRepositoryInterface;
 use App\Repositories\Contracts\AuditLogRepositoryInterface;
 use App\Repositories\Contracts\CategoryRepositoryInterface;
+use App\Repositories\Contracts\JobReadRepositoryInterface;
 use App\Repositories\Contracts\JobWriteRepositoryInterface;
+use App\Repositories\Contracts\SettingsRepositoryInterface;
+use App\Repositories\PgSettingsRepository;
+use App\Services\Contracts\JobSearchServiceInterface;
+use App\Services\Contracts\SettingsReaderInterface;
+use App\Services\JobSearchService;
+use App\Services\SettingsReader;
 use App\Repositories\Contracts\ThrottleRepositoryInterface;
 use App\Repositories\Contracts\TransactionManagerInterface;
 use App\Repositories\PgAdminUserRepository;
@@ -98,6 +105,8 @@ return static function (Container $c, Config $config): void {
     $c->bind(TransactionManagerInterface::class, PgTransactionManager::class);
     $c->bind(CategoryRepositoryInterface::class, PgCategoryRepository::class);
     $c->bind(JobWriteRepositoryInterface::class, PgJobRepository::class);
+    $c->bind(JobReadRepositoryInterface::class, PgJobRepository::class);
+    $c->bind(SettingsRepositoryInterface::class, PgSettingsRepository::class);
 
     // --- Services -----------------------------------------------------------------------
     $c->bind(HealthCheckInterface::class, DatabaseHealthCheck::class);
@@ -108,4 +117,6 @@ return static function (Container $c, Config $config): void {
     $c->bind(AdminAccountServiceInterface::class, AdminAccountService::class);
     $c->bind(CategoryServiceInterface::class, CategoryService::class);
     $c->bind(JobServiceInterface::class, JobService::class);
+    $c->bind(JobSearchServiceInterface::class, JobSearchService::class);
+    $c->bind(SettingsReaderInterface::class, SettingsReader::class);
 };

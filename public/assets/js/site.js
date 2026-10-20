@@ -1,0 +1,131 @@
+/*
+ * Public-site progressive enhancement. Every page works without it; this adds:
+ *  - saved jobs in localStorage (same key as the original prototype),
+ *  - filters that apply as soon as they change,
+ *  - the desktop detail pane (cards open in the pane instead of the full page),
+ *  - small form helpers (subscribe form timing).
+ */
+(() => {
+  'use strict';
+
+  const SAVED_KEY = 'kazi-saved-jobs';
+  const WIDE = window.matchMedia('(min-width: 1101px)');
+
+  /* ---------- Saved jobs ---------- */
+  function loadSaved() {
+    try {
+      const list = JSON.parse(localStorage.getItem(SAVED_KEY)) || [];
+      // Only numeric ids are server jobs; older prototype ids ("j01") are dropped.
+      return new Set(list.map(String).filter((id) => /^\d+$/.test(id)));
+    } catch { return new Set(); }
+  }
+  let saved = loadSaved();
+  function persist() {
+    try { localStorage.setItem(SAVED_KEY, JSON.stringify([...saved])); } catch { /* storage blocked */ }
+  }
+
+  function savedUrl() {
+    return saved.size ? `/saved?ids=${[...saved].join(',')}` : '/saved';
+  }
+
+  function renderSaved() {
+    const count = document.getElementById('savedCount');
+    if (count) count.textContent = String(saved.size);
+    const link = document.getElementById('savedLink');
+    if (link) {
+      link.href = savedUrl();
+      link.classList.toggle('active', location.pathname === '/saved');
+    }
+    document.querySelectorAll('[data-save]').forEach((button) => {
+      const on = saved.has(button.dataset.save);
+      button.hidden = false;
+      button.setAttribute('aria-pressed', String(on));
+      if (button.classList.contains('save')) {
+        button.classList.toggle('on', on);
+        button.textContent = on ? '★' : '☆';
+        const title = button.closest('.card')?.querySelector('.title')?.textContent?.trim() || 'job';
+        button.setAttribute('aria-label', `${on ? 'Unsave' : 'Save'} ${title}`);
+      } else {
+        button.textContent = on ? '★ Saved' : '☆ Save job';
+      }
+    });
+  }
+
+  function toggleSave(id) {
+    if (saved.has(id)) {
+      saved.delete(id);
+      toast('Removed from saved jobs');
+      if (document.querySelector('[data-saved-page]')) {
+        document.querySelector(`.card [data-save="${CSS.escape(id)}"]`)?.closest('.card')?.remove();
+        history.replaceState(null, '', savedUrl());
+      }
+    } else {
+      saved.add(id);
+      toast('Job saved');
+    }
+    persist();
+    renderSaved();
+  }
+
+  /* ---------- Toast ---------- */
+  let toastTimer;
+  function toast(message) {
+    const el = document.querySelector('.toast');
+    if (!el) return;
+    el.textContent = message;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
+  }
+
+  /* ---------- Wiring ---------- */
+  document.addEventListener('click', (event) => {
+    const saveButton = event.target.closest('[data-save]');
+    if (saveButton) {
+      event.preventDefault();
+      toggleSave(saveButton.dataset.save);
+      return;
+    }
+
+    // On wide screens a card opens in the detail pane; links inside the card still work normally.
+    const card = event.target.closest('.card[data-pane-url]');
+    if (card && WIDE.matches && !document.querySelector('[data-saved-page]')) {
+      if (event.target.closest('a') && !event.target.closest('.title')) return;
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.button === 1) return;
+      event.preventDefault();
+      location.assign(card.dataset.paneUrl);
+    }
+  });
+
+  // Filters and sort apply immediately; the "Apply filters" button stays for typed salary values.
+  document.addEventListener('change', (event) => {
+    const field = event.target.closest('[data-autosubmit]');
+    if (!field) return;
+    const form = field.form;
+    if (!form) return;
+    const page = form.querySelector('input[name="page"]');
+    if (page) page.remove();
+    form.requestSubmit();
+  });
+
+  // Drop empty fields so result URLs stay short and readable.
+  const searchForm = document.getElementById('jobsearch');
+  if (searchForm) {
+    searchForm.addEventListener('formdata', (event) => {
+      for (const [key, value] of [...event.formData.entries()]) {
+        if (value === '' || (key === 'sort' && value === 'relevance')) event.formData.delete(key);
+      }
+    });
+  }
+
+  // The saved page needs the ids from this browser.
+  if (document.querySelector('[data-saved-page]') && !new URLSearchParams(location.search).has('ids') && saved.size) {
+    location.replace(savedUrl());
+    return;
+  }
+
+  // Keep the selected card in view after the pane reloads.
+  document.querySelector('.card.active')?.scrollIntoView({ block: 'nearest' });
+
+  renderSaved();
+})();

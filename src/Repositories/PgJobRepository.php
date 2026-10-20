@@ -8,15 +8,135 @@ use App\Core\Database\Database;
 use App\Core\Database\PgArray;
 use App\Domain\Job;
 use App\Domain\JobInput;
+use App\Domain\JobSearchCriteria;
 use App\Domain\JobStatus;
+use App\Repositories\Contracts\JobReadRepositoryInterface;
 use App\Repositories\Contracts\JobWriteRepositoryInterface;
 use DateTimeImmutable;
 
-final class PgJobRepository implements JobWriteRepositoryInterface
+final class PgJobRepository implements JobWriteRepositoryInterface, JobReadRepositoryInterface
 {
+    /** The single definition of "publicly visible". */
+    private const VISIBLE = "j.status = 'published' AND j.deleted_at IS NULL AND (j.expires_at IS NULL OR j.expires_at > now())";
+
     public function __construct(private readonly Database $db)
     {
     }
+
+    // --- Public reads -----------------------------------------------------------------------
+
+    public function searchPublished(JobSearchCriteria $criteria, int $limit, int $offset): array
+    {
+        $where = [self::VISIBLE];
+        $params = [];
+        $tsQuery = $criteria->tsQuery();
+
+        if ($tsQuery !== null) {
+            // numnode() = 0 when the words were all stop-words: then the keyword filter is ignored.
+            $where[] = "(numnode(to_tsquery('english', ?)) = 0 OR j.search @@ to_tsquery('english', ?))";
+            array_push($params, $tsQuery, $tsQuery);
+        }
+        if ($criteria->location !== '') {
+            if (strtolower($criteria->location) === 'remote') {
+                $where[] = 'j.is_remote';
+            } else {
+                $where[] = 'j.location ILIKE ?';
+                $params[] = '%' . addcslashes($criteria->location, '%_\\') . '%';
+            }
+        }
+        if ($criteria->categorySlug !== null) {
+            $where[] = 'c.slug = ?';
+            $params[] = $criteria->categorySlug;
+        }
+        if ($criteria->types !== []) {
+            $where[] = 'j.job_type IN (' . implode(', ', array_fill(0, count($criteria->types), '?')) . ')';
+            foreach ($criteria->types as $type) {
+                $params[] = $type->value;
+            }
+        }
+        if ($criteria->experience !== null) {
+            $where[] = 'j.experience_level = ?';
+            $params[] = $criteria->experience->value;
+        }
+        if ($criteria->postedWithinDays !== null) {
+            $where[] = 'j.published_at >= now() - make_interval(days => ?)';
+            $params[] = $criteria->postedWithinDays;
+        }
+        if ($criteria->remoteOnly) {
+            $where[] = 'j.is_remote';
+        }
+        // Salary filters keep jobs whose advertised range overlaps the requested range.
+        if ($criteria->salaryMin !== null) {
+            $where[] = 'coalesce(j.salary_max, j.salary_min) >= ?';
+            $params[] = $criteria->salaryMin;
+        }
+        if ($criteria->salaryMax !== null) {
+            $where[] = 'coalesce(j.salary_min, j.salary_max) <= ?';
+            $params[] = $criteria->salaryMax;
+        }
+        $whereSql = implode(' AND ', $where);
+
+        $total = (int) $this->db->fetchValue('SELECT count(*) FROM ' . JobRowMapper::FROM . " WHERE {$whereSql}", $params);
+
+        $orderParams = [];
+        $order = match ($criteria->sort) {
+            'date' => 'j.published_at DESC, j.id DESC',
+            'salary' => 'coalesce(j.salary_max, j.salary_min) DESC NULLS LAST, j.published_at DESC',
+            default => $tsQuery !== null
+                ? "ts_rank_cd(j.search, to_tsquery('english', ?)) DESC, j.published_at DESC, j.id DESC"
+                : 'j.published_at DESC, j.id DESC',
+        };
+        if ($criteria->sort === 'relevance' && $tsQuery !== null) {
+            $orderParams[] = $tsQuery;
+        }
+
+        $rows = $this->db->fetchAll(
+            'SELECT ' . JobRowMapper::SELECT . ' FROM ' . JobRowMapper::FROM
+            . " WHERE {$whereSql} ORDER BY {$order} LIMIT ? OFFSET ?",
+            [...$params, ...$orderParams, $limit, $offset],
+        );
+
+        return ['items' => array_map(JobRowMapper::map(...), $rows), 'total' => $total];
+    }
+
+    public function findPublishedBySlug(string $slug): ?Job
+    {
+        $row = $this->db->fetchOne(
+            'SELECT ' . JobRowMapper::SELECT . ' FROM ' . JobRowMapper::FROM . ' WHERE j.slug = ? AND ' . self::VISIBLE,
+            [$slug],
+        );
+
+        return $row === null ? null : JobRowMapper::map($row);
+    }
+
+    public function findPublishedByIds(array $ids): array
+    {
+        $ids = array_values(array_unique(array_map('intval', $ids)));
+        if ($ids === []) {
+            return [];
+        }
+
+        $rows = $this->db->fetchAll(
+            'SELECT ' . JobRowMapper::SELECT . ' FROM ' . JobRowMapper::FROM
+            . ' WHERE j.id = ANY(?::bigint[]) AND ' . self::VISIBLE,
+            ['{' . implode(',', $ids) . '}'],
+        );
+        $byId = [];
+        foreach ($rows as $row) {
+            $byId[(int) $row['id']] = JobRowMapper::map($row);
+        }
+
+        return array_values(array_filter(array_map(static fn (int $id): ?Job => $byId[$id] ?? null, $ids)));
+    }
+
+    public function publishedLocations(): array
+    {
+        return array_column($this->db->fetchAll(
+            'SELECT DISTINCT j.location FROM jobs j WHERE ' . self::VISIBLE . ' ORDER BY j.location',
+        ), 'location');
+    }
+
+    // --- Back office --------------------------------------------------------------------------
 
     public function adminSearch(array $filters, int $limit, int $offset): array
     {
