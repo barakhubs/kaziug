@@ -68,7 +68,7 @@ Full-stack job board for Uganda with a single-admin back office. Read this file 
 
 ## Commands
 ```
-docker compose up -d                  # local Postgres 16 on port 5442 (creates kaziug + kaziug_test)
+docker compose up -d                  # Postgres 16 on 5442 (kaziug + kaziug_test) and Mailpit (SMTP 1025, UI 8025)
 composer install
 cp .env.example .env                  # then fill in values
 php bin/console config:check
@@ -76,9 +76,15 @@ php bin/console migrate
 php bin/console seed                  # sample data, only when requested
 php bin/console admin:create
 php -S localhost:8000 -t public public/index.php   # local server (router script needed for paths with dots)
-php bin/console newsletter:work       # run by the scheduler in production
+php bin/console newsletter:work       # one batch; --loop runs every minute (Laravel Cloud background process)
 vendor/bin/phpunit
 ```
+
+## Where things are wired
+- Interface → implementation bindings: `config/container.php`. Routes: `config/routes.php`. Console commands: `config/commands.php`. Seeders: `config/seeders.php`.
+- Global middleware order is set in `config/container.php` (Kernel factory). Public pages run `SharePublicData`; `/admin` runs `IdleTimeout` + `Authenticate`.
+- Tests: `tests/Support/HttpTestCase` drives the real kernel; email goes to `RecordingTransportFactory` (`$this->mail`). Fakes for unit tests live in `tests/Support/Fakes`.
+- Recorded design decisions (category delete blocked, import consent, etc.) are in README section 10.
 If a command here does not exist yet, create it and update this section.
 
 ## Code style

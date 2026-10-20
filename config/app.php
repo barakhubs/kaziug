@@ -7,6 +7,18 @@ use App\Core\Env;
 $env = Env::string('APP_ENV', 'production');
 $root = dirname(__DIR__);
 
+// Some platforms inject a single DATABASE_URL instead of DB_* variables; DB_* wins when both exist.
+$databaseUrl = Env::string('DATABASE_URL');
+$url = $databaseUrl !== '' ? (parse_url($databaseUrl) ?: []) : [];
+$dbFromUrl = [
+    'host' => $url['host'] ?? null,
+    'port' => $url['port'] ?? null,
+    'database' => isset($url['path']) ? ltrim($url['path'], '/') : null,
+    'username' => isset($url['user']) ? rawurldecode($url['user']) : null,
+    'password' => isset($url['pass']) ? rawurldecode($url['pass']) : null,
+];
+parse_str($url['query'] ?? '', $urlQuery);
+
 return [
     'app' => [
         'env' => $env,
@@ -18,14 +30,14 @@ return [
         'root' => $root,
     ],
     'db' => [
-        'host' => Env::string('DB_HOST', '127.0.0.1'),
-        'port' => Env::int('DB_PORT', 5432),
+        'host' => Env::string('DB_HOST', $dbFromUrl['host'] ?? '127.0.0.1'),
+        'port' => Env::int('DB_PORT', (int) ($dbFromUrl['port'] ?? 5432)),
         'database' => $env === 'testing'
             ? Env::string('DB_TEST_DATABASE', 'kaziug_test')
-            : Env::string('DB_DATABASE', 'kaziug'),
-        'username' => Env::string('DB_USERNAME', 'kaziug'),
-        'password' => Env::string('DB_PASSWORD'),
-        'sslmode' => Env::string('DB_SSLMODE', 'prefer'),
+            : Env::string('DB_DATABASE', $dbFromUrl['database'] ?? 'kaziug'),
+        'username' => Env::string('DB_USERNAME', $dbFromUrl['username'] ?? 'kaziug'),
+        'password' => Env::string('DB_PASSWORD', $dbFromUrl['password'] ?? ''),
+        'sslmode' => Env::string('DB_SSLMODE', is_string($urlQuery['sslmode'] ?? null) ? $urlQuery['sslmode'] : 'prefer'),
     ],
     'session' => [
         'cookie' => Env::string('SESSION_COOKIE', 'kaziug_session'),
