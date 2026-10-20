@@ -61,6 +61,12 @@ final class ViewScope
         return $scope->renderFile($this->view->path($template));
     }
 
+    /** Passes a plain value (e.g. the page title) up to the layout. */
+    public function set(string $name, string $value): void
+    {
+        $this->sections[$name] = $value;
+    }
+
     /** Captures output until end() into a named variable for the layout (e.g. "head"). */
     public function start(string $name): void
     {

@@ -22,8 +22,24 @@ use App\Middleware\SecurityHeaders;
 use App\Middleware\ShareViewData;
 use App\Middleware\StartSession;
 use App\Middleware\VerifyCsrfToken;
+use App\Repositories\Contracts\AdminUserRepositoryInterface;
+use App\Repositories\Contracts\AuditLogRepositoryInterface;
+use App\Repositories\Contracts\ThrottleRepositoryInterface;
+use App\Repositories\PgAdminUserRepository;
+use App\Repositories\PgAuditLogRepository;
+use App\Repositories\PgThrottleRepository;
+use App\Services\AdminAccountService;
+use App\Services\AuditService;
+use App\Services\AuthService;
+use App\Services\Contracts\AdminAccountServiceInterface;
+use App\Services\Contracts\AuditServiceInterface;
+use App\Services\Contracts\AuthServiceInterface;
 use App\Services\Contracts\HealthCheckInterface;
+use App\Services\Contracts\PasswordHasherInterface;
+use App\Services\Contracts\ThrottleInterface;
 use App\Services\DatabaseHealthCheck;
+use App\Services\PasswordHasher;
+use App\Services\Throttle;
 
 /*
  * The single place where abstractions are mapped to implementations (Dependency Inversion).
@@ -65,6 +81,16 @@ return static function (Container $c, Config $config): void {
         ],
     ));
 
+    // --- Repositories -------------------------------------------------------------------
+    $c->bind(AdminUserRepositoryInterface::class, PgAdminUserRepository::class);
+    $c->bind(ThrottleRepositoryInterface::class, PgThrottleRepository::class);
+    $c->bind(AuditLogRepositoryInterface::class, PgAuditLogRepository::class);
+
     // --- Services -----------------------------------------------------------------------
     $c->bind(HealthCheckInterface::class, DatabaseHealthCheck::class);
+    $c->bind(PasswordHasherInterface::class, PasswordHasher::class);
+    $c->bind(ThrottleInterface::class, Throttle::class);
+    $c->bind(AuditServiceInterface::class, AuditService::class);
+    $c->bind(AuthServiceInterface::class, AuthService::class);
+    $c->bind(AdminAccountServiceInterface::class, AdminAccountService::class);
 };
