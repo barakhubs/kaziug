@@ -14,6 +14,7 @@ $nav = [
     ['/admin/settings', 'Site settings'],
     ['/admin/settings/smtp', 'SMTP'],
     ['/admin/account', 'Account'],
+    ['/admin/audit', 'Audit log'],
 ];
 // The longest nav link that prefixes the current path is the active one.
 $activeHref = '/admin';

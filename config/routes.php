@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Controllers\Admin\AccountController;
+use App\Controllers\Admin\AuditLogController;
 use App\Controllers\Admin\AuthController;
 use App\Controllers\Admin\CategoriesController;
 use App\Controllers\Admin\DashboardController;
@@ -110,6 +111,8 @@ return static function (Router $r): void {
 
         $r->get('/settings', [SiteSettingsController::class, 'show']);
         $r->post('/settings', [SiteSettingsController::class, 'update']);
+
+        $r->get('/audit', [AuditLogController::class, 'index']);
 
         $r->get('/account', [AccountController::class, 'show']);
         $r->post('/account/password', [AccountController::class, 'updatePassword']);

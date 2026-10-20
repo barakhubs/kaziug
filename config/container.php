@@ -60,6 +60,8 @@ use App\Repositories\PgDeliveryRepository;
 use App\Repositories\PgNewsletterRepository;
 use App\Services\Contracts\NewsletterServiceInterface;
 use App\Services\NewsletterService;
+use App\Services\Contracts\DashboardServiceInterface;
+use App\Services\DashboardService;
 use App\Services\Contracts\JobSearchServiceInterface;
 use App\Services\Contracts\SettingsReaderInterface;
 use App\Services\JobSearchService;
@@ -169,4 +171,5 @@ return static function (Container $c, Config $config): void {
     $c->bind(SubscriptionServiceInterface::class, SubscriptionService::class);
     $c->bind(SubscriberAdminServiceInterface::class, SubscriberAdminService::class);
     $c->bind(NewsletterServiceInterface::class, NewsletterService::class);
+    $c->bind(DashboardServiceInterface::class, DashboardService::class);
 };

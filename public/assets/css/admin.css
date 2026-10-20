@@ -285,3 +285,13 @@ code { background: #eef1f4; padding: 1px 5px; border-radius: 4px; font-size: 0.8
 .email-preview { width: 100%; height: 640px; border: 1px solid var(--line); border-radius: 8px; background: #f4f6f8; }
 .stack form, form.stack { display: grid; gap: 8px; }
 .stat strong .pill { font-size: 0.95rem; vertical-align: middle; }
+svg.bar { width: 100%; height: 10px; background: #eef1f4; border-radius: 999px; display: block; }
+svg.bar rect { fill: var(--brand); }
+.dash-grid { display: grid; grid-template-columns: minmax(260px, 1fr) minmax(0, 2fr); gap: 20px; align-items: start; }
+.panel-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.panel-head a { color: var(--brand); font-size: 0.9rem; }
+.panel .table-wrap { border: 0; }
+.stat-text { font-size: 1.1rem !important; }
+.nowrap { white-space: nowrap; }
+.link-reset { color: var(--brand); font-size: 0.9rem; }
+@media (max-width: 1000px) { .dash-grid { grid-template-columns: 1fr; } }
