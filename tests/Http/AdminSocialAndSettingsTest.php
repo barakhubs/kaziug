@@ -54,16 +54,16 @@ final class AdminSocialAndSettingsTest extends AdminHttpTestCase
 
     public function testSocialProfileCrudAndFooter(): void
     {
-        $this->assertStatus(200, $this->get('/admin/social'));
-        $this->assertStatus(200, $this->get('/admin/social/new'));
+        $this->assertStatus(200, $this->get('/admin/settings/social'));
+        $this->assertStatus(200, $this->get('/admin/settings/social/new'));
 
-        $bad = $this->post('/admin/social', ['platform' => 'X', 'label' => 'X', 'url' => 'javascript:alert(1)', 'icon_key' => 'x']);
+        $bad = $this->post('/admin/settings/social', ['platform' => 'X', 'label' => 'X', 'url' => 'javascript:alert(1)', 'icon_key' => 'x']);
         $this->assertStatus(422, $bad);
-        $this->assertStatus(422, $this->post('/admin/social', ['platform' => 'X', 'label' => 'X', 'url' => 'https://x.com/k', 'icon_key' => 'myspace']));
+        $this->assertStatus(422, $this->post('/admin/settings/social', ['platform' => 'X', 'label' => 'X', 'url' => 'https://x.com/k', 'icon_key' => 'myspace']));
 
-        $this->post('/admin/social', ['platform' => 'LinkedIn', 'label' => 'Us on LinkedIn', 'url' => 'https://linkedin.com/company/k', 'icon_key' => 'linkedin', 'is_visible' => '1']);
-        $this->post('/admin/social', ['platform' => 'X', 'label' => 'Us on X', 'url' => 'https://x.com/k', 'icon_key' => 'x', 'is_visible' => '1']);
-        $this->post('/admin/social', ['platform' => 'TikTok', 'label' => 'Us on TikTok', 'url' => 'https://tiktok.com/@k', 'icon_key' => 'tiktok']);
+        $this->post('/admin/settings/social', ['platform' => 'LinkedIn', 'label' => 'Us on LinkedIn', 'url' => 'https://linkedin.com/company/k', 'icon_key' => 'linkedin', 'is_visible' => '1']);
+        $this->post('/admin/settings/social', ['platform' => 'X', 'label' => 'Us on X', 'url' => 'https://x.com/k', 'icon_key' => 'x', 'is_visible' => '1']);
+        $this->post('/admin/settings/social', ['platform' => 'TikTok', 'label' => 'Us on TikTok', 'url' => 'https://tiktok.com/@k', 'icon_key' => 'tiktok']);
         [$linkedin, $x, $tiktok] = array_map('intval', array_column($this->db->fetchAll('SELECT id FROM social_profiles ORDER BY id'), 'id'));
 
         $footer = $this->get('/')->body();
@@ -71,15 +71,15 @@ final class AdminSocialAndSettingsTest extends AdminHttpTestCase
         $this->assertStringNotContainsString('tiktok.com', $footer, 'hidden profiles stay out of the footer');
         $this->assertLessThan(strpos($footer, 'x.com/k'), strpos($footer, 'linkedin.com'));
 
-        $this->post("/admin/social/{$x}/move", ['direction' => 'up']);
-        $this->post("/admin/social/{$tiktok}/visibility", ['visible' => '1']);
+        $this->post("/admin/settings/social/{$x}/move", ['direction' => 'up']);
+        $this->post("/admin/settings/social/{$tiktok}/visibility", ['visible' => '1']);
         $footer = $this->get('/')->body();
         $this->assertLessThan(strpos($footer, 'linkedin.com'), strpos($footer, 'x.com/k'));
         $this->assertStringContainsString('tiktok.com', $footer);
 
-        $this->post("/admin/social/{$linkedin}", ['platform' => 'LinkedIn', 'label' => 'Changed', 'url' => 'https://linkedin.com/company/new', 'icon_key' => 'linkedin', 'is_visible' => '1']);
+        $this->post("/admin/settings/social/{$linkedin}", ['platform' => 'LinkedIn', 'label' => 'Changed', 'url' => 'https://linkedin.com/company/new', 'icon_key' => 'linkedin', 'is_visible' => '1']);
         $this->assertStringContainsString('linkedin.com/company/new', $this->get('/')->body());
-        $this->post("/admin/social/{$linkedin}/delete");
+        $this->post("/admin/settings/social/{$linkedin}/delete");
         $this->assertStringNotContainsString('linkedin.com', $this->get('/')->body());
 
         foreach (['social_profile.created', 'social_profile.updated', 'social_profile.reordered', 'social_profile.shown', 'social_profile.deleted'] as $action) {

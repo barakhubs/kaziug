@@ -8,11 +8,13 @@ use App\Core\Http\Request;
 use App\Core\Http\Responder;
 use App\Core\Http\Response;
 use App\Domain\Pagination;
+use App\Domain\TableQuery;
 use App\Services\Contracts\AuditServiceInterface;
 
 final class AuditLogController
 {
     private const PER_PAGE = 50;
+
 
     public function __construct(
         private readonly AuditServiceInterface $audit,
@@ -35,12 +37,13 @@ final class AuditLogController
             'from' => $date($request->query('from')),
             'to' => $date($request->query('to')),
         ];
-        $page = max(1, (int) $request->query('page', 1));
-        $result = $this->audit->search($filters, $page, self::PER_PAGE);
+        $table = TableQuery::fromQuery($request->queryAll(), ['when'], 'when', 'desc', self::PER_PAGE);
+        $result = $this->audit->search($filters, $table->page, $table->perPage, $table->direction);
 
         return $this->responder->view('admin/audit/index', [
             'rows' => $result['rows'],
-            'pagination' => new Pagination($page, self::PER_PAGE, $result['total']),
+            'pagination' => new Pagination($table->page, $table->perPage, $result['total']),
+            'table' => $table,
             'filters' => $filters,
             'options' => $options,
         ]);

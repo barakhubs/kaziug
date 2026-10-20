@@ -10,9 +10,10 @@ $headingTag = $inPane ? 'h2' : 'h1';
 <p class="salary"><?= e(Format::salary($job->salaryMin, $job->salaryMax, $job->currency)) ?></p>
 <div class="actions">
   <?php if ($job->applyUrl !== null): ?>
-    <a class="btn-primary" href="<?= e($job->applyUrl) ?>" target="_blank" rel="noopener nofollow">Apply now</a>
-  <?php elseif ($job->applyEmail !== null): ?>
-    <a class="btn-primary" href="mailto:<?= e($job->applyEmail) ?>?subject=<?= e(rawurlencode('Application: ' . $job->title)) ?>">Apply by email</a>
+    <a class="btn-primary" href="<?= e($job->applyUrl) ?>" target="_blank" rel="noopener nofollow">Apply / more info ↗</a>
+  <?php endif; ?>
+  <?php if ($job->applyEmail !== null): ?>
+    <a class="<?= $job->applyUrl !== null ? 'btn-ghost' : 'btn-primary' ?>" href="mailto:<?= e($job->applyEmail) ?>?subject=<?= e(rawurlencode('Application: ' . $job->title)) ?>">Apply by email</a>
   <?php endif; ?>
   <button class="btn-ghost js-only" type="button" data-save="<?= e($job->id) ?>" aria-pressed="false" hidden>☆ Save job</button>
   <?php if ($inPane): ?>
@@ -38,6 +39,16 @@ $headingTag = $inPane ? 'h2' : 'h1';
   <h3>Skills</h3>
   <div class="tags"><?php foreach ($job->skills as $skill): ?><span><?= e($skill) ?></span><?php endforeach; ?></div>
 <?php endif; ?>
+<h3>How to apply</h3>
 <?php if ($job->applyUrl === null && $job->applyEmail === null): ?>
-  <p class="muted apply-note">To apply, contact <?= e($job->company) ?> directly.</p>
+  <p class="muted">Contact <?= e($job->company) ?> directly.</p>
+<?php else: ?>
+  <ul class="apply-list">
+    <?php if ($job->applyUrl !== null): ?>
+      <li>Online: <a href="<?= e($job->applyUrl) ?>" target="_blank" rel="noopener nofollow"><?= e(parse_url($job->applyUrl, PHP_URL_HOST) ?: $job->applyUrl) ?></a></li>
+    <?php endif; ?>
+    <?php if ($job->applyEmail !== null): ?>
+      <li>By email: <a href="mailto:<?= e($job->applyEmail) ?>?subject=<?= e(rawurlencode('Application: ' . $job->title)) ?>"><?= e($job->applyEmail) ?></a></li>
+    <?php endif; ?>
+  </ul>
 <?php endif; ?>

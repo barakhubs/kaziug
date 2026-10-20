@@ -52,11 +52,11 @@ final class AdminDashboardAndAuditTest extends AdminHttpTestCase
         $this->assertStringContainsString('127.0.0.1', $all);
 
         $filtered = $this->get('/admin/audit', ['action' => 'category.created'])->body();
-        $this->assertStringContainsString('2 entries', $filtered);
+        $this->assertStringContainsString('of <strong>2</strong> entries', $filtered);
         $this->assertStringNotContainsString('<code>auth.login</code>', $filtered);
 
-        $this->assertStringContainsString('1 entry', $this->get('/admin/audit', ['to' => date('Y-m-d', strtotime('-5 days'))])->body());
-        $this->assertStringContainsString('2 entries', $this->get('/admin/audit', ['entity' => 'category'])->body());
+        $this->assertStringContainsString('of <strong>1</strong> entry', $this->get('/admin/audit', ['to' => date('Y-m-d', strtotime('-5 days'))])->body());
+        $this->assertStringContainsString('of <strong>2</strong> entries', $this->get('/admin/audit', ['entity' => 'category'])->body());
 
         // Unknown filter values are ignored rather than passed to SQL.
         $this->assertStatus(200, $this->get('/admin/audit', ['action' => "x' OR 1=1 --", 'from' => '2026-13-45']));
@@ -67,8 +67,9 @@ final class AdminDashboardAndAuditTest extends AdminHttpTestCase
         $this->post('/admin/categories', ['name' => 'Tech', 'is_active' => '1']);
         $categoryId = (int) $this->db->fetchValue('SELECT id FROM job_categories');
         $this->post('/admin/jobs', ['title' => 'Dev', 'company' => 'Co', 'location' => 'Kampala', 'job_type' => 'full-time',
-            'experience_level' => 'mid', 'category_id' => (string) $categoryId, 'summary' => 'S', 'intent' => 'draft']);
-        $this->post('/admin/social', ['platform' => 'X', 'label' => 'X', 'url' => 'https://x.com/k', 'icon_key' => 'x']);
+            'experience_level' => 'mid', 'category_id' => (string) $categoryId, 'summary' => 'S', 'intent' => 'draft',
+            'apply_method' => 'email', 'apply_email' => 'jobs@co.ug']);
+        $this->post('/admin/settings/social', ['platform' => 'X', 'label' => 'X', 'url' => 'https://x.com/k', 'icon_key' => 'x']);
         $this->post('/admin/settings', ['site_name' => 'KaziUG', 'jobs_per_page' => '9']);
         $this->post('/admin/settings/smtp', ['host' => 'smtp.test', 'port' => '25', 'encryption' => 'none', 'from_email' => 'a@b.ug']);
         $this->db->execute("INSERT INTO subscribers (email, status, unsubscribe_token) VALUES ('s@x.ug', 'active', ?)", [str_repeat('s', 43)]);

@@ -295,3 +295,32 @@ svg.bar rect { fill: var(--brand); }
 .nowrap { white-space: nowrap; }
 .link-reset { color: var(--brand); font-size: 0.9rem; }
 @media (max-width: 1000px) { .dash-grid { grid-template-columns: 1fr; } }
+.sort-link { color: inherit; text-decoration: none; display: inline-flex; gap: 4px; align-items: center; }
+.sort-link:hover, .sort-link.on { color: var(--brand-dark); }
+.sort-arrow { font-size: 0.7rem; opacity: 0.5; }
+.sort-link.on .sort-arrow { opacity: 1; }
+.table-footer { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; justify-content: space-between; margin-top: 14px; }
+.table-footer p { margin: 0; }
+.table-footer .pager { margin-top: 0; }
+.per-page select { width: auto; margin-left: 6px; padding: 4px 8px; }
+.row-actions .status-form { display: inline-flex; gap: 4px; align-items: center; }
+.row-actions .status-form select { width: auto; padding: 4px 6px; font-size: 0.85rem; }
+.row-actions a.row-link, .row-actions button { font-size: 0.9rem; }
+.sub { color: var(--muted); font-size: 0.82rem; font-weight: 400; margin-top: 2px; }
+.apply-fieldset { border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; margin: 0; display: grid; gap: 8px; }
+.apply-fieldset legend { font-weight: 600; font-size: 0.9rem; padding: 0 4px; }
+.apply-fieldset.has-error { border-color: var(--danger); }
+.choice-row { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+.choice-row .check { font-weight: 500; }
+.choice-row input { width: auto; }
+.job-form-card { max-width: 900px; }
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin-bottom: 20px; flex-wrap: wrap; }
+.tab {
+  padding: 10px 16px; text-decoration: none; color: var(--muted); font-weight: 600;
+  border-bottom: 3px solid transparent; margin-bottom: -1px;
+}
+.tab:hover { color: var(--ink); }
+.tab.on { color: var(--brand-dark); border-bottom-color: var(--brand); }
+.section-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+.section-head h2 { margin: 0; font-size: 1.15rem; }
+.section-head .hint { margin: 0; }

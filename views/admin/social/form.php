@@ -9,12 +9,13 @@ $this->set('title', $profile === null ? 'New social profile' : 'Edit social prof
 $v = static fn (string $key): mixed => $values[$key] ?? '';
 $err = static fn (string $key): string => isset($errors[$key]) ? 'has-error' : '';
 ?>
-<header class="page-head">
-  <h1><?= $profile === null ? 'New social profile' : 'Edit social profile' ?></h1>
-  <div class="head-actions"><a class="btn-ghost" href="/admin/social">← All profiles</a></div>
-</header>
+<?= $this->insert('partials/settings_tabs') ?>
+<div class="section-head">
+  <h2><?= $profile === null ? 'New social profile' : 'Edit social profile' ?></h2>
+  <a class="btn-ghost" href="/admin/settings/social">← All profiles</a>
+</div>
 
-<form class="form-card" method="post" action="<?= e($profile === null ? '/admin/social' : "/admin/social/{$profile->id}") ?>" novalidate>
+<form class="form-card" method="post" action="<?= e($profile === null ? '/admin/settings/social' : "/admin/settings/social/{$profile->id}") ?>" novalidate>
   <?= $this->insert('partials/csrf') ?>
   <label class="<?= $err('platform') ?>">Platform
     <input name="platform" value="<?= e($v('platform')) ?>" required maxlength="60" placeholder="e.g. LinkedIn">
@@ -42,6 +43,6 @@ $err = static fn (string $key): string => isset($errors[$key]) ? 'has-error' : '
   <label class="check"><input type="checkbox" name="is_visible" value="1"<?= $v('is_visible') ? ' checked' : '' ?>> Show in the site footer</label>
   <div class="form-actions">
     <button class="btn-primary" type="submit"><?= $profile === null ? 'Add profile' : 'Save changes' ?></button>
-    <a class="btn-ghost" href="/admin/social">Cancel</a>
+    <a class="btn-ghost" href="/admin/settings/social">Cancel</a>
   </div>
 </form>

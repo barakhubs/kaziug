@@ -13,7 +13,7 @@ interface AuditLogRepositoryInterface
      * @param array{action?: string, entity?: string, actor?: string, from?: string, to?: string} $filters
      * @return array{rows: list<array<string, mixed>>, total: int}
      */
-    public function search(array $filters, int $limit, int $offset): array;
+    public function search(array $filters, int $limit, int $offset, string $direction = 'desc'): array;
 
     /** @return list<string> distinct values of a column, for filter dropdowns */
     public function distinct(string $column): array;

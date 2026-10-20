@@ -26,9 +26,9 @@ final class AuditService implements AuditServiceInterface
         );
     }
 
-    public function search(array $filters, int $page, int $perPage): array
+    public function search(array $filters, int $page, int $perPage, string $direction = 'desc'): array
     {
-        return $this->logs->search($filters, $perPage, max(0, ($page - 1) * $perPage));
+        return $this->logs->search($filters, $perPage, max(0, ($page - 1) * $perPage), $direction);
     }
 
     public function recent(int $limit): array

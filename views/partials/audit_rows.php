@@ -14,7 +14,7 @@ $describe = static function (array $metadata): string {
 ?>
 <div class="table-wrap">
   <table>
-    <thead><tr><th>When</th><th>Who</th><th>Action</th><th>Entity</th><th>Details</th><th>IP</th></tr></thead>
+    <thead><tr><?= $whenTh ?? '<th>When</th>' ?><th>Who</th><th>Action</th><th>Entity</th><th>Details</th><th>IP</th></tr></thead>
     <tbody>
     <?php if ($rows === []): ?>
       <tr><td colspan="6" class="muted center">No entries.</td></tr>

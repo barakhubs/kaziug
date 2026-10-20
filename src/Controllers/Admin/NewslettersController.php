@@ -9,6 +9,8 @@ use App\Core\Http\Responder;
 use App\Core\Http\Response;
 use App\Domain\DomainException;
 use App\Domain\Newsletter;
+use App\Domain\TableQuery;
+use App\Repositories\Contracts\NewsletterRepositoryInterface;
 use App\Mail\MailException;
 use App\Services\Contracts\NewsletterServiceInterface;
 use App\Services\Contracts\SmtpSettingsServiceInterface;
@@ -33,13 +35,20 @@ final class NewslettersController
 
     public function index(Request $request): Response
     {
-        $result = $this->newsletters->paginate(max(1, (int) $request->query('page', 1)), self::PER_PAGE);
+        $q = mb_substr(trim((string) $request->query('q', '')), 0, 100);
+        $table = TableQuery::fromQuery($request->queryAll(), NewsletterRepositoryInterface::SORTS, 'created', 'desc', self::PER_PAGE);
+        $result = $this->newsletters->paginate($table, $q);
         $counts = [];
         foreach ($result->items as $newsletter) {
             $counts[$newsletter->id] = $this->newsletters->counts($newsletter->id);
         }
 
-        return $this->responder->view('admin/newsletters/index', ['result' => $result, 'counts' => $counts]);
+        return $this->responder->view('admin/newsletters/index', [
+            'result' => $result,
+            'counts' => $counts,
+            'table' => $table->withPage($result->pagination->page),
+            'q' => $q,
+        ]);
     }
 
     public function create(Request $request): Response

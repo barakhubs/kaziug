@@ -12,8 +12,10 @@ interface NewsletterRepositoryInterface
 {
     public function findById(int $id): ?Newsletter;
 
-    /** @return array{items: list<Newsletter>, total: int} newest first */
-    public function paginate(int $limit, int $offset): array;
+    public const SORTS = ['subject', 'status', 'created'];
+
+    /** @return array{items: list<Newsletter>, total: int} */
+    public function paginate(int $limit, int $offset, string $q = '', string $sort = 'created', string $direction = 'desc'): array;
 
     public function latest(): ?Newsletter;
 

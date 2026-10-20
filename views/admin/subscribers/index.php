@@ -7,7 +7,12 @@ use App\Domain\SubscriberStatus;
 
 $this->layout('layouts/admin');
 $this->set('title', 'Subscribers');
+/** @var \App\Domain\TableQuery $table */
 $exportQuery = $filters['status'] !== '' ? '?status=' . rawurlencode($filters['status']) : '';
+$filterQuery = array_filter($filters, static fn ($v) => $v !== '');
+$sort = fn (string $key, string $label, string $first = 'asc'): string => $this->insert('partials/sort_th', [
+    'table' => $table, 'key' => $key, 'label' => $label, 'path' => '/admin/subscribers', 'filters' => $filterQuery, 'first' => $first,
+]);
 ?>
 <header class="page-head">
   <h1>Subscribers</h1>
@@ -33,13 +38,14 @@ $exportQuery = $filters['status'] !== '' ? '?status=' . rawurlencode($filters['s
       <option value="<?= e($status->value) ?>"<?= $filters['status'] === $status->value ? ' selected' : '' ?>><?= e($status->label()) ?></option>
     <?php endforeach; ?>
   </select>
-  <button class="btn-ghost" type="submit">Filter</button>
-  <span class="muted"><?= e($result->pagination->total) ?> subscriber(s)</span>
+  <?php if ($table->perPage !== 25): ?><input type="hidden" name="per_page" value="<?= e($table->perPage) ?>"><?php endif; ?>
+  <button class="btn-ghost" type="submit">Search</button>
+  <?php if ($filterQuery !== []): ?><a class="link-reset" href="/admin/subscribers">Clear</a><?php endif; ?>
 </form>
 
 <div class="table-wrap">
   <table>
-    <thead><tr><th>Email</th><th>Name</th><th>Status</th><th>Consent</th><th>Joined</th><th><span class="sr-only">Actions</span></th></tr></thead>
+    <thead><tr><?= $sort('email', 'Email') ?><th>Name</th><?= $sort('status', 'Status') ?><th>Consent</th><?= $sort('joined', 'Joined', 'desc') ?><th><span class="sr-only">Actions</span></th></tr></thead>
     <tbody>
     <?php if ($result->items === []): ?>
       <tr><td colspan="6" class="muted center">No subscribers match.</td></tr>
@@ -69,4 +75,4 @@ $exportQuery = $filters['status'] !== '' ? '?status=' . rawurlencode($filters['s
   </table>
 </div>
 
-<?= $this->insert('partials/admin_pager', ['pagination' => $result->pagination, 'path' => '/admin/subscribers', 'query' => ['q' => $filters['q'], 'status' => $filters['status']]]) ?>
+<?= $this->insert('partials/table_footer', ['pagination' => $result->pagination, 'table' => $table, 'path' => '/admin/subscribers', 'filters' => $filterQuery, 'noun' => 'subscribers']) ?>

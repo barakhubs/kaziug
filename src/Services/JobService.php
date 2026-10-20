@@ -13,6 +13,7 @@ use App\Domain\NotFoundException;
 use App\Domain\Paginated;
 use App\Domain\Pagination;
 use App\Domain\Slug;
+use App\Domain\TableQuery;
 use App\Repositories\Contracts\CategoryRepositoryInterface;
 use App\Repositories\Contracts\JobWriteRepositoryInterface;
 use App\Repositories\Contracts\TransactionManagerInterface;
@@ -29,13 +30,13 @@ final class JobService implements JobServiceInterface
     ) {
     }
 
-    public function search(array $filters, int $page, int $perPage): Paginated
+    public function search(array $filters, TableQuery $table): Paginated
     {
-        $first = $this->jobs->adminSearch($filters, $perPage, max(0, ($page - 1) * $perPage));
-        $pagination = new Pagination($page, $perPage, $first['total']);
-        if ($pagination->page !== $page) {
+        $first = $this->jobs->adminSearch($filters, $table->perPage, $table->offset(), $table->sort, $table->direction);
+        $pagination = new Pagination($table->page, $table->perPage, $first['total']);
+        if ($pagination->page !== $table->page) {
             // Requested page was past the end: show the last page instead.
-            $first = $this->jobs->adminSearch($filters, $perPage, $pagination->offset());
+            $first = $this->jobs->adminSearch($filters, $table->perPage, $pagination->offset(), $table->sort, $table->direction);
         }
 
         return new Paginated($first['items'], $pagination);

@@ -10,6 +10,7 @@ use App\Domain\NotFoundException;
 use App\Domain\Paginated;
 use App\Domain\Pagination;
 use App\Domain\Subscriber;
+use App\Domain\TableQuery;
 use App\Repositories\Contracts\SubscriberRepositoryInterface;
 use App\Services\Contracts\AuditServiceInterface;
 use App\Services\Contracts\SubscriberAdminServiceInterface;
@@ -25,12 +26,12 @@ final class SubscriberAdminService implements SubscriberAdminServiceInterface
     ) {
     }
 
-    public function search(array $filters, int $page, int $perPage): Paginated
+    public function search(array $filters, TableQuery $table): Paginated
     {
-        $result = $this->subscribers->search($filters, $perPage, max(0, ($page - 1) * $perPage));
-        $pagination = new Pagination($page, $perPage, $result['total']);
-        if ($pagination->page !== $page) {
-            $result = $this->subscribers->search($filters, $perPage, $pagination->offset());
+        $result = $this->subscribers->search($filters, $table->perPage, $table->offset(), $table->sort, $table->direction);
+        $pagination = new Pagination($table->page, $table->perPage, $result['total']);
+        if ($pagination->page !== $table->page) {
+            $result = $this->subscribers->search($filters, $table->perPage, $pagination->offset(), $table->sort, $table->direction);
         }
 
         return new Paginated($result['items'], $pagination);

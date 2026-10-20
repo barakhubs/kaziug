@@ -64,3 +64,26 @@
     });
   });
 })();
+
+(() => {
+  'use strict';
+
+  // Selects marked data-autosubmit (rows per page, filters) apply immediately.
+  document.addEventListener('change', (event) => {
+    const field = event.target.closest('[data-autosubmit]');
+    if (field && field.form) field.form.requestSubmit();
+  });
+
+  // "How to apply": show only the fields for the chosen method.
+  document.querySelectorAll('[data-apply-method]').forEach((group) => {
+    const sync = () => {
+      const chosen = group.querySelector('input[name="apply_method"]:checked')?.value || '';
+      group.querySelectorAll('[data-apply-field]').forEach((field) => {
+        const kind = field.dataset.applyField;
+        field.hidden = !(chosen === 'both' || chosen === kind);
+      });
+    };
+    group.addEventListener('change', sync);
+    sync();
+  });
+})();

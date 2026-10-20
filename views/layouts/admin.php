@@ -10,9 +10,7 @@ $nav = [
     ['/admin/categories', 'Categories'],
     ['/admin/newsletters', 'Newsletters'],
     ['/admin/subscribers', 'Subscribers'],
-    ['/admin/social', 'Social profiles'],
-    ['/admin/settings', 'Site settings'],
-    ['/admin/settings/smtp', 'SMTP'],
+    ['/admin/settings', 'Settings'],
     ['/admin/account', 'Account'],
     ['/admin/audit', 'Audit log'],
 ];

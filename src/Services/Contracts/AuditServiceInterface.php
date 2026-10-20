@@ -15,7 +15,7 @@ interface AuditServiceInterface
      * @param array{action?: string, entity?: string, actor?: string, from?: string, to?: string} $filters
      * @return array{rows: list<array<string, mixed>>, total: int}
      */
-    public function search(array $filters, int $page, int $perPage): array;
+    public function search(array $filters, int $page, int $perPage, string $direction = 'desc'): array;
 
     /** @return list<array<string, mixed>> */
     public function recent(int $limit): array;

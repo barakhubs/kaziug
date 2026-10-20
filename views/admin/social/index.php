@@ -4,11 +4,11 @@ $this->layout('layouts/admin');
 $this->set('title', 'Social profiles');
 $last = count($profiles) - 1;
 ?>
-<header class="page-head">
-  <h1>Social profiles</h1>
-  <div class="head-actions"><a class="btn-primary" href="/admin/social/new">+ New profile</a></div>
-</header>
-<p class="hint">Visible profiles appear as icons in the public site footer, in this order.</p>
+<?= $this->insert('partials/settings_tabs') ?>
+<div class="section-head">
+  <p class="hint">Visible profiles appear as icons in the public site footer, in this order.</p>
+  <a class="btn-primary" href="/admin/settings/social/new">+ New profile</a>
+</div>
 
 <div class="table-wrap">
   <table>
@@ -20,7 +20,7 @@ $last = count($profiles) - 1;
     <?php foreach ($profiles as $i => $profile): ?>
       <tr>
         <td class="row-actions order-cell">
-          <form class="inline" method="post" action="/admin/social/<?= e($profile->id) ?>/move">
+          <form class="inline" method="post" action="/admin/settings/social/<?= e($profile->id) ?>/move">
             <?= $this->insert('partials/csrf') ?>
             <button type="submit" name="direction" value="up"<?= $i === 0 ? ' disabled' : '' ?> aria-label="Move <?= e($profile->label) ?> up">↑</button>
             <button type="submit" name="direction" value="down"<?= $i === $last ? ' disabled' : '' ?> aria-label="Move <?= e($profile->label) ?> down">↓</button>
@@ -31,13 +31,13 @@ $last = count($profiles) - 1;
         <td class="small"><a href="<?= e($profile->url) ?>" target="_blank" rel="noopener noreferrer"><?= e($profile->url) ?></a></td>
         <td><span class="pill <?= $profile->isVisible ? 'visible' : 'hidden-pill' ?>"><?= $profile->isVisible ? 'Visible' : 'Hidden' ?></span></td>
         <td class="row-actions">
-          <a class="row-link" href="/admin/social/<?= e($profile->id) ?>/edit">Edit</a>
-          <form class="inline" method="post" action="/admin/social/<?= e($profile->id) ?>/visibility">
+          <a class="row-link" href="/admin/settings/social/<?= e($profile->id) ?>/edit">Edit</a>
+          <form class="inline" method="post" action="/admin/settings/social/<?= e($profile->id) ?>/visibility">
             <?= $this->insert('partials/csrf') ?>
             <input type="hidden" name="visible" value="<?= $profile->isVisible ? '0' : '1' ?>">
             <button type="submit"><?= $profile->isVisible ? 'Hide' : 'Show' ?></button>
           </form>
-          <form class="inline" method="post" action="/admin/social/<?= e($profile->id) ?>/delete" data-confirm="Delete the <?= e($profile->platform) ?> profile?">
+          <form class="inline" method="post" action="/admin/settings/social/<?= e($profile->id) ?>/delete" data-confirm="Delete the <?= e($profile->platform) ?> profile?">
             <?= $this->insert('partials/csrf') ?>
             <button type="submit" class="danger">Delete</button>
           </form>

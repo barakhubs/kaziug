@@ -20,7 +20,7 @@ final class InMemoryJobRepository implements JobWriteRepositoryInterface
 
     private int $nextId = 1;
 
-    public function adminSearch(array $filters, int $limit, int $offset): array
+    public function adminSearch(array $filters, int $limit, int $offset, string $sort = 'updated', string $direction = 'desc'): array
     {
         $items = array_values(array_filter($this->jobs, static fn (Job $j): bool => $j->deletedAt === null
             && (($filters['status'] ?? '') === '' || $j->status->value === $filters['status'])));

@@ -61,6 +61,7 @@ return static function (Router $r): void {
         $r->get('/jobs/new', [JobsController::class, 'create']);
         $r->post('/jobs', [JobsController::class, 'store']);
         $r->post('/jobs/bulk-status', [JobsController::class, 'bulkStatus']);
+        $r->get('/jobs/{id:\d+}', [JobsController::class, 'show']);
         $r->get('/jobs/{id:\d+}/edit', [JobsController::class, 'edit']);
         $r->post('/jobs/{id:\d+}', [JobsController::class, 'update']);
         $r->post('/jobs/{id:\d+}/status', [JobsController::class, 'changeStatus']);
@@ -76,14 +77,14 @@ return static function (Router $r): void {
         $r->post('/categories/{id:\d+}/move', [CategoriesController::class, 'move']);
         $r->post('/categories/{id:\d+}/delete', [CategoriesController::class, 'delete']);
 
-        $r->get('/social', [SocialProfilesController::class, 'index']);
-        $r->get('/social/new', [SocialProfilesController::class, 'create']);
-        $r->post('/social', [SocialProfilesController::class, 'store']);
-        $r->get('/social/{id:\d+}/edit', [SocialProfilesController::class, 'edit']);
-        $r->post('/social/{id:\d+}', [SocialProfilesController::class, 'update']);
-        $r->post('/social/{id:\d+}/visibility', [SocialProfilesController::class, 'visibility']);
-        $r->post('/social/{id:\d+}/move', [SocialProfilesController::class, 'move']);
-        $r->post('/social/{id:\d+}/delete', [SocialProfilesController::class, 'delete']);
+        $r->get('/settings/social', [SocialProfilesController::class, 'index']);
+        $r->get('/settings/social/new', [SocialProfilesController::class, 'create']);
+        $r->post('/settings/social', [SocialProfilesController::class, 'store']);
+        $r->get('/settings/social/{id:\d+}/edit', [SocialProfilesController::class, 'edit']);
+        $r->post('/settings/social/{id:\d+}', [SocialProfilesController::class, 'update']);
+        $r->post('/settings/social/{id:\d+}/visibility', [SocialProfilesController::class, 'visibility']);
+        $r->post('/settings/social/{id:\d+}/move', [SocialProfilesController::class, 'move']);
+        $r->post('/settings/social/{id:\d+}/delete', [SocialProfilesController::class, 'delete']);
 
         $r->get('/newsletters', [NewslettersController::class, 'index']);
         $r->get('/newsletters/new', [NewslettersController::class, 'create']);

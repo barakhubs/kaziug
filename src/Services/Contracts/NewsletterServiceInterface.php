@@ -8,13 +8,14 @@ use App\Domain\Actor;
 use App\Domain\DeliveryCounts;
 use App\Domain\Newsletter;
 use App\Domain\Paginated;
+use App\Domain\TableQuery;
 use DateTimeImmutable;
 
 /** Back-office newsletter management. Sending is only ever queued here; the worker sends. */
 interface NewsletterServiceInterface
 {
     /** @return Paginated<Newsletter> */
-    public function paginate(int $page, int $perPage): Paginated;
+    public function paginate(TableQuery $table, string $q = ''): Paginated;
 
     public function get(int $id): Newsletter;
 

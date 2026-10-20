@@ -84,8 +84,14 @@ final class PgSubscriberRepository implements SubscriberRepositoryInterface
         $this->db->execute('DELETE FROM subscribers WHERE id = ?', [$id]);
     }
 
-    public function search(array $filters, int $limit, int $offset): array
+    public function search(array $filters, int $limit, int $offset, string $sort = 'joined', string $direction = 'desc'): array
     {
+        $dir = $direction === 'asc' ? 'ASC' : 'DESC';
+        $order = match ($sort) {
+            'email' => "lower(email) {$dir}",
+            'status' => "status {$dir}, created_at DESC",
+            default => "created_at {$dir}",
+        };
         $where = [];
         $params = [];
         $q = trim((string) ($filters['q'] ?? ''));
@@ -102,7 +108,7 @@ final class PgSubscriberRepository implements SubscriberRepositoryInterface
 
         $total = (int) $this->db->fetchValue("SELECT count(*) FROM subscribers {$whereSql}", $params);
         $rows = $this->db->fetchAll(
-            'SELECT ' . self::COLUMNS . " FROM subscribers {$whereSql} ORDER BY created_at DESC, id DESC LIMIT ? OFFSET ?",
+            'SELECT ' . self::COLUMNS . " FROM subscribers {$whereSql} ORDER BY {$order}, id DESC LIMIT ? OFFSET ?",
             [...$params, $limit, $offset],
         );
 

@@ -30,11 +30,14 @@ interface SubscriberRepositoryInterface
 
     public function delete(int $id): void;
 
+    public const SORTS = ['email', 'status', 'joined'];
+
     /**
      * @param array{q?: string, status?: string} $filters
+     * @param string $sort one of self::SORTS
      * @return array{items: list<Subscriber>, total: int}
      */
-    public function search(array $filters, int $limit, int $offset): array;
+    public function search(array $filters, int $limit, int $offset, string $sort = 'joined', string $direction = 'desc'): array;
 
     /** @return array<string, int> */
     public function countByStatus(): array;

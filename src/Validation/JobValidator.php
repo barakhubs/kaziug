@@ -16,6 +16,8 @@ use App\Validation\Rules\IntegerRule;
  */
 final class JobValidator
 {
+    /** How candidates apply: through a link (application page / more info), by email, or both. */
+    public const APPLY_METHODS = ['link', 'email', 'both'];
     private const MAX_LIST_ITEMS = 30;
     private const MAX_SKILLS = 20;
 
@@ -44,6 +46,7 @@ final class JobValidator
             'responsibilities' => 'max:10000',
             'requirements' => 'max:10000',
             'skills' => 'max:2000',
+            'apply_method' => 'required|in:' . implode(',', self::APPLY_METHODS),
             'apply_url' => 'url',
             'apply_email' => 'email',
             'expires_at' => 'datetime',
@@ -56,6 +59,23 @@ final class JobValidator
         if ($salaryMin !== null && $salaryMax !== null && $salaryMax < $salaryMin) {
             $errors['salary_max'] ??= 'Must be at least the minimum salary.';
         }
+
+        // The chosen method decides which contact fields are required; the other one is cleared.
+        $method = (string) ($data['apply_method'] ?? '');
+        $needsLink = $method === 'link' || $method === 'both';
+        $needsEmail = $method === 'email' || $method === 'both';
+        if (!isset($errors['apply_method'])) {
+            if ($needsLink && $data['apply_url'] === null) {
+                $errors['apply_url'] ??= 'Enter the link where candidates apply or read more.';
+            }
+            if ($needsEmail && $data['apply_email'] === null) {
+                $errors['apply_email'] ??= 'Enter the email address applications go to.';
+            }
+        } else {
+            $errors['apply_method'] = 'Choose how candidates apply.';
+        }
+        $applyUrl = $needsLink ? $data['apply_url'] : null;
+        $applyEmail = $needsEmail && $data['apply_email'] !== null ? strtolower((string) $data['apply_email']) : null;
 
         $currency = strtoupper((string) ($data['currency'] ?? '')) ?: 'UGX';
         if (preg_match('/^[A-Z]{3}$/', $currency) !== 1) {
@@ -93,10 +113,21 @@ final class JobValidator
             $responsibilities,
             $requirements,
             $skills,
-            $data['apply_url'],
-            $data['apply_email'] === null ? null : strtolower((string) $data['apply_email']),
+            $applyUrl,
+            $applyEmail,
             DateTimeRule::parse($data['expires_at']),
         ), []];
+    }
+
+    /** The method matching a job's stored contact fields ('' when it has none yet). */
+    public static function applyMethodFor(?string $url, ?string $email): string
+    {
+        return match (true) {
+            $url !== null && $email !== null => 'both',
+            $url !== null => 'link',
+            $email !== null => 'email',
+            default => '',
+        };
     }
 
     /** @return list<string> */

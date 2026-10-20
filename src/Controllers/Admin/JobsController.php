@@ -10,6 +10,8 @@ use App\Core\Http\Response;
 use App\Domain\DomainException;
 use App\Domain\Job;
 use App\Domain\JobStatus;
+use App\Domain\TableQuery;
+use App\Repositories\Contracts\JobWriteRepositoryInterface;
 use App\Services\Contracts\CategoryServiceInterface;
 use App\Services\Contracts\JobServiceInterface;
 use App\Validation\JobValidator;
@@ -17,8 +19,6 @@ use App\Validation\JobValidator;
 final class JobsController
 {
     use AdminContext;
-
-    private const PER_PAGE = 20;
 
     public function __construct(
         private readonly JobServiceInterface $jobs,
@@ -33,15 +33,26 @@ final class JobsController
         $filters = [
             'q' => mb_substr(trim((string) $request->query('q', '')), 0, 100),
             'status' => in_array($request->query('status'), JobStatus::values(), true) ? (string) $request->query('status') : '',
-            'category_id' => max(0, (int) $request->query('category', 0)),
+            'category' => max(0, (int) $request->query('category', 0)),
         ];
+        $table = TableQuery::fromQuery($request->queryAll(), JobWriteRepositoryInterface::SORTS, 'updated');
+        $result = $this->jobs->search(['q' => $filters['q'], 'status' => $filters['status'], 'category_id' => $filters['category']], $table);
 
         return $this->responder->view('admin/jobs/index', [
-            'result' => $this->jobs->search($filters, max(1, (int) $request->query('page', 1)), self::PER_PAGE),
+            'result' => $result,
+            'table' => $table->withPage($result->pagination->page),
             'filters' => $filters,
             'categories' => $this->categories->all(),
             'statusCounts' => $this->jobs->countByStatus(),
         ]);
+    }
+
+    /** Read-only details: everything about the job, its status controls and history. */
+    public function show(Request $request): Response
+    {
+        $job = $this->jobs->get($this->id($request));
+
+        return $this->responder->view('admin/jobs/show', ['job' => $job, 'history' => $this->jobs->history($job->id)]);
     }
 
     public function create(Request $request): Response
@@ -64,7 +75,7 @@ final class JobsController
 
         $message = $job->status === JobStatus::Published ? 'Job created and published.' : 'Job saved as a draft.';
 
-        return $this->responder->redirectWith($request, "/admin/jobs/{$job->id}/edit", 'success', $message);
+        return $this->responder->redirectWith($request, "/admin/jobs/{$job->id}", 'success', $message);
     }
 
     public function edit(Request $request): Response
@@ -88,16 +99,16 @@ final class JobsController
             return $this->form($job, $request->all(), [$e->field ?? 'title' => $e->getMessage()], 422);
         }
 
-        return $this->responder->redirectWith($request, "/admin/jobs/{$job->id}/edit", 'success', 'Job updated.');
+        return $this->responder->redirectWith($request, "/admin/jobs/{$job->id}", 'success', 'Job updated.');
     }
 
     public function changeStatus(Request $request): Response
     {
         $id = $this->id($request);
         $to = JobStatus::tryFrom((string) $request->input('to'));
-        $back = $this->returnTo($request, "/admin/jobs/{$id}/edit");
+        $back = $this->returnTo($request, "/admin/jobs/{$id}");
         if ($to === null) {
-            return $this->responder->redirectWith($request, $back, 'error', 'Unknown status.');
+            return $this->responder->redirectWith($request, $back, 'error', 'Choose a status.');
         }
 
         try {
@@ -152,7 +163,6 @@ final class JobsController
             'values' => $values,
             'errors' => $errors,
             'categories' => $this->categories->all(),
-            'history' => $job !== null ? $this->jobs->history($job->id) : [],
         ], $status);
     }
 
@@ -167,7 +177,7 @@ final class JobsController
     /** @return array<string, mixed> */
     private static function defaults(): array
     {
-        return ['job_type' => 'full-time', 'experience_level' => 'entry', 'currency' => 'UGX'];
+        return ['job_type' => 'full-time', 'experience_level' => 'entry', 'currency' => 'UGX', 'apply_method' => 'link'];
     }
 
     /** @return array<string, mixed> */
@@ -188,6 +198,7 @@ final class JobsController
             'responsibilities' => implode("\n", $job->responsibilities),
             'requirements' => implode("\n", $job->requirements),
             'skills' => implode(', ', $job->skills),
+            'apply_method' => JobValidator::applyMethodFor($job->applyUrl, $job->applyEmail),
             'apply_url' => $job->applyUrl ?? '',
             'apply_email' => $job->applyEmail ?? '',
             'expires_at' => $job->expiresAt?->format('Y-m-d') ?? '',

@@ -37,6 +37,8 @@ final class AdminJobsAndCategoriesTest extends AdminHttpTestCase
             'responsibilities' => "Build dashboards\nClean data",
             'requirements' => 'SQL',
             'skills' => 'SQL, Python',
+            'apply_method' => 'link',
+            'apply_url' => 'https://insights.example/careers/analyst',
         ], ...$overrides];
     }
 
@@ -46,12 +48,62 @@ final class AdminJobsAndCategoriesTest extends AdminHttpTestCase
         $jobId = (int) $this->db->fetchValue('SELECT min(id) FROM jobs');
         $categoryId = (int) $this->db->fetchValue('SELECT min(id) FROM job_categories');
 
-        foreach (['/admin', '/admin/jobs', '/admin/jobs/new', "/admin/jobs/{$jobId}/edit", '/admin/categories',
+        foreach (['/admin', '/admin/jobs', '/admin/jobs/new', "/admin/jobs/{$jobId}/edit", "/admin/jobs/{$jobId}", '/admin/categories',
             '/admin/categories/new', "/admin/categories/{$categoryId}/edit", '/admin/jobs?status=published&q=dev&page=2'] as $path) {
             $this->assertStatus(200, $this->get($path));
         }
         $this->assertStatus(404, $this->get('/admin/jobs/999999/edit'));
         $this->assertStringContainsString('Frontend Developer (React)', $this->get('/admin/jobs')->body());
+    }
+
+    public function testJobTableSortsPagesAndSummarises(): void
+    {
+        $this->container->get(SeedCommand::class)->run(['--only=jobs'], new Io([], echo: false));
+
+        $page = $this->get('/admin/jobs', ['sort' => 'title', 'dir' => 'asc', 'per_page' => '10'])->body();
+        $this->assertStringContainsString('Showing <strong>1–10</strong> of <strong>14</strong> jobs', $page);
+        preg_match_all('#<strong><a href="/admin/jobs/\d+">([^<]+)</a></strong>#', $page, $m);
+        $titles = array_map('html_entity_decode', $m[1]);
+        $this->assertCount(10, $titles);
+        $this->assertSame('Agronomist', $titles[0]);
+        $sorted = $titles;
+        sort($sorted, SORT_STRING | SORT_FLAG_CASE);
+        $this->assertSame($sorted, $titles);
+        $this->assertStringContainsString('href="/admin/jobs?sort=title&amp;dir=asc&amp;per_page=10&amp;page=2"', $page);
+        $this->assertStringContainsString('aria-sort="ascending"', $page);
+
+        $page2 = $this->get('/admin/jobs', ['sort' => 'title', 'dir' => 'asc', 'per_page' => '10', 'page' => '2'])->body();
+        $this->assertStringContainsString('Showing <strong>11–14</strong> of <strong>14</strong> jobs', $page2);
+
+        // Unknown sort keys and page sizes fall back to the defaults.
+        $this->assertStringContainsString('Showing <strong>1–14</strong>', $this->get('/admin/jobs', ['sort' => 'id; DROP', 'per_page' => '7'])->body());
+    }
+
+    public function testJobDetailsPageShowsEverything(): void
+    {
+        $this->post('/admin/jobs', $this->jobForm(['intent' => 'publish', 'apply_method' => 'both', 'apply_email' => 'hr@insights.example']));
+        $id = (int) $this->db->fetchValue('SELECT id FROM jobs');
+
+        $body = $this->get("/admin/jobs/{$id}")->body();
+
+        $this->assertStringContainsString('Kampala Insights', $body);
+        $this->assertStringContainsString('https://insights.example/careers/analyst', $body);
+        $this->assertStringContainsString('hr@insights.example', $body);
+        $this->assertStringContainsString('Build dashboards', $body);
+        $this->assertStringContainsString('Created as published', $body);
+
+        $public = $this->get('/jobs/' . $this->db->fetchValue('SELECT slug FROM jobs'))->body();
+        $this->assertStringContainsString('Apply / more info', $public);
+        $this->assertStringContainsString('mailto:hr@insights.example', $public);
+    }
+
+    public function testJobCannotBeSavedWithoutApplicationDetails(): void
+    {
+        $response = $this->post('/admin/jobs', $this->jobForm(['apply_method' => 'email', 'apply_email' => '']));
+
+        $this->assertStatus(422, $response);
+        $this->assertStringContainsString('Enter the email address applications go to.', $response->body());
+        $this->assertSame(0, (int) $this->db->fetchValue('SELECT count(*) FROM jobs'));
     }
 
     public function testAdminRoutesRequireLogin(): void
@@ -75,10 +127,10 @@ final class AdminJobsAndCategoriesTest extends AdminHttpTestCase
     {
         $response = $this->post('/admin/jobs', $this->jobForm(['intent' => 'draft']));
         $id = (int) $this->db->fetchValue('SELECT id FROM jobs');
-        $this->assertRedirect("/admin/jobs/{$id}/edit", $response);
+        $this->assertRedirect("/admin/jobs/{$id}", $response);
         $this->assertSame('draft', $this->db->fetchValue('SELECT status FROM jobs WHERE id = ?', [$id]));
 
-        $this->assertRedirect("/admin/jobs/{$id}/edit", $this->post("/admin/jobs/{$id}", $this->jobForm(['title' => 'Senior Data Analyst'])));
+        $this->assertRedirect("/admin/jobs/{$id}", $this->post("/admin/jobs/{$id}", $this->jobForm(['title' => 'Senior Data Analyst'])));
         $this->assertSame('Senior Data Analyst', $this->db->fetchValue('SELECT title FROM jobs WHERE id = ?', [$id]));
 
         foreach (['published', 'closed', 'archived'] as $to) {
@@ -87,14 +139,14 @@ final class AdminJobsAndCategoriesTest extends AdminHttpTestCase
         }
         $this->assertSame(4, (int) $this->db->fetchValue('SELECT count(*) FROM job_status_history WHERE job_id = ?', [$id]));
 
-        $edit = $this->get("/admin/jobs/{$id}/edit")->body();
+        $edit = $this->get("/admin/jobs/{$id}")->body();
         $this->assertStringContainsString('closed → archived', $edit);
         $this->assertStringContainsString(self::ADMIN_EMAIL, $edit);
 
         // Archived is final.
         $this->post("/admin/jobs/{$id}/status", ['to' => 'published']);
         $this->assertSame('archived', $this->db->fetchValue('SELECT status FROM jobs WHERE id = ?', [$id]));
-        $this->assertStringContainsString("can&apos;t be moved", $this->get("/admin/jobs/{$id}/edit")->body());
+        $this->assertStringContainsString("can&apos;t be moved", $this->get("/admin/jobs/{$id}")->body());
         $this->assertSame(1, $this->auditCount('job.created'));
         $this->assertSame(3, $this->auditCount('job.status_changed'));
     }

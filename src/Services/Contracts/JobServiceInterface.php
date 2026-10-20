@@ -9,6 +9,7 @@ use App\Domain\Job;
 use App\Domain\JobInput;
 use App\Domain\JobStatus;
 use App\Domain\Paginated;
+use App\Domain\TableQuery;
 
 /** Back-office job management. */
 interface JobServiceInterface
@@ -17,7 +18,7 @@ interface JobServiceInterface
      * @param array{q?: string, status?: string, category_id?: int} $filters
      * @return Paginated<Job>
      */
-    public function search(array $filters, int $page, int $perPage): Paginated;
+    public function search(array $filters, TableQuery $table): Paginated;
 
     public function get(int $id): Job;
 

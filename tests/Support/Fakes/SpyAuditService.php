@@ -23,7 +23,7 @@ final class SpyAuditService implements AuditServiceInterface
         return array_column($this->records, 'action');
     }
 
-    public function search(array $filters, int $page, int $perPage): array
+    public function search(array $filters, int $page, int $perPage, string $direction = 'desc'): array
     {
         return ['rows' => [], 'total' => 0];
     }

@@ -7,6 +7,7 @@ namespace App\Services\Contracts;
 use App\Domain\Actor;
 use App\Domain\Paginated;
 use App\Domain\Subscriber;
+use App\Domain\TableQuery;
 
 /** Back-office subscriber management. */
 interface SubscriberAdminServiceInterface
@@ -15,7 +16,7 @@ interface SubscriberAdminServiceInterface
      * @param array{q?: string, status?: string} $filters
      * @return Paginated<Subscriber>
      */
-    public function search(array $filters, int $page, int $perPage): Paginated;
+    public function search(array $filters, TableQuery $table): Paginated;
 
     /** @return array<string, int> */
     public function countByStatus(): array;

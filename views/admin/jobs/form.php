@@ -3,7 +3,7 @@
 /** @var array<string, mixed> $values */
 /** @var array<string, string> $errors */
 /** @var list<\App\Domain\Category> $categories */
-/** @var list<array<string, mixed>> $history */
+
 use App\Core\Format;
 use App\Domain\ExperienceLevel;
 use App\Domain\JobType;
@@ -17,10 +17,7 @@ $action = $job === null ? '/admin/jobs' : "/admin/jobs/{$job->id}";
 <header class="page-head">
   <h1><?= $job === null ? 'New job' : 'Edit job' ?></h1>
   <div class="head-actions">
-    <a class="btn-ghost" href="/admin/jobs">← All jobs</a>
-    <?php if ($job !== null && $job->isPubliclyVisible()): ?>
-      <a class="btn-ghost" href="/jobs/<?= e($job->slug) ?>" target="_blank" rel="noopener">View on site ↗</a>
-    <?php endif; ?>
+    <a class="btn-ghost" href="<?= e($job === null ? '/admin/jobs' : "/admin/jobs/{$job->id}") ?>">← <?= $job === null ? 'All jobs' : 'Job details' ?></a>
   </div>
 </header>
 
@@ -28,7 +25,7 @@ $action = $job === null ? '/admin/jobs' : "/admin/jobs/{$job->id}";
   <div class="flash error" role="alert">Please fix the highlighted fields.</div>
 <?php endif; ?>
 
-<div class="edit-layout">
+<div>
   <form class="form-card job-form-card" method="post" action="<?= e($action) ?>" novalidate>
     <?= $this->insert('partials/csrf') ?>
     <div class="grid2">
@@ -103,14 +100,26 @@ $action = $job === null ? '/admin/jobs' : "/admin/jobs/{$job->id}";
         <textarea name="requirements" rows="4"><?= e($v('requirements')) ?></textarea>
         <?= $this->insert('partials/field_error', ['field' => 'requirements']) ?>
       </label>
-      <label class="<?= $err('apply_url') ?>">Application link <span class="hint">(optional)</span>
-        <input type="url" name="apply_url" value="<?= e($v('apply_url')) ?>" placeholder="https://">
-        <?= $this->insert('partials/field_error', ['field' => 'apply_url']) ?>
-      </label>
-      <label class="<?= $err('apply_email') ?>">Application email <span class="hint">(optional)</span>
-        <input type="email" name="apply_email" value="<?= e($v('apply_email')) ?>">
-        <?= $this->insert('partials/field_error', ['field' => 'apply_email']) ?>
-      </label>
+      <fieldset class="full apply-fieldset<?= $err('apply_method') ?>" data-apply-method>
+        <legend>How to apply</legend>
+        <p class="hint">Shown on the job page as the “Apply” buttons. Choose at least one.</p>
+        <div class="choice-row">
+          <?php foreach (['link' => 'Link (application page or more info)', 'email' => 'Email', 'both' => 'Link and email'] as $method => $label): ?>
+            <label class="check"><input type="radio" name="apply_method" value="<?= e($method) ?>"<?= $v('apply_method') === $method ? ' checked' : '' ?>> <?= e($label) ?></label>
+          <?php endforeach; ?>
+        </div>
+        <?= $this->insert('partials/field_error', ['field' => 'apply_method']) ?>
+        <div class="grid2">
+          <label class="<?= $err('apply_url') ?>" data-apply-field="link">Application / more-info link
+            <input type="url" name="apply_url" value="<?= e($v('apply_url')) ?>" placeholder="https://company.example/careers/123">
+            <?= $this->insert('partials/field_error', ['field' => 'apply_url']) ?>
+          </label>
+          <label class="<?= $err('apply_email') ?>" data-apply-field="email">Application email
+            <input type="email" name="apply_email" value="<?= e($v('apply_email')) ?>" placeholder="jobs@company.example">
+            <?= $this->insert('partials/field_error', ['field' => 'apply_email']) ?>
+          </label>
+        </div>
+      </fieldset>
     </div>
 
     <div class="form-actions">
@@ -124,44 +133,6 @@ $action = $job === null ? '/admin/jobs' : "/admin/jobs/{$job->id}";
     </div>
   </form>
 
-  <?php if ($job !== null): ?>
-    <aside class="panel status-panel">
-      <h2>Status</h2>
-      <p><span class="pill <?= e($job->status->value) ?>"><?= e($job->status->label()) ?></span>
-        <?php if ($job->isExpired()): ?><span class="pill closed">Expired</span><?php endif; ?></p>
-      <?php if ($job->status->allowedNext() !== []): ?>
-        <form method="post" action="/admin/jobs/<?= e($job->id) ?>/status" class="form-actions">
-          <?= $this->insert('partials/csrf') ?>
-          <?php foreach ($job->status->allowedNext() as $next): ?>
-            <button class="btn-ghost btn-sm" type="submit" name="to" value="<?= e($next->value) ?>"><?= e($job->status->actionLabel($next)) ?></button>
-          <?php endforeach; ?>
-        </form>
-      <?php else: ?>
-        <p class="hint">Archived jobs can't change status.</p>
-      <?php endif; ?>
-
-      <h2 class="section-gap">History</h2>
-      <ol class="timeline">
-        <?php foreach ($history as $entry): ?>
-          <li>
-            <strong><?= e($entry['from_status'] === null ? 'Created as ' . $entry['to_status'] : $entry['from_status'] . ' → ' . $entry['to_status']) ?></strong>
-            <div class="muted small"><?= e(Format::dbDateTime($entry['changed_at'])) ?><?= $entry['changed_by'] !== null ? ' · ' . e($entry['changed_by']) : '' ?></div>
-          </li>
-        <?php endforeach; ?>
-      </ol>
-
-      <div class="form-actions section-gap">
-        <form method="post" action="/admin/jobs/<?= e($job->id) ?>/duplicate">
-          <?= $this->insert('partials/csrf') ?>
-          <button class="btn-ghost btn-sm" type="submit">Duplicate</button>
-        </form>
-        <form method="post" action="/admin/jobs/<?= e($job->id) ?>/delete" data-confirm="Delete this job? It will disappear from the site and the back office.">
-          <?= $this->insert('partials/csrf') ?>
-          <button class="btn-danger btn-sm" type="submit">Delete</button>
-        </form>
-      </div>
-    </aside>
-  <?php endif; ?>
 </div>
 
 <datalist id="cityList">

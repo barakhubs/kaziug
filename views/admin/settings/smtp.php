@@ -11,7 +11,7 @@ $this->set('title', 'SMTP settings');
 $v = static fn (string $key): mixed => $values[$key] ?? '';
 $err = static fn (string $key): string => isset($errors[$key]) ? 'has-error' : '';
 ?>
-<header class="page-head"><h1>SMTP settings</h1></header>
+<?= $this->insert('partials/settings_tabs') ?>
 
 <div class="panel mail-status">
   <?php if ($smtp->isConfigured()): ?>

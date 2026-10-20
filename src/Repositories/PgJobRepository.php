@@ -138,8 +138,16 @@ final class PgJobRepository implements JobWriteRepositoryInterface, JobReadRepos
 
     // --- Back office --------------------------------------------------------------------------
 
-    public function adminSearch(array $filters, int $limit, int $offset): array
+    public function adminSearch(array $filters, int $limit, int $offset, string $sort = 'updated', string $direction = 'desc'): array
     {
+        $dir = $direction === 'asc' ? 'ASC' : 'DESC';
+        $order = match ($sort) {
+            'title' => "lower(j.title) {$dir}",
+            'status' => "j.status {$dir}, j.updated_at DESC",
+            'posted' => "j.published_at {$dir} NULLS LAST",
+            default => "j.updated_at {$dir}",
+        };
+
         $where = ['j.deleted_at IS NULL'];
         $params = [];
 
@@ -162,7 +170,7 @@ final class PgJobRepository implements JobWriteRepositoryInterface, JobReadRepos
         $total = (int) $this->db->fetchValue('SELECT count(*) FROM ' . JobRowMapper::FROM . " WHERE {$whereSql}", $params);
         $rows = $this->db->fetchAll(
             'SELECT ' . JobRowMapper::SELECT . ' FROM ' . JobRowMapper::FROM
-            . " WHERE {$whereSql} ORDER BY j.updated_at DESC, j.id DESC LIMIT ? OFFSET ?",
+            . " WHERE {$whereSql} ORDER BY {$order}, j.id DESC LIMIT ? OFFSET ?",
             [...$params, $limit, $offset],
         );
 

@@ -25,11 +25,27 @@ final class PgNewsletterRepository implements NewsletterRepositoryInterface
         return $row === null ? null : $this->map($row);
     }
 
-    public function paginate(int $limit, int $offset): array
+    public function paginate(int $limit, int $offset, string $q = '', string $sort = 'created', string $direction = 'desc'): array
     {
+        $dir = $direction === 'asc' ? 'ASC' : 'DESC';
+        $order = match ($sort) {
+            'subject' => "lower(n.subject) {$dir}",
+            'status' => "n.status {$dir}, n.created_at DESC",
+            default => "n.created_at {$dir}",
+        };
+        $where = '';
+        $params = [];
+        if (trim($q) !== '') {
+            $where = 'WHERE n.subject ILIKE ?';
+            $params[] = '%' . addcslashes(trim($q), '%_\\') . '%';
+        }
+
         return [
-            'items' => array_map($this->map(...), $this->db->fetchAll(self::SELECT . ' ORDER BY n.created_at DESC, n.id DESC LIMIT ? OFFSET ?', [$limit, $offset])),
-            'total' => (int) $this->db->fetchValue('SELECT count(*) FROM newsletters'),
+            'items' => array_map($this->map(...), $this->db->fetchAll(
+                self::SELECT . " {$where} ORDER BY {$order}, n.id DESC LIMIT ? OFFSET ?",
+                [...$params, $limit, $offset],
+            )),
+            'total' => (int) $this->db->fetchValue("SELECT count(*) FROM newsletters n {$where}", $params),
         ];
     }
 

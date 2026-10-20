@@ -20,6 +20,17 @@ final class Pagination
         return ($this->page - 1) * $this->perPage;
     }
 
+    /** 1-based index of the first row on this page (0 when there are no rows). */
+    public function from(): int
+    {
+        return $this->total === 0 ? 0 : $this->offset() + 1;
+    }
+
+    public function to(): int
+    {
+        return min($this->total, $this->page * $this->perPage);
+    }
+
     public function hasPrevious(): bool
     {
         return $this->page > 1;

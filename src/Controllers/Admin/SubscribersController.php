@@ -9,6 +9,8 @@ use App\Core\Http\Responder;
 use App\Core\Http\Response;
 use App\Domain\DomainException;
 use App\Domain\SubscriberStatus;
+use App\Domain\TableQuery;
+use App\Repositories\Contracts\SubscriberRepositoryInterface;
 use App\Services\Contracts\SubscriberAdminServiceInterface;
 
 final class SubscribersController
@@ -31,8 +33,12 @@ final class SubscribersController
             'status' => $this->status($request->query('status')) ?? '',
         ];
 
+        $table = TableQuery::fromQuery($request->queryAll(), SubscriberRepositoryInterface::SORTS, 'joined', 'desc', self::PER_PAGE);
+        $result = $this->subscribers->search($filters, $table);
+
         return $this->responder->view('admin/subscribers/index', [
-            'result' => $this->subscribers->search($filters, max(1, (int) $request->query('page', 1)), self::PER_PAGE),
+            'result' => $result,
+            'table' => $table->withPage($result->pagination->page),
             'filters' => $filters,
             'counts' => $this->subscribers->countByStatus(),
         ]);

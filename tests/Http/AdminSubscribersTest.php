@@ -49,14 +49,14 @@ final class AdminSubscribersTest extends AdminHttpTestCase
     public function testListFiltersAndSearch(): void
     {
         $all = $this->get('/admin/subscribers')->body();
-        $this->assertStringContainsString('4 subscriber(s)', $all);
+        $this->assertStringContainsString('of <strong>4</strong> subscribers', $all);
 
         $active = $this->get('/admin/subscribers', ['status' => 'active'])->body();
         $this->assertStringContainsString('amina@example.com', $active);
         $this->assertStringNotContainsString('carol@example.com', $active);
 
         $search = $this->get('/admin/subscribers', ['q' => 'dan'])->body();
-        $this->assertStringContainsString('1 subscriber(s)', $search);
+        $this->assertStringContainsString('of <strong>1</strong> subscriber', $search);
     }
 
     public function testExportCsvIsFilteredAndSafe(): void

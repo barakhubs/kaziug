@@ -56,6 +56,29 @@ final class JobValidatorTest extends TestCase
         $this->assertSame(['title', 'job_type', 'apply_url', 'apply_email', 'salary_max', 'currency'], array_keys($errors));
     }
 
+    public function testApplicationDetailsAreRequiredForTheChosenMethod(): void
+    {
+        [, $errors] = $this->validator->validate($this->form(['apply_method' => '']));
+        $this->assertSame('Choose how candidates apply.', $errors['apply_method']);
+
+        [, $errors] = $this->validator->validate($this->form(['apply_method' => 'link', 'apply_url' => '']));
+        $this->assertArrayHasKey('apply_url', $errors);
+
+        [, $errors] = $this->validator->validate($this->form(['apply_method' => 'both', 'apply_email' => '']));
+        $this->assertArrayHasKey('apply_email', $errors);
+
+        [$linkOnly] = $this->validator->validate($this->form(['apply_method' => 'link']));
+        $this->assertSame('https://savanna.example/careers/42', $linkOnly?->applyUrl);
+        $this->assertNull($linkOnly?->applyEmail, 'the unchosen field is cleared');
+
+        [$emailOnly] = $this->validator->validate($this->form(['apply_method' => 'email', 'apply_url' => '']));
+        $this->assertSame('jobs@savanna.example', $emailOnly?->applyEmail);
+        $this->assertNull($emailOnly?->applyUrl);
+
+        $this->assertSame('both', JobValidator::applyMethodFor('https://x.ug', 'a@x.ug'));
+        $this->assertSame('', JobValidator::applyMethodFor(null, null));
+    }
+
     public function testFormattingHelpers(): void
     {
         $this->assertSame('frontend-developer-react', Slug::from('Frontend Developer (React)'));
@@ -82,6 +105,9 @@ final class JobValidatorTest extends TestCase
             'experience_level' => 'entry',
             'category_id' => '1',
             'summary' => 'Help customers.',
+            'apply_method' => 'both',
+            'apply_url' => 'https://savanna.example/careers/42',
+            'apply_email' => 'Jobs@Savanna.example',
         ], ...$overrides];
     }
 }

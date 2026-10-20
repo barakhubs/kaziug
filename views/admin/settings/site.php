@@ -7,7 +7,7 @@ $this->set('title', 'Site settings');
 $v = static fn (string $key): mixed => $values[$key] ?? '';
 $err = static fn (string $key): string => isset($errors[$key]) ? 'has-error' : '';
 ?>
-<header class="page-head"><h1>Site settings</h1></header>
+<?= $this->insert('partials/settings_tabs') ?>
 
 <?php if ($site->maintenanceMode): ?>
   <div class="flash info">Maintenance mode is <strong>on</strong>: visitors see a maintenance page. You can still browse the site while signed in.</div>

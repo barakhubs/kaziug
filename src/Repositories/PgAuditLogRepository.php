@@ -22,8 +22,9 @@ final class PgAuditLogRepository implements AuditLogRepositoryInterface
         );
     }
 
-    public function search(array $filters, int $limit, int $offset): array
+    public function search(array $filters, int $limit, int $offset, string $direction = 'desc'): array
     {
+        $dir = $direction === 'asc' ? 'ASC' : 'DESC';
         $where = [];
         $params = [];
         foreach (['action', 'entity', 'actor'] as $column) {
@@ -45,7 +46,7 @@ final class PgAuditLogRepository implements AuditLogRepositoryInterface
         $total = (int) $this->db->fetchValue("SELECT count(*) FROM audit_logs {$whereSql}", $params);
         $rows = $this->db->fetchAll(
             "SELECT id, actor, action, entity, entity_id, metadata, host(ip) AS ip, created_at
-             FROM audit_logs {$whereSql} ORDER BY created_at DESC, id DESC LIMIT ? OFFSET ?",
+             FROM audit_logs {$whereSql} ORDER BY created_at {$dir}, id {$dir} LIMIT ? OFFSET ?",
             [...$params, $limit, $offset],
         );
         foreach ($rows as &$row) {

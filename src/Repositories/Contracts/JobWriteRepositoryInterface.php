@@ -12,11 +12,15 @@ use DateTimeImmutable;
 /** Back-office access to jobs (all statuses). Public reads live in JobReadRepositoryInterface. */
 interface JobWriteRepositoryInterface
 {
+    public const SORTS = ['title', 'status', 'posted', 'updated'];
+
     /**
      * @param array{q?: string, status?: string, category_id?: int} $filters
+     * @param string $sort one of self::SORTS
+     * @param 'asc'|'desc' $direction
      * @return array{items: list<Job>, total: int}
      */
-    public function adminSearch(array $filters, int $limit, int $offset): array;
+    public function adminSearch(array $filters, int $limit, int $offset, string $sort = 'updated', string $direction = 'desc'): array;
 
     public function findById(int $id): ?Job;
 

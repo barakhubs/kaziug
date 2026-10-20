@@ -12,6 +12,7 @@ use App\Domain\NewsletterStatus;
 use App\Domain\NotFoundException;
 use App\Domain\Paginated;
 use App\Domain\Pagination;
+use App\Domain\TableQuery;
 use App\Mail\MailerInterface;
 use App\Mail\NewsletterEmailBuilder;
 use App\Repositories\Contracts\DeliveryRepositoryInterface;
@@ -39,11 +40,15 @@ final class NewsletterService implements NewsletterServiceInterface
     ) {
     }
 
-    public function paginate(int $page, int $perPage): Paginated
+    public function paginate(TableQuery $table, string $q = ''): Paginated
     {
-        $result = $this->newsletters->paginate($perPage, max(0, ($page - 1) * $perPage));
+        $result = $this->newsletters->paginate($table->perPage, $table->offset(), $q, $table->sort, $table->direction);
+        $pagination = new Pagination($table->page, $table->perPage, $result['total']);
+        if ($pagination->page !== $table->page) {
+            $result = $this->newsletters->paginate($table->perPage, $pagination->offset(), $q, $table->sort, $table->direction);
+        }
 
-        return new Paginated($result['items'], new Pagination($page, $perPage, $result['total']));
+        return new Paginated($result['items'], $pagination);
     }
 
     public function get(int $id): Newsletter

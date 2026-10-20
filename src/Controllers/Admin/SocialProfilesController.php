@@ -40,7 +40,7 @@ final class SocialProfilesController
         }
         $this->profiles->create($result->data, $this->actor($request));
 
-        return $this->responder->redirectWith($request, '/admin/social', 'success', 'Social profile added.');
+        return $this->responder->redirectWith($request, '/admin/settings/social', 'success', 'Social profile added.');
     }
 
     public function edit(Request $request): Response
@@ -65,7 +65,7 @@ final class SocialProfilesController
         }
         $this->profiles->update($profile->id, $result->data, $this->actor($request));
 
-        return $this->responder->redirectWith($request, '/admin/social', 'success', 'Social profile updated.');
+        return $this->responder->redirectWith($request, '/admin/settings/social', 'success', 'Social profile updated.');
     }
 
     public function visibility(Request $request): Response
@@ -73,21 +73,21 @@ final class SocialProfilesController
         $visible = $request->input('visible') === '1';
         $this->profiles->setVisible($this->id($request), $visible, $this->actor($request));
 
-        return $this->responder->redirectWith($request, '/admin/social', 'success', $visible ? 'Profile shown in the footer.' : 'Profile hidden from the footer.');
+        return $this->responder->redirectWith($request, '/admin/settings/social', 'success', $visible ? 'Profile shown in the footer.' : 'Profile hidden from the footer.');
     }
 
     public function move(Request $request): Response
     {
         $this->profiles->move($this->id($request), $request->input('direction') === 'up' ? 'up' : 'down', $this->actor($request));
 
-        return $this->responder->redirect('/admin/social');
+        return $this->responder->redirect('/admin/settings/social');
     }
 
     public function delete(Request $request): Response
     {
         $this->profiles->delete($this->id($request), $this->actor($request));
 
-        return $this->responder->redirectWith($request, '/admin/social', 'success', 'Social profile deleted.');
+        return $this->responder->redirectWith($request, '/admin/settings/social', 'success', 'Social profile deleted.');
     }
 
     /**

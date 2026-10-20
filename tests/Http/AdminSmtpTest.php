@@ -103,11 +103,12 @@ final class AdminSmtpTest extends AdminHttpTestCase
         $this->assertStringStartsWith('Failed', (string) $this->db->fetchValue('SELECT last_test_result FROM smtp_settings'));
     }
 
-    public function testNavHighlightsSmtpOnly(): void
+    public function testSettingsTabsHighlightSmtp(): void
     {
         $page = $this->get('/admin/settings/smtp')->body();
 
-        $this->assertStringContainsString('href="/admin/settings/smtp" aria-current="page"', $page);
-        $this->assertStringNotContainsString('href="/admin/settings" aria-current="page"', $page);
+        $this->assertStringContainsString('class="tab on" href="/admin/settings/smtp" aria-current="page"', $page);
+        $this->assertStringContainsString('class="nav-btn active" href="/admin/settings" aria-current="page"', $page);
+        $this->assertStringNotContainsString('class="tab on" href="/admin/settings"', $page);
     }
 }
