@@ -299,3 +299,52 @@ a.btn-ghost { height: 40px; }
   .contact-grid, .cv-offer { grid-template-columns: 1fr; }
   .form-row { grid-template-columns: 1fr; }
 }
+
+/* Mobile filter panel. Only with JavaScript (html.js); without it the filters stay inline. */
+.filters-toggle, .filters-close, .label-panel { display: none; }
+.filters-backdrop { display: none; }
+
+@media (max-width: 760px) {
+  html.js .filters-toggle {
+    display: inline-flex; align-items: center; gap: 6px; height: 38px; padding: 0 14px;
+    border: 1px solid var(--brand); border-radius: 8px; background: #fff; color: var(--brand);
+    font: inherit; font-weight: 700; cursor: pointer;
+  }
+  html.js .filters-toggle svg { width: 18px; height: 18px; fill: currentColor; }
+  html.js .filters-toggle .badge { background: var(--brand); color: #fff; }
+  html.js .results-head { flex-wrap: wrap; }
+
+  html.js .filters {
+    position: fixed; top: 0; bottom: 0; left: 0; z-index: 120;
+    width: min(86vw, 340px); max-height: none; margin: 0; overflow-y: auto;
+    border-radius: 0 var(--radius) var(--radius) 0; border-left: 0; padding: 0 18px;
+    transform: translateX(-105%); visibility: hidden;
+    transition: transform 0.25s ease, visibility 0s linear 0.25s;
+  }
+  html.js .filters.open {
+    transform: none; visibility: visible; box-shadow: 8px 0 30px rgba(0, 0, 0, 0.2);
+    transition: transform 0.25s ease, visibility 0s;
+  }
+  html.js .filters-head {
+    position: sticky; top: 0; background: #fff; z-index: 1;
+    padding: 16px 0 12px; margin-bottom: 8px; border-bottom: 1px solid var(--line); gap: 12px;
+  }
+  html.js .filters-head h2 { margin-right: auto; }
+  html.js .filters-close {
+    display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px;
+    border: 0; border-radius: 8px; background: #eef3f1; color: var(--ink); font-size: 1rem; cursor: pointer;
+  }
+  html.js .filters-foot { position: sticky; bottom: 0; background: #fff; padding: 12px 0 16px; border-top: 1px solid var(--line); }
+  html.js .apply-filters { background: var(--brand); color: #fff; height: 46px; font-size: 1rem; }
+  html.js .label-wide { display: none; }
+  html.js .label-panel { display: inline; }
+
+  html.js .filters-backdrop:not([hidden]) {
+    display: block; position: fixed; inset: 0; z-index: 110; background: rgba(20, 28, 36, 0.45);
+  }
+  body.filters-open { overflow: hidden; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.js .filters, html.js .filters.open { transition: none; }
+}

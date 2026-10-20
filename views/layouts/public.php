@@ -24,6 +24,7 @@ if (preg_match('/^(.+?)(UG)$/u', $brandName, $m) === 1) {
   <?php if (isset($robots)): ?><meta name="robots" content="<?= e($robots) ?>"><?php endif; ?>
   <?= $head ?? '' ?>
   <link rel="stylesheet" href="/assets/css/site.css">
+  <script src="/assets/js/js-flag.js"></script>
   <script src="/assets/js/site.js" defer></script>
 </head>
 <body>

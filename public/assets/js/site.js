@@ -97,10 +97,49 @@
     }
   });
 
+  /* ---------- Mobile filter panel ---------- */
+  const PHONE = window.matchMedia('(max-width: 760px)');
+  const panel = document.getElementById('filters');
+  const toggle = document.querySelector('.filters-toggle');
+  const backdrop = document.querySelector('.filters-backdrop');
+
+  function openFilters() {
+    if (!panel || !toggle) return;
+    panel.classList.add('open');
+    panel.setAttribute('role', 'dialog');
+    panel.setAttribute('aria-modal', 'true');
+    panel.setAttribute('aria-labelledby', 'filters-title');
+    if (backdrop) backdrop.hidden = false;
+    toggle.setAttribute('aria-expanded', 'true');
+    document.body.classList.add('filters-open');
+    panel.querySelector('[data-filters-close]')?.focus();
+  }
+
+  function closeFilters(returnFocus = true) {
+    if (!panel || !panel.classList.contains('open')) return;
+    panel.classList.remove('open');
+    panel.removeAttribute('role');
+    panel.removeAttribute('aria-modal');
+    if (backdrop) backdrop.hidden = true;
+    toggle?.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('filters-open');
+    if (returnFocus) toggle?.focus();
+  }
+
+  toggle?.addEventListener('click', openFilters);
+  document.querySelectorAll('[data-filters-close]').forEach((el) => el.addEventListener('click', () => closeFilters()));
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeFilters();
+  });
+  // Rotating to a wider screen puts the filters back in the page.
+  PHONE.addEventListener('change', (event) => { if (!event.matches) closeFilters(false); });
+
   // Filters and sort apply immediately; the "Apply filters" button stays for typed salary values.
+  // Inside the phone panel, choices wait for "Show results" so the panel doesn't reload on every tap.
   document.addEventListener('change', (event) => {
     const field = event.target.closest('[data-autosubmit]');
     if (!field) return;
+    if (PHONE.matches && field.closest('.filters')) return;
     const form = field.form;
     if (!form) return;
     const page = form.querySelector('input[name="page"]');

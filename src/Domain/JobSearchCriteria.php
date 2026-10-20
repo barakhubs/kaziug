@@ -116,6 +116,19 @@ final class JobSearchCriteria
         return in_array($type, $this->types, true);
     }
 
+    /** Number of filter groups in use (keyword and sort not counted), for the mobile "Filters" badge. */
+    public function activeFilterCount(bool $includeCategory = true): int
+    {
+        return count(array_filter([
+            $this->types !== [],
+            $includeCategory && $this->categorySlug !== null,
+            $this->experience !== null,
+            $this->postedWithinDays !== null,
+            $this->remoteOnly,
+            $this->salaryMin !== null || $this->salaryMax !== null,
+        ]));
+    }
+
     public function hasFilters(): bool
     {
         return $this->toQuery(['sort' => null, 'page' => null], false) !== [];

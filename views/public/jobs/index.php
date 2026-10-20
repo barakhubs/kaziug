@@ -56,10 +56,11 @@ $total = $result->pagination->total;
 <?php endif; ?>
 
 <main class="container layout" id="main">
-  <aside class="filters" aria-label="Filters">
+  <aside class="filters" id="filters" aria-label="Filters">
     <div class="filters-head">
-      <h2>Filters</h2>
+      <h2 id="filters-title">Filters</h2>
       <a class="link-btn" href="<?= e($basePath) ?>">Clear all</a>
+      <button type="button" class="filters-close" data-filters-close aria-label="Close filters">✕</button>
     </div>
 
     <fieldset>
@@ -115,11 +116,21 @@ $total = $result->pagination->total;
       <label class="check"><input type="checkbox" name="remote" value="1" form="jobsearch" data-autosubmit<?= $criteria->remoteOnly ? ' checked' : '' ?>> Remote only</label>
     </fieldset>
 
-    <button type="submit" class="btn-ghost apply-filters" form="jobsearch">Apply filters</button>
+    <div class="filters-foot">
+      <button type="submit" class="btn-ghost apply-filters" form="jobsearch">
+        <span class="label-wide">Apply filters</span><span class="label-panel">Show results</span>
+      </button>
+    </div>
   </aside>
+  <div class="filters-backdrop" data-filters-close hidden></div>
 
   <section class="results" aria-labelledby="resultsSummary">
     <div class="results-head">
+      <?php $activeFilters = $criteria->activeFilterCount($includeCategory); ?>
+      <button type="button" class="filters-toggle" aria-controls="filters" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 5h18v2H3V5Zm4 6h10v2H7v-2Zm3 6h4v2h-4v-2Z"/></svg>
+        Filters<?php if ($activeFilters > 0): ?> <span class="badge"><?= e($activeFilters) ?></span><?php endif; ?>
+      </button>
       <p id="resultsSummary" aria-live="polite">
         <strong><?= e($total) ?></strong> job<?= $total === 1 ? '' : 's' ?>
         <?php if ($criteria->q !== ''): ?> for “<?= e($criteria->q) ?>”<?php endif; ?>
