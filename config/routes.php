@@ -7,6 +7,7 @@ use App\Controllers\Admin\AuthController;
 use App\Controllers\Admin\CategoriesController;
 use App\Controllers\Admin\DashboardController;
 use App\Controllers\Admin\JobsController;
+use App\Controllers\Admin\NewslettersController;
 use App\Controllers\Admin\SiteSettingsController;
 use App\Controllers\Admin\SmtpSettingsController;
 use App\Controllers\Admin\SocialProfilesController;
@@ -82,6 +83,19 @@ return static function (Router $r): void {
         $r->post('/social/{id:\d+}/visibility', [SocialProfilesController::class, 'visibility']);
         $r->post('/social/{id:\d+}/move', [SocialProfilesController::class, 'move']);
         $r->post('/social/{id:\d+}/delete', [SocialProfilesController::class, 'delete']);
+
+        $r->get('/newsletters', [NewslettersController::class, 'index']);
+        $r->get('/newsletters/new', [NewslettersController::class, 'create']);
+        $r->post('/newsletters', [NewslettersController::class, 'store']);
+        $r->get('/newsletters/{id:\d+}', [NewslettersController::class, 'show']);
+        $r->get('/newsletters/{id:\d+}/edit', [NewslettersController::class, 'edit']);
+        $r->post('/newsletters/{id:\d+}', [NewslettersController::class, 'update']);
+        $r->get('/newsletters/{id:\d+}/preview', [NewslettersController::class, 'preview']);
+        $r->post('/newsletters/{id:\d+}/test', [NewslettersController::class, 'test']);
+        $r->post('/newsletters/{id:\d+}/send', [NewslettersController::class, 'send']);
+        $r->post('/newsletters/{id:\d+}/schedule', [NewslettersController::class, 'schedule']);
+        $r->post('/newsletters/{id:\d+}/unschedule', [NewslettersController::class, 'unschedule']);
+        $r->post('/newsletters/{id:\d+}/delete', [NewslettersController::class, 'delete']);
 
         $r->get('/subscribers', [SubscribersController::class, 'index']);
         $r->get('/subscribers/export.csv', [SubscribersController::class, 'export']);

@@ -42,6 +42,22 @@ final class Config
         return (bool) $this->get($key, $default);
     }
 
+    /** A copy with one dot-key replaced (used by tests and commands that need a variation). */
+    public function with(string $key, mixed $value): self
+    {
+        $values = $this->values;
+        $node = &$values;
+        foreach (explode('.', $key) as $segment) {
+            if (!isset($node[$segment]) || !is_array($node[$segment])) {
+                $node[$segment] = $node[$segment] ?? [];
+            }
+            $node = &$node[$segment];
+        }
+        $node = $value;
+
+        return new self($values);
+    }
+
     public function isProduction(): bool
     {
         return $this->get('app.env') === 'production';

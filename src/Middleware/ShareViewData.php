@@ -30,6 +30,8 @@ final class ShareViewData implements MiddlewareInterface
         $this->view->share('session', $request->attribute('session'));
         $this->view->share('currentPath', $request->path);
         $this->view->share('appUrl', $this->config->string('app.url'));
+        // Settings are cached per request, never across requests.
+        $this->settings->forget();
         $this->view->share('site', $this->settings->site());
 
         return $next($request);

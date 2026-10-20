@@ -25,3 +25,42 @@
     });
   });
 })();
+
+(() => {
+  'use strict';
+
+  // Minimal formatting toolbar for the newsletter body (a plain textarea of HTML).
+  // It only wraps the selection in tags; the server sanitises whatever is saved.
+  document.querySelectorAll('[data-editor]').forEach((toolbar) => {
+    const area = document.getElementById(toolbar.dataset.editor);
+    if (!area) return;
+    toolbar.hidden = false;
+
+    const escapeAttr = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+    const replaceSelection = (before, inner, after) => {
+      const { selectionStart: start, selectionEnd: end, value } = area;
+      const text = inner(value.slice(start, end));
+      area.setRangeText(before + text + after, start, end, 'end');
+      area.focus();
+    };
+
+    toolbar.addEventListener('click', (event) => {
+      const button = event.target.closest('button');
+      if (!button) return;
+      if (button.dataset.wrap) {
+        const tag = button.dataset.wrap;
+        replaceSelection(`<${tag}>`, (s) => s || 'text', `</${tag}>`);
+      } else if (button.dataset.list) {
+        const tag = button.dataset.list;
+        replaceSelection(`<${tag}>\n`, (s) => (s || 'Item').split(/\r?\n/).filter(Boolean)
+          .map((line) => `  <li>${line.trim()}</li>`).join('\n'), `\n</${tag}>`);
+      } else if ('link' in button.dataset) {
+        const url = window.prompt('Link address (https://… or mailto:…)', 'https://');
+        if (!url || !/^(https?:\/\/|mailto:)/i.test(url.trim())) return;
+        replaceSelection(`<a href="${escapeAttr(url.trim())}">`, (s) => s || url.trim(), '</a>');
+      } else if (button.dataset.insert) {
+        replaceSelection('', () => button.dataset.insert, '\n');
+      }
+    });
+  });
+})();

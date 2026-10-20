@@ -274,3 +274,14 @@ td a { color: var(--ink); }
 .stat-link { text-decoration: none; color: var(--ink); }
 .stat-link.on { border-color: var(--brand); box-shadow: 0 0 0 2px rgba(12, 107, 88, 0.15); }
 code { background: #eef1f4; padding: 1px 5px; border-radius: 4px; font-size: 0.85em; }
+.js-only[hidden] { display: none !important; }
+.editor-toolbar { display: flex; gap: 4px; flex-wrap: wrap; margin: 6px 0; }
+.editor-toolbar button {
+  min-width: 36px; height: 32px; border: 1px solid var(--line); background: #fff; border-radius: 6px; cursor: pointer;
+}
+.editor-toolbar button:hover { border-color: var(--brand); color: var(--brand); }
+.code-area { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 0.88rem; }
+.newsletter-form { max-width: 900px; }
+.email-preview { width: 100%; height: 640px; border: 1px solid var(--line); border-radius: 8px; background: #f4f6f8; }
+.stack form, form.stack { display: grid; gap: 8px; }
+.stat strong .pill { font-size: 0.95rem; vertical-align: middle; }

@@ -50,6 +50,16 @@ use App\Services\Contracts\SubscriberAdminServiceInterface;
 use App\Services\Contracts\SubscriptionServiceInterface;
 use App\Services\SubscriberAdminService;
 use App\Services\SubscriptionService;
+use App\Mail\EmailNewsletterChannel;
+use App\Mail\NewsletterChannelInterface;
+use App\Repositories\Contracts\DeliveryRepositoryInterface;
+use App\Repositories\Contracts\LockInterface;
+use App\Repositories\Contracts\NewsletterRepositoryInterface;
+use App\Repositories\PgAdvisoryLock;
+use App\Repositories\PgDeliveryRepository;
+use App\Repositories\PgNewsletterRepository;
+use App\Services\Contracts\NewsletterServiceInterface;
+use App\Services\NewsletterService;
 use App\Services\Contracts\JobSearchServiceInterface;
 use App\Services\Contracts\SettingsReaderInterface;
 use App\Services\JobSearchService;
@@ -132,10 +142,15 @@ return static function (Container $c, Config $config): void {
     $c->bind(SocialProfileRepositoryInterface::class, PgSocialProfileRepository::class);
     $c->bind(SmtpSettingsRepositoryInterface::class, PgSmtpSettingsRepository::class);
     $c->bind(SubscriberRepositoryInterface::class, PgSubscriberRepository::class);
+    $c->bind(NewsletterRepositoryInterface::class, PgNewsletterRepository::class);
+    $c->bind(DeliveryRepositoryInterface::class, PgDeliveryRepository::class);
+    $c->bind(LockInterface::class, PgAdvisoryLock::class);
 
     // --- Mail ---------------------------------------------------------------------------
     $c->bind(TransportFactoryInterface::class, PhpMailerTransportFactory::class);
     $c->bind(MailerInterface::class, ConfiguredMailer::class);
+    // To add a channel, bind a composite here that also calls the new one.
+    $c->bind(NewsletterChannelInterface::class, EmailNewsletterChannel::class);
 
     // --- Services -----------------------------------------------------------------------
     $c->bind(HealthCheckInterface::class, DatabaseHealthCheck::class);
@@ -153,4 +168,5 @@ return static function (Container $c, Config $config): void {
     $c->bind(SmtpSettingsServiceInterface::class, SmtpSettingsService::class);
     $c->bind(SubscriptionServiceInterface::class, SubscriptionService::class);
     $c->bind(SubscriberAdminServiceInterface::class, SubscriberAdminService::class);
+    $c->bind(NewsletterServiceInterface::class, NewsletterService::class);
 };
