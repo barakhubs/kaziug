@@ -3,7 +3,8 @@
 /** @var \App\Domain\SiteSettings $site */
 $this->layout('layouts/public');
 $this->set('pageTitle', 'Contact us');
-$this->set('metaDescription', 'Get in touch with ' . $site->siteName . ' by message or WhatsApp.');
+$this->set('metaDescription', 'Get in touch with ' . $site->siteName . ', the job board for Uganda, by message or WhatsApp.');
+$this->set('canonical', $appUrl . '/contact');
 ?>
 <main class="container contact-page" id="main">
   <p class="crumbs"><a href="/">All jobs</a> › Contact us</p>

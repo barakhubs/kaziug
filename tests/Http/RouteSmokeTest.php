@@ -37,6 +37,7 @@ final class RouteSmokeTest extends AdminHttpTestCase
             'slug' => [
                 '/jobs/' => (string) $this->db->fetchValue('SELECT min(slug) FROM jobs'),
                 '/categories/' => 'technology',
+                '/jobs-in/' => 'kampala',
             ],
             'token' => str_repeat('k', 43),
         ];

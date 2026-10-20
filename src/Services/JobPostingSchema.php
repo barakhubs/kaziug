@@ -28,15 +28,22 @@ final class JobPostingSchema
             'title' => $job->title,
             'description' => $this->description($job),
             'identifier' => ['@type' => 'PropertyValue', 'name' => $this->settings->site()->siteName, 'value' => (string) $job->id],
-            'datePosted' => $job->publishedAt?->format('Y-m-d'),
+            'datePosted' => $job->publishedAt?->format(DATE_ATOM),
             'employmentType' => $job->jobType->schemaOrg(),
             'hiringOrganization' => ['@type' => 'Organization', 'name' => $job->company],
+            'industry' => $job->categoryName,
+            'occupationalCategory' => $job->categoryName,
+            // Applications happen on the employer's link or by email, not on this page.
+            'directApply' => false,
             'jobLocation' => [
                 '@type' => 'Place',
                 'address' => ['@type' => 'PostalAddress', 'addressLocality' => $job->location, 'addressCountry' => 'UG'],
             ],
             'url' => $this->config->string('app.url') . '/jobs/' . $job->slug,
         ];
+        if ($job->skills !== []) {
+            $data['skills'] = implode(', ', $job->skills);
+        }
         if ($job->expiresAt !== null) {
             $data['validThrough'] = $job->expiresAt->format(DATE_ATOM);
         }

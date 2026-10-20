@@ -122,7 +122,7 @@ final class PublicJobsTest extends HttpTestCase
         $slug = $this->slug('Frontend Developer');
         $body = $this->get("/jobs/{$slug}")->body();
 
-        $this->assertStringContainsString('<title>Frontend Developer (React) at Savanna Tech Labs · KaziUG</title>', $body);
+        $this->assertStringContainsString('<title>Frontend Developer (React) at Savanna Tech Labs, Kampala · KaziUG</title>', $body);
         $this->assertStringContainsString('<link rel="canonical" href="http://localhost/jobs/' . $slug . '">', $body);
         $this->assertStringContainsString('<meta property="og:title"', $body);
         preg_match('#<script type="application/ld\+json">(.+?)</script>#s', $body, $m);

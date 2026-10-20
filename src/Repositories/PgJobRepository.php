@@ -136,6 +136,20 @@ final class PgJobRepository implements JobWriteRepositoryInterface, JobReadRepos
         ), 'location');
     }
 
+    public function locationCounts(): array
+    {
+        return array_map(static fn (array $r): array => ['location' => (string) $r['location'], 'count' => (int) $r['n']], $this->db->fetchAll(
+            'SELECT j.location, count(*) AS n FROM jobs j WHERE ' . self::VISIBLE . ' GROUP BY j.location ORDER BY n DESC, j.location',
+        ));
+    }
+
+    public function sitemapEntries(): array
+    {
+        return array_map(static fn (array $r): array => ['slug' => (string) $r['slug'], 'updated_at' => (string) $r['updated_at']], $this->db->fetchAll(
+            'SELECT j.slug, j.updated_at FROM jobs j WHERE ' . self::VISIBLE . ' ORDER BY j.published_at DESC LIMIT 50000',
+        ));
+    }
+
     // --- Back office --------------------------------------------------------------------------
 
     public function adminSearch(array $filters, int $limit, int $offset, string $sort = 'updated', string $direction = 'desc'): array

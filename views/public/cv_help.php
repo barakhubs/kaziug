@@ -5,8 +5,14 @@ use App\Core\Format;
 
 $this->layout('layouts/public');
 $price = Format::money($site->cvServicePrice);
-$this->set('pageTitle', 'CV help');
-$this->set('metaDescription', "Get your CV reviewed and fixed by {$site->siteName} for {$price}.");
+$this->set('pageTitle', 'CV help: CV fix service in Uganda, ' . $price);
+$this->set('metaDescription', "Get your CV reviewed and fixed by {$site->siteName} for {$price}. Clear structure, stronger wording, tailored to jobs in Uganda. Request online or on WhatsApp.");
+$this->set('canonical', $appUrl . '/cv-help');
+$this->start('head');
+foreach ($jsonLd as $json): ?>
+  <script type="application/ld+json"><?= $json ?></script>
+<?php endforeach;
+$this->end();
 ?>
 <main class="container contact-page" id="main">
   <p class="crumbs"><a href="/">All jobs</a> › CV help</p>
@@ -51,4 +57,14 @@ $this->set('metaDescription', "Get your CV reviewed and fixed by {$site->siteNam
         'whatsappMessage' => "Hello {$site->siteName}, I'd like help with my CV ({$price}).",
     ]) ?>
   </div>
+
+  <section class="panel-card faq" aria-labelledby="faq-title">
+    <h2 id="faq-title">Frequently asked questions</h2>
+    <?php foreach ($faq as $item): ?>
+      <details>
+        <summary><?= e($item['question']) ?></summary>
+        <p><?= e($item['answer']) ?></p>
+      </details>
+    <?php endforeach; ?>
+  </section>
 </main>

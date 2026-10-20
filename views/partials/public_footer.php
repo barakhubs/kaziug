@@ -13,6 +13,23 @@ $socialProfiles ??= [];
       <p class="footer-links"><a href="/contact">Contact us</a> · <a href="/cv-help">CV help</a></p>
     </div>
 
+    <?php if (($footerCities ?? []) !== [] || ($footerCategories ?? []) !== []): ?>
+      <nav class="footer-browse" aria-label="Browse jobs">
+        <?php if (($footerCities ?? []) !== []): ?>
+          <div>
+            <p class="footer-heading">Jobs by city</p>
+            <ul><?php foreach ($footerCities as $fc): ?><li><a href="/jobs-in/<?= e($fc['slug']) ?>">Jobs in <?= e($fc['name']) ?></a></li><?php endforeach; ?></ul>
+          </div>
+        <?php endif; ?>
+        <?php if (($footerCategories ?? []) !== []): ?>
+          <div>
+            <p class="footer-heading">Jobs by category</p>
+            <ul><?php foreach ($footerCategories as $fcat): ?><li><a href="/categories/<?= e($fcat->slug) ?>"><?= e($fcat->name) ?></a></li><?php endforeach; ?></ul>
+          </div>
+        <?php endif; ?>
+      </nav>
+    <?php endif; ?>
+
     <?php if (isset($subscribeForm) && $subscribeForm): ?>
       <?= $this->insert('partials/subscribe_form') ?>
     <?php endif; ?>

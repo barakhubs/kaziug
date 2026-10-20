@@ -35,6 +35,38 @@ final class Format
         return self::money($min, $currency) . $range . ' / month';
     }
 
+    /** Shortens text for meta descriptions: whole words only, ending in "…" when cut. */
+    public static function excerpt(string $text, int $max = 155): string
+    {
+        $text = trim((string) preg_replace('/\s+/u', ' ', $text));
+        if (mb_strlen($text) <= $max) {
+            return $text;
+        }
+        $cut = mb_substr($text, 0, $max - 1);
+        $space = mb_strrpos($cut, ' ');
+        if ($space !== false && $space > $max * 0.6) {
+            $cut = mb_substr($cut, 0, $space);
+        }
+
+        return rtrim($cut, " ,.;:-–") . '…';
+    }
+
+    /** One plain sentence with a job's key facts, easy for people and AI answers to quote. */
+    public static function jobFacts(\App\Domain\Job $job): string
+    {
+        $where = $job->location . ', Uganda' . ($job->isRemote ? ' (remote-friendly)' : '');
+
+        return sprintf(
+            '%s %s-level %s role at %s in %s. Salary: %s.',
+            $job->jobType->label(),
+            strtolower($job->experienceLevel->label()),
+            $job->categoryName,
+            $job->company,
+            $where,
+            $job->salaryMin === null && $job->salaryMax === null ? 'not disclosed' : self::salary($job->salaryMin, $job->salaryMax, $job->currency),
+        );
+    }
+
     public static function date(?DateTimeInterface $date, string $format = 'j M Y'): string
     {
         return $date?->format($format) ?? '';

@@ -22,6 +22,15 @@ if (preg_match('/^(.+?)(UG)$/u', $brandName, $m) === 1) {
   <meta name="description" content="<?= e($metaDescription ?? $site->metaDescription) ?>">
   <?php if (isset($canonical)): ?><link rel="canonical" href="<?= e($canonical) ?>"><?php endif; ?>
   <?php if (isset($robots)): ?><meta name="robots" content="<?= e($robots) ?>"><?php endif; ?>
+  <meta property="og:site_name" content="<?= e($site->siteName) ?>">
+  <meta property="og:type" content="<?= e($ogType ?? 'website') ?>">
+  <meta property="og:title" content="<?= e($fullTitle) ?>">
+  <meta property="og:description" content="<?= e($metaDescription ?? $site->metaDescription) ?>">
+  <meta property="og:locale" content="en_UG">
+  <?php if (isset($canonical)): ?><meta property="og:url" content="<?= e($canonical) ?>"><?php endif; ?>
+  <?php if ($site->hasLogo()): ?><meta property="og:image" content="<?= e(($appUrl ?? '') . '/media/logo?v=' . $site->logoVersion) ?>"><?php endif; ?>
+  <meta name="twitter:card" content="summary">
+  <link rel="alternate" type="application/rss+xml" title="<?= e($site->siteName) ?> latest jobs" href="/jobs.rss">
   <?= $head ?? '' ?>
   <link rel="stylesheet" href="/assets/css/site.css">
   <script src="/assets/js/js-flag.js"></script>

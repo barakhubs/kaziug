@@ -23,4 +23,10 @@ interface JobReadRepositoryInterface
 
     /** @return list<string> distinct locations of visible jobs */
     public function publishedLocations(): array;
+
+    /** @return list<array{location: string, count: int}> visible jobs per location, most first */
+    public function locationCounts(): array;
+
+    /** @return list<array{slug: string, updated_at: string}> every visible job, for the sitemap */
+    public function sitemapEntries(): array;
 }

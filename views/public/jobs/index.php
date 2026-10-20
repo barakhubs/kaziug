@@ -4,33 +4,53 @@
 /** @var \App\Domain\Job|null $selected */
 /** @var list<\App\Domain\Category> $categories */
 /** @var list<string> $locations */
+/** @var list<array{name: string, slug: string, count: int}> $cities */
 /** @var \App\Domain\Category|null $category */
+/** @var array{name: string, slug: string, count: int}|null $city */
+/** @var bool $includeCategory */
+/** @var bool $includeLocation */
+/** @var list<string> $jsonLd */
 /** @var string $basePath */
+/** @var string $appUrl */
 /** @var \App\Domain\SiteSettings $site */
-/** @var \App\Core\Config $config */
+use App\Core\Format;
 use App\Domain\ExperienceLevel;
 use App\Domain\JobType;
 
 $this->layout('layouts/public');
-$onCategoryPage = $category !== null;
-$includeCategory = !$onCategoryPage;
-$this->set('pageTitle', $onCategoryPage ? $category->name . ' jobs' : '');
-if ($onCategoryPage && $category->description !== '') {
-    $this->set('metaDescription', $category->description);
+$total = $result->pagination->total;
+$plural = static fn (int $n): string => $n === 1 ? '1 open job' : "{$n} open jobs";
+
+if ($category !== null) {
+    $this->set('pageTitle', $category->name . ' jobs in Uganda');
+    $this->set('metaDescription', Format::excerpt($category->description !== ''
+        ? $category->description
+        : "Browse {$plural($total)} in {$category->name} across Uganda, with salaries in UGX and how to apply."));
+} elseif ($city !== null) {
+    $this->set('pageTitle', 'Jobs in ' . $city['name'] . ', Uganda');
+    $this->set('metaDescription', Format::excerpt("Browse {$plural($city['count'])} in {$city['name']}, Uganda: full-time, part-time, contract and internship roles with salaries in UGX. Updated daily."));
 }
-$this->set('canonical', $appUrl . ($basePath === '/' ? '/' : $basePath) . ($result->pagination->page > 1 ? '?page=' . $result->pagination->page : ''));
-if ($criteria->hasFilters()) {
+$this->set('canonical', $appUrl . $basePath . ($result->pagination->page > 1 ? '?page=' . $result->pagination->page : ''));
+if ($criteria->hasFilters($includeLocation)) {
     // Filtered result pages are endless permutations: keep them out of search indexes.
     $this->set('robots', 'noindex, follow');
 }
+$this->start('head');
+foreach ($jsonLd as $json): ?>
+  <script type="application/ld+json"><?= $json ?></script>
+<?php endforeach;
+$this->end();
 
-$paneUrl = static function (\App\Domain\Job $job) use ($criteria, $basePath, $includeCategory): string {
-    return $basePath . '?' . http_build_query($criteria->toQuery(['job' => $job->slug], $includeCategory));
+$paneUrl = static function (\App\Domain\Job $job) use ($criteria, $basePath, $includeCategory, $includeLocation): string {
+    return $basePath . '?' . http_build_query($criteria->toQuery(['job' => $job->slug], $includeCategory, $includeLocation));
 };
-$total = $result->pagination->total;
+$otherCities = array_values(array_filter($cities, static fn (array $c): bool => $c['slug'] !== ($city['slug'] ?? '')));
 ?>
 <section class="searchbar">
-  <form id="jobsearch" class="container search-form" role="search" method="get" action="<?= e($basePath) ?>">
+  <?php if ($category === null && $city === null): ?>
+    <div class="container"><h1 class="search-title"><?= e($site->tagline !== '' ? $site->tagline : 'Jobs in Uganda') ?></h1></div>
+  <?php endif; ?>
+  <form id="jobsearch" class="container search-form" role="search" method="get" action="<?= e($city !== null ? '/' : $basePath) ?>">
     <div class="field grow">
       <label for="q" class="sr-only">Job title, skill or company</label>
       <input id="q" name="q" type="search" value="<?= e($criteria->q) ?>" placeholder="Job title, skill or company" autocomplete="off" maxlength="100">
@@ -47,13 +67,25 @@ $total = $result->pagination->total;
   </form>
 </section>
 
-<?php if ($onCategoryPage): ?>
+<?php if ($category !== null): ?>
   <div class="container category-head">
     <p class="crumbs"><a href="/">All jobs</a> › <?= e($category->name) ?></p>
     <h1><?= e($category->name) ?> jobs</h1>
-    <?php if ($category->description !== ''): ?><p class="muted"><?= e($category->description) ?></p><?php endif; ?>
+    <p class="muted"><?= e($category->description !== '' ? $category->description : ucfirst($plural($total)) . " in {$category->name} across Uganda.") ?></p>
+  </div>
+<?php elseif ($city !== null): ?>
+  <div class="container category-head">
+    <p class="crumbs"><a href="/">All jobs</a> › <?= e($city['name']) ?></p>
+    <h1>Jobs in <?= e($city['name']) ?></h1>
+    <p class="muted"><?= e(ucfirst($plural($city['count']))) ?> in <?= e($city['name']) ?>, Uganda: full-time, part-time, contract and internship roles. Salaries are monthly, in UGX, where employers share them.</p>
+    <?php if ($otherCities !== []): ?>
+      <p class="city-links">Other cities:
+        <?php foreach (array_slice($otherCities, 0, 8) as $i => $other): ?><?= $i > 0 ? ' · ' : '' ?><a href="/jobs-in/<?= e($other['slug']) ?>"><?= e($other['name']) ?></a><?php endforeach; ?>
+      </p>
+    <?php endif; ?>
   </div>
 <?php endif; ?>
+
 
 <main class="container layout" id="main">
   <aside class="filters" id="filters" aria-label="Filters">
@@ -70,7 +102,7 @@ $total = $result->pagination->total;
       <?php endforeach; ?>
     </fieldset>
 
-    <?php if (!$onCategoryPage): ?>
+    <?php if ($includeCategory): ?>
       <fieldset>
         <legend><label for="categoryFilter">Category</label></legend>
         <select id="categoryFilter" name="category" form="jobsearch" data-autosubmit>
@@ -155,7 +187,7 @@ $total = $result->pagination->total;
     </ul>
 
     <?= $this->insert('partials/public_pager', [
-        'pagination' => $result->pagination, 'criteria' => $criteria, 'basePath' => $basePath, 'includeCategory' => $includeCategory,
+        'pagination' => $result->pagination, 'criteria' => $criteria, 'basePath' => $basePath, 'includeCategory' => $includeCategory, 'includeLocation' => $includeLocation,
     ]) ?>
   </section>
 

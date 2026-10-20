@@ -30,7 +30,7 @@ final class JobSearchCriteria
     }
 
     /** @param array<string, mixed> $query raw $_GET; anything invalid is ignored rather than rejected */
-    public static function fromQuery(array $query, ?string $forcedCategory = null): self
+    public static function fromQuery(array $query, ?string $forcedCategory = null, ?string $forcedLocation = null): self
     {
         $text = static fn (string $key, int $max): string => is_string($query[$key] ?? null)
             ? mb_substr(trim((string) preg_replace('/\s+/u', ' ', $query[$key])), 0, $max)
@@ -65,7 +65,7 @@ final class JobSearchCriteria
 
         return new self(
             $text('q', 100),
-            $text('loc', 80),
+            $forcedLocation ?? $text('loc', 80),
             $category,
             $types,
             is_string($query['exp'] ?? null) ? ExperienceLevel::tryFrom($query['exp']) : null,
@@ -83,11 +83,11 @@ final class JobSearchCriteria
      * @param array<string, mixed> $overrides
      * @return array<string, mixed>
      */
-    public function toQuery(array $overrides = [], bool $includeCategory = true): array
+    public function toQuery(array $overrides = [], bool $includeCategory = true, bool $includeLocation = true): array
     {
         $query = [
             'q' => $this->q,
-            'loc' => $this->location,
+            'loc' => $includeLocation ? $this->location : null,
             'category' => $includeCategory ? $this->categorySlug : null,
             'type' => array_map(static fn (JobType $t): string => $t->value, $this->types),
             'exp' => $this->experience?->value,
@@ -129,9 +129,9 @@ final class JobSearchCriteria
         ]));
     }
 
-    public function hasFilters(): bool
+    public function hasFilters(bool $includeLocation = true): bool
     {
-        return $this->toQuery(['sort' => null, 'page' => null], false) !== [];
+        return $this->toQuery(['sort' => null, 'page' => null], false, $includeLocation) !== [];
     }
 
     /**

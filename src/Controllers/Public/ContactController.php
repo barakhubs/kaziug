@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controllers\Public;
 
+use App\Core\Format;
 use App\Core\Http\Request;
+use App\Services\Contracts\SettingsReaderInterface;
+use App\Services\Seo\StructuredData;
 use App\Core\Http\Responder;
 use App\Core\Http\Response;
 use App\Core\Log\LoggerInterface;
@@ -28,6 +31,8 @@ final class ContactController
         private readonly FormTimer $timer,
         private readonly LoggerInterface $logger,
         private readonly Responder $responder,
+        private readonly SettingsReaderInterface $settings,
+        private readonly StructuredData $structuredData,
     ) {
     }
 
@@ -109,11 +114,31 @@ final class ContactController
      */
     private function page(string $topic, array $errors, array $values, int $status = 200): Response
     {
-        return $this->responder->view(self::PAGES[$topic]['template'], [
+        $data = [
             'errors' => $errors,
             'values' => $values,
             'formAvailable' => $this->contact->isAvailable(),
             'formAction' => self::PAGES[$topic]['path'],
-        ], $status);
+        ];
+        if ($topic === ContactMessage::TOPIC_CV) {
+            $site = $this->settings->site();
+            $faq = $this->faq();
+            $data['faq'] = $faq;
+            $data['jsonLd'] = [$this->structuredData->cvService($site), $this->structuredData->faq($faq)];
+        }
+
+        return $this->responder->view(self::PAGES[$topic]['template'], $data, $status);
+    }
+
+    /** @return list<array{question: string, answer: string}> */
+    private function faq(): array
+    {
+        $site = $this->settings->site();
+        $replace = ['{price}' => Format::money($site->cvServicePrice), '{site}' => $site->siteName];
+
+        return array_map(static fn (array $item): array => [
+            'question' => strtr((string) $item['question'], $replace),
+            'answer' => strtr((string) $item['answer'], $replace),
+        ], require dirname(__DIR__, 3) . '/config/content/cv_help_faq.php');
     }
 }

@@ -6,7 +6,7 @@ use App\Core\Format;
 $headingTag = $inPane ? 'h2' : 'h1';
 ?>
 <<?= $headingTag ?> class="detail-title"><?php if ($inPane): ?><a href="/jobs/<?= e($job->slug) ?>"><?= e($job->title) ?></a><?php else: ?><?= e($job->title) ?><?php endif; ?></<?= $headingTag ?>>
-<p class="company"><?= e($job->company) ?> · <?= e($job->location) ?><?= $job->isRemote ? ' · Remote' : '' ?></p>
+<p class="company"><?= e($job->company) ?> · <a href="/jobs-in/<?= e(\App\Domain\Slug::from($job->location)) ?>"><?= e($job->location) ?></a><?= $job->isRemote ? ' · Remote' : '' ?></p>
 <p class="salary"><?= e(Format::salary($job->salaryMin, $job->salaryMax, $job->currency)) ?></p>
 <div class="actions">
   <?php if ($job->applyUrl !== null): ?>

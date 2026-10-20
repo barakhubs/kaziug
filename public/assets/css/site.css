@@ -348,3 +348,20 @@ a.btn-ghost { height: 40px; }
 @media (prefers-reduced-motion: reduce) {
   html.js .filters, html.js .filters.open { transition: none; }
 }
+
+/* SEO / GEO additions */
+.search-title { color: #fff; font-size: 1.25rem; margin: 0 0 10px; font-weight: 700; letter-spacing: -0.01em; }
+.city-links { font-size: 0.9rem; margin: 6px 0 0; color: var(--muted); }
+.city-links a, .related-links a, .company a { color: var(--brand); }
+.job-facts { margin-top: 20px; padding: 12px 14px; background: #eef3f1; border-radius: 8px; font-size: 0.95rem; }
+.related-links { font-size: 0.9rem; color: var(--muted); }
+.faq { margin-top: 20px; }
+.faq details { border-top: 1px solid var(--line); padding: 12px 0; }
+.faq details:first-of-type { border-top: 0; }
+.faq summary { font-weight: 700; cursor: pointer; }
+.faq details p { margin: 8px 0 0; color: #2f3947; }
+.footer-browse { display: flex; gap: 32px; flex-wrap: wrap; }
+.footer-heading { font-weight: 700; color: var(--ink); margin: 0 0 6px; }
+.footer-browse ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 4px; }
+.footer-browse a { color: var(--muted); text-decoration: none; }
+.footer-browse a:hover { color: var(--brand); text-decoration: underline; }

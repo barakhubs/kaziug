@@ -6,8 +6,9 @@
 if ($pagination->pages <= 1) {
     return;
 }
-$url = static function (int $page) use ($criteria, $basePath, $includeCategory): string {
-    $query = $criteria->toQuery(['page' => $page > 1 ? $page : null], $includeCategory);
+$includeLocation ??= true;
+$url = static function (int $page) use ($criteria, $basePath, $includeCategory, $includeLocation): string {
+    $query = $criteria->toQuery(['page' => $page > 1 ? $page : null], $includeCategory, $includeLocation);
 
     return $basePath . ($query === [] ? '' : '?' . http_build_query($query));
 };

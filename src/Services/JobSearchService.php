@@ -9,6 +9,7 @@ use App\Domain\JobSearchCriteria;
 use App\Domain\NotFoundException;
 use App\Domain\Paginated;
 use App\Domain\Pagination;
+use App\Domain\Slug;
 use App\Repositories\Contracts\JobReadRepositoryInterface;
 use App\Services\Contracts\JobSearchServiceInterface;
 
@@ -44,5 +45,42 @@ final class JobSearchService implements JobSearchServiceInterface
     public function locations(): array
     {
         return $this->jobs->publishedLocations();
+    }
+
+    public function cities(): array
+    {
+        $cities = [];
+        foreach ($this->jobs->locationCounts() as $row) {
+            $slug = Slug::from($row['location']);
+            // Several spellings of one city ("Kampala", "kampala ") share a page.
+            if (isset($cities[$slug])) {
+                $cities[$slug]['count'] += $row['count'];
+                continue;
+            }
+            $cities[$slug] = ['name' => $row['location'], 'slug' => $slug, 'count' => $row['count']];
+        }
+
+        return array_values($cities);
+    }
+
+    public function findCity(string $slug): ?array
+    {
+        foreach ($this->cities() as $city) {
+            if ($city['slug'] === $slug) {
+                return $city;
+            }
+        }
+
+        return null;
+    }
+
+    public function sitemapEntries(): array
+    {
+        return $this->jobs->sitemapEntries();
+    }
+
+    public function latest(int $limit): array
+    {
+        return $this->jobs->searchPublished(new JobSearchCriteria(sort: 'date'), $limit, 0)['items'];
     }
 }

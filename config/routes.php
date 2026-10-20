@@ -15,6 +15,8 @@ use App\Controllers\Admin\SocialProfilesController;
 use App\Controllers\Admin\SubscribersController;
 use App\Controllers\Public\SubscriptionController;
 use App\Controllers\Public\CategoryController;
+use App\Controllers\Public\CityController;
+use App\Controllers\Public\SiteFilesController;
 use App\Controllers\Public\ContactController;
 use App\Controllers\Public\HealthController;
 use App\Controllers\Public\JobListController;
@@ -36,6 +38,7 @@ return static function (Router $r): void {
         $r->get('/', [JobListController::class, 'index']);
         $r->get('/jobs/{slug:[a-z0-9-]+}', [JobShowController::class, 'show']);
         $r->get('/categories/{slug:[a-z0-9-]+}', [CategoryController::class, 'show']);
+        $r->get('/jobs-in/{slug:[a-z0-9-]+}', [CityController::class, 'show']);
         $r->get('/saved', [SavedJobsController::class, 'index']);
 
         $r->get('/contact', [ContactController::class, 'showContact']);
@@ -52,6 +55,10 @@ return static function (Router $r): void {
 
     // --- Public machine endpoints -----------------------------------------------------------
     $r->get('/health', [HealthController::class, 'show']);
+    $r->get('/robots.txt', [SiteFilesController::class, 'robots']);
+    $r->get('/sitemap.xml', [SiteFilesController::class, 'sitemap']);
+    $r->get('/llms.txt', [SiteFilesController::class, 'llms']);
+    $r->get('/jobs.rss', [SiteFilesController::class, 'rss']);
     $r->get('/media/logo', [MediaController::class, 'logo']);
 
     // --- Admin: sign-in (no auth) --------------------------------------------------------
