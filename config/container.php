@@ -36,6 +36,14 @@ use App\Services\Contracts\SocialProfileServiceInterface;
 use App\Services\SettingsService;
 use App\Services\SocialProfileService;
 use App\Middleware\MaintenanceMode;
+use App\Mail\ConfiguredMailer;
+use App\Mail\MailerInterface;
+use App\Mail\PhpMailerTransportFactory;
+use App\Mail\TransportFactoryInterface;
+use App\Repositories\Contracts\SmtpSettingsRepositoryInterface;
+use App\Repositories\PgSmtpSettingsRepository;
+use App\Services\Contracts\SmtpSettingsServiceInterface;
+use App\Services\SmtpSettingsService;
 use App\Services\Contracts\JobSearchServiceInterface;
 use App\Services\Contracts\SettingsReaderInterface;
 use App\Services\JobSearchService;
@@ -116,6 +124,11 @@ return static function (Container $c, Config $config): void {
     $c->bind(JobReadRepositoryInterface::class, PgJobRepository::class);
     $c->bind(SettingsRepositoryInterface::class, PgSettingsRepository::class);
     $c->bind(SocialProfileRepositoryInterface::class, PgSocialProfileRepository::class);
+    $c->bind(SmtpSettingsRepositoryInterface::class, PgSmtpSettingsRepository::class);
+
+    // --- Mail ---------------------------------------------------------------------------
+    $c->bind(TransportFactoryInterface::class, PhpMailerTransportFactory::class);
+    $c->bind(MailerInterface::class, ConfiguredMailer::class);
 
     // --- Services -----------------------------------------------------------------------
     $c->bind(HealthCheckInterface::class, DatabaseHealthCheck::class);
@@ -130,4 +143,5 @@ return static function (Container $c, Config $config): void {
     $c->bind(SettingsReaderInterface::class, SettingsReader::class);
     $c->bind(SettingsServiceInterface::class, SettingsService::class);
     $c->bind(SocialProfileServiceInterface::class, SocialProfileService::class);
+    $c->bind(SmtpSettingsServiceInterface::class, SmtpSettingsService::class);
 };

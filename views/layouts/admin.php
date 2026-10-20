@@ -10,11 +10,17 @@ $nav = [
     ['/admin/categories', 'Categories'],
     ['/admin/social', 'Social profiles'],
     ['/admin/settings', 'Site settings'],
+    ['/admin/settings/smtp', 'SMTP'],
     ['/admin/account', 'Account'],
 ];
-$isActive = static fn (string $href): bool => $href === '/admin'
-    ? $currentPath === '/admin'
-    : ($currentPath === $href || str_starts_with($currentPath, $href . '/'));
+// The longest nav link that prefixes the current path is the active one.
+$activeHref = '/admin';
+foreach ($nav as [$href]) {
+    if (($currentPath === $href || str_starts_with($currentPath, $href . '/')) && strlen($href) > strlen($activeHref)) {
+        $activeHref = $href;
+    }
+}
+$isActive = static fn (string $href): bool => $href === $activeHref;
 ?>
 <!doctype html>
 <html lang="en">

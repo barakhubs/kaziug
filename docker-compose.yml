@@ -17,5 +17,13 @@ services:
       timeout: 3s
       retries: 10
 
+  # Catches every email sent locally. SMTP host 127.0.0.1, port 1025, encryption "none";
+  # read the mail at http://localhost:8025.
+  mailpit:
+    image: axllent/mailpit:v1.21
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
 volumes:
   db-data:

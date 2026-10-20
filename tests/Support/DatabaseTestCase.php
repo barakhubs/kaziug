@@ -8,7 +8,9 @@ use App\Core\Config;
 use App\Core\Container;
 use App\Core\Database\Database;
 use App\Core\Database\Migrator;
+use App\Mail\TransportFactoryInterface;
 use PHPUnit\Framework\TestCase;
+use Tests\Support\Fakes\RecordingTransportFactory;
 use RuntimeException;
 
 /**
@@ -23,10 +25,15 @@ abstract class DatabaseTestCase extends TestCase
 
     protected Database $db;
 
+    /** Every email the app tries to send in a test lands here. */
+    protected RecordingTransportFactory $mail;
+
     protected function setUp(): void
     {
         parent::setUp();
         $this->container = require dirname(__DIR__, 2) . '/config/bootstrap.php';
+        $this->mail = new RecordingTransportFactory();
+        $this->container->instance(TransportFactoryInterface::class, $this->mail);
 
         $config = $this->container->get(Config::class);
         if ($config->string('app.env') !== 'testing' || !str_ends_with($config->string('db.database'), '_test')) {

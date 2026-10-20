@@ -8,6 +8,7 @@ use App\Controllers\Admin\CategoriesController;
 use App\Controllers\Admin\DashboardController;
 use App\Controllers\Admin\JobsController;
 use App\Controllers\Admin\SiteSettingsController;
+use App\Controllers\Admin\SmtpSettingsController;
 use App\Controllers\Admin\SocialProfilesController;
 use App\Controllers\Public\CategoryController;
 use App\Controllers\Public\HealthController;
@@ -73,6 +74,10 @@ return static function (Router $r): void {
         $r->post('/social/{id:\d+}/visibility', [SocialProfilesController::class, 'visibility']);
         $r->post('/social/{id:\d+}/move', [SocialProfilesController::class, 'move']);
         $r->post('/social/{id:\d+}/delete', [SocialProfilesController::class, 'delete']);
+
+        $r->get('/settings/smtp', [SmtpSettingsController::class, 'show']);
+        $r->post('/settings/smtp', [SmtpSettingsController::class, 'update']);
+        $r->post('/settings/smtp/test', [SmtpSettingsController::class, 'test']);
 
         $r->get('/settings', [SiteSettingsController::class, 'show']);
         $r->post('/settings', [SiteSettingsController::class, 'update']);
