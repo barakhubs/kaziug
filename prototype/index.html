@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KaziUG: Jobs in Uganda</title>
+  <meta name="description" content="Find jobs in Uganda across Kampala, Entebbe, Jinja, Mbarara, Gulu, Kasese and remote roles.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a href="index.html" class="brand">Kazi<span>UG</span></a>
+      <nav class="topnav">
+        <a href="#" id="savedLink">Saved <span id="savedCount" class="badge">0</span></a>
+        <a href="#" onclick="return false;">Post a job</a>
+        <a href="#" onclick="return false;">Sign in</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="searchbar">
+    <form id="searchForm" class="container search-form" role="search">
+      <div class="field grow">
+        <label for="q" class="sr-only">Job title, skill or company</label>
+        <input id="q" type="search" placeholder="Job title, skill or company" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="locInput" class="sr-only">Location</label>
+        <input id="locInput" type="text" list="locations" placeholder="City or remote" autocomplete="off">
+        <datalist id="locations"></datalist>
+      </div>
+      <button type="submit" class="btn-primary">Find jobs</button>
+    </form>
+  </section>
+
+  <main class="container layout">
+
+    <aside class="filters" aria-label="Filters">
+      <div class="filters-head">
+        <h2>Filters</h2>
+        <button type="button" id="clearFilters" class="link-btn">Clear all</button>
+      </div>
+
+      <fieldset>
+        <legend>Job type</legend>
+        <div id="typeFilters"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Category</legend>
+        <select id="categoryFilter" aria-label="Category">
+          <option value="">All categories</option>
+        </select>
+      </fieldset>
+
+      <fieldset>
+        <legend>Experience</legend>
+        <select id="expFilter" aria-label="Experience level">
+          <option value="">Any level</option>
+          <option value="Entry">Entry</option>
+          <option value="Mid">Mid</option>
+          <option value="Senior">Senior</option>
+        </select>
+      </fieldset>
+
+      <fieldset>
+        <legend>Date posted</legend>
+        <select id="dateFilter" aria-label="Date posted">
+          <option value="">Any time</option>
+          <option value="1">Last 24 hours</option>
+          <option value="7">Last 7 days</option>
+          <option value="30">Last 30 days</option>
+        </select>
+      </fieldset>
+
+      <fieldset>
+        <legend>Work style</legend>
+        <label class="check"><input type="checkbox" id="remoteOnly"> Remote only</label>
+      </fieldset>
+    </aside>
+
+    <section class="results">
+      <div class="results-head">
+        <p id="resultsSummary" aria-live="polite"></p>
+        <label>Sort by
+          <select id="sortSelect" aria-label="Sort by">
+            <option value="relevance">Relevance</option>
+            <option value="date">Date posted</option>
+            <option value="salary">Salary</option>
+          </select>
+        </label>
+      </div>
+      <ul id="jobList" class="job-list"></ul>
+      <nav class="pager" id="pager" aria-label="Pagination"></nav>
+    </section>
+
+    <article class="detail" id="detail">
+      <div class="detail-empty">Select a job to see its details.</div>
+    </article>
+
+  </main>
+
+  <footer>
+    <div class="container">
+      Demo job data is fictional and not affiliated with any company listed.
+    </div>
+  </footer>
+
+  <script src="jobs-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>KaziUG Back Office</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+  <!-- Sign-in / first-time setup -->
+  <section id="authView" class="auth hidden">
+    <form id="setupForm" class="auth-card hidden">
+      <h1>Create admin password</h1>
+      <p class="muted">This browser has no admin yet. Create the single admin password.</p>
+      <label>Password (8+ characters)
+        <input type="password" id="setupPass" minlength="8" required autocomplete="new-password">
+      </label>
+      <label>Confirm password
+        <input type="password" id="setupPass2" minlength="8" required autocomplete="new-password">
+      </label>
+      <button class="btn-primary" type="submit">Create admin</button>
+    </form>
+
+    <form id="loginForm" class="auth-card hidden">
+      <h1>Back office sign in</h1>
+      <label>Password
+        <input type="password" id="loginPass" required autocomplete="current-password">
+      </label>
+      <button class="btn-primary" type="submit">Sign in</button>
+      <p id="loginError" class="error" role="alert"></p>
+    </form>
+  </section>
+
+  <!-- Main app -->
+  <div id="appView" class="app hidden">
+    <aside class="side">
+      <div class="side-brand">Kazi<span>UG</span><small>Back office</small></div>
+      <nav class="side-nav">
+        <button class="nav-btn active" type="button" data-view="dashboardView">Dashboard</button>
+        <button class="nav-btn" type="button" data-view="jobsView">Jobs</button>
+        <a class="nav-btn" href="../index.html" target="_blank" rel="noopener">View public site ↗</a>
+      </nav>
+      <button class="nav-btn logout" id="logoutBtn" type="button">Sign out</button>
+    </aside>
+
+    <main class="main">
+      <section id="dashboardView" class="view">
+        <header class="page-head"><h1>Dashboard</h1></header>
+        <div class="stats" id="stats"></div>
+        <div class="panel">
+          <h2>Jobs by category</h2>
+          <div id="categoryBars"></div>
+        </div>
+      </section>
+
+      <section id="jobsView" class="view hidden">
+        <header class="page-head">
+          <h1>Jobs</h1>
+          <div class="head-actions">
+            <button class="btn-ghost" type="button" id="exportBtn">Export JSON</button>
+            <button class="btn-ghost" type="button" id="resetBtn">Reset to sample data</button>
+            <button class="btn-primary" type="button" id="newJobBtn">+ New job</button>
+          </div>
+        </header>
+
+        <div class="toolbar">
+          <input type="search" id="jobSearch" placeholder="Search title, company, location…" aria-label="Search jobs">
+          <select id="statusFilter" aria-label="Filter by status">
+            <option value="all">All statuses</option>
+            <option value="published">Published</option>
+            <option value="draft">Drafts</option>
+          </select>
+          <span id="jobCount" class="muted"></span>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Title</th><th>Company</th><th>Location</th><th>Type</th>
+                <th>Status</th><th>Posted</th><th><span class="sr-only">Actions</span></th>
+              </tr>
+            </thead>
+            <tbody id="jobRows"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Job form -->
+  <dialog id="jobDialog">
+    <form id="jobForm" class="job-form" novalidate>
+      <header class="dialog-head">
+        <h2 id="dialogTitle">New job</h2>
+        <button type="button" class="icon-btn" data-close aria-label="Close">×</button>
+      </header>
+
+      <div class="grid2">
+        <label class="full">Job title
+          <input name="title" required>
+        </label>
+        <label>Company
+          <input name="company" required>
+        </label>
+        <label>Location (city)
+          <input name="location" list="cityList" required>
+        </label>
+        <label>Job type
+          <select name="type">
+            <option>Full-time</option><option>Part-time</option><option>Contract</option><option>Internship</option>
+          </select>
+        </label>
+        <label>Category
+          <input name="category" list="catList" required>
+        </label>
+        <label>Experience
+          <select name="exp">
+            <option value="Entry">Entry</option><option value="Mid">Mid</option><option value="Senior">Senior</option>
+          </select>
+        </label>
+        <label>Salary min (UGX / month)
+          <input name="salaryMin" type="number" min="0" step="1000">
+        </label>
+        <label>Salary max (UGX / month)
+          <input name="salaryMax" type="number" min="0" step="1000">
+        </label>
+        <label class="full">Skills (comma separated)
+          <input name="skills">
+        </label>
+        <label class="full">Summary
+          <textarea name="summary" rows="3" required></textarea>
+        </label>
+        <label class="full">Responsibilities (one per line)
+          <textarea name="responsibilities" rows="4"></textarea>
+        </label>
+        <label class="full">Requirements (one per line)
+          <textarea name="requirements" rows="4"></textarea>
+        </label>
+        <label class="check"><input type="checkbox" name="remote"> Remote-friendly</label>
+        <label class="check"><input type="checkbox" name="published" checked> Published on the public site</label>
+      </div>
+
+      <p id="formError" class="error" role="alert"></p>
+
+      <footer class="dialog-foot">
+        <button type="button" class="btn-ghost" data-close>Cancel</button>
+        <button type="submit" class="btn-primary">Save job</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <datalist id="cityList">
+    <option value="Kampala"></option><option value="Entebbe"></option><option value="Jinja"></option>
+    <option value="Mbarara"></option><option value="Gulu"></option><option value="Mukono"></option>
+    <option value="Kasese"></option>
+  </datalist>
+  <datalist id="catList"></datalist>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script src="../jobs-data.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
