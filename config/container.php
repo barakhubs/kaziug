@@ -44,6 +44,12 @@ use App\Repositories\Contracts\SmtpSettingsRepositoryInterface;
 use App\Repositories\PgSmtpSettingsRepository;
 use App\Services\Contracts\SmtpSettingsServiceInterface;
 use App\Services\SmtpSettingsService;
+use App\Repositories\Contracts\SubscriberRepositoryInterface;
+use App\Repositories\PgSubscriberRepository;
+use App\Services\Contracts\SubscriberAdminServiceInterface;
+use App\Services\Contracts\SubscriptionServiceInterface;
+use App\Services\SubscriberAdminService;
+use App\Services\SubscriptionService;
 use App\Services\Contracts\JobSearchServiceInterface;
 use App\Services\Contracts\SettingsReaderInterface;
 use App\Services\JobSearchService;
@@ -125,6 +131,7 @@ return static function (Container $c, Config $config): void {
     $c->bind(SettingsRepositoryInterface::class, PgSettingsRepository::class);
     $c->bind(SocialProfileRepositoryInterface::class, PgSocialProfileRepository::class);
     $c->bind(SmtpSettingsRepositoryInterface::class, PgSmtpSettingsRepository::class);
+    $c->bind(SubscriberRepositoryInterface::class, PgSubscriberRepository::class);
 
     // --- Mail ---------------------------------------------------------------------------
     $c->bind(TransportFactoryInterface::class, PhpMailerTransportFactory::class);
@@ -144,4 +151,6 @@ return static function (Container $c, Config $config): void {
     $c->bind(SettingsServiceInterface::class, SettingsService::class);
     $c->bind(SocialProfileServiceInterface::class, SocialProfileService::class);
     $c->bind(SmtpSettingsServiceInterface::class, SmtpSettingsService::class);
+    $c->bind(SubscriptionServiceInterface::class, SubscriptionService::class);
+    $c->bind(SubscriberAdminServiceInterface::class, SubscriberAdminService::class);
 };

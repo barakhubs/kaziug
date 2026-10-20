@@ -271,3 +271,6 @@ td a { color: var(--ink); }
 .logo-preview img { max-height: 60px; background: var(--brand-dark); padding: 8px; border-radius: 8px; }
 .ok-text { color: var(--brand-dark); font-weight: 600; }
 .mail-status p { margin: 4px 0; }
+.stat-link { text-decoration: none; color: var(--ink); }
+.stat-link.on { border-color: var(--brand); box-shadow: 0 0 0 2px rgba(12, 107, 88, 0.15); }
+code { background: #eef1f4; padding: 1px 5px; border-radius: 4px; font-size: 0.85em; }

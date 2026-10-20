@@ -18,13 +18,20 @@ final class VerifyCsrfToken implements MiddlewareInterface
 {
     private const SAFE_METHODS = ['GET', 'HEAD', 'OPTIONS'];
 
+    /**
+     * RFC 8058 one-click unsubscribe: mail clients POST to the link in the List-Unsubscribe
+     * header without any page or cookie. The 256-bit token in the URL is the authorisation,
+     * and the only effect is unsubscribing that one address.
+     */
+    private const EXEMPT = ['#^/unsubscribe/[A-Za-z0-9_-]{43}$#'];
+
     public function __construct(private readonly Csrf $csrf)
     {
     }
 
     public function process(Request $request, callable $next): Response
     {
-        if (!in_array($request->method, self::SAFE_METHODS, true)) {
+        if (!in_array($request->method, self::SAFE_METHODS, true) && !$this->isExempt($request->path)) {
             $submitted = $request->input(Csrf::FIELD) ?? $request->header(Csrf::HEADER);
             $secret = $request->attribute('csrf_cookie_secret');
 
@@ -34,5 +41,16 @@ final class VerifyCsrfToken implements MiddlewareInterface
         }
 
         return $next($request);
+    }
+
+    private function isExempt(string $path): bool
+    {
+        foreach (self::EXEMPT as $pattern) {
+            if (preg_match($pattern, $path) === 1) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

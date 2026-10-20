@@ -8,6 +8,7 @@ $nav = [
     ['/admin', 'Dashboard'],
     ['/admin/jobs', 'Jobs'],
     ['/admin/categories', 'Categories'],
+    ['/admin/subscribers', 'Subscribers'],
     ['/admin/social', 'Social profiles'],
     ['/admin/settings', 'Site settings'],
     ['/admin/settings/smtp', 'SMTP'],

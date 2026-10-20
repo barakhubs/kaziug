@@ -10,6 +10,8 @@ use App\Controllers\Admin\JobsController;
 use App\Controllers\Admin\SiteSettingsController;
 use App\Controllers\Admin\SmtpSettingsController;
 use App\Controllers\Admin\SocialProfilesController;
+use App\Controllers\Admin\SubscribersController;
+use App\Controllers\Public\SubscriptionController;
 use App\Controllers\Public\CategoryController;
 use App\Controllers\Public\HealthController;
 use App\Controllers\Public\JobListController;
@@ -32,6 +34,12 @@ return static function (Router $r): void {
         $r->get('/jobs/{slug:[a-z0-9-]+}', [JobShowController::class, 'show']);
         $r->get('/categories/{slug:[a-z0-9-]+}', [CategoryController::class, 'show']);
         $r->get('/saved', [SavedJobsController::class, 'index']);
+
+        $r->post('/subscribe', [SubscriptionController::class, 'subscribe']);
+        $r->get('/subscribe/confirm/{token:[A-Za-z0-9_-]+}', [SubscriptionController::class, 'showConfirm']);
+        $r->post('/subscribe/confirm/{token:[A-Za-z0-9_-]+}', [SubscriptionController::class, 'confirm']);
+        $r->get('/unsubscribe/{token:[A-Za-z0-9_-]+}', [SubscriptionController::class, 'showUnsubscribe']);
+        $r->post('/unsubscribe/{token:[A-Za-z0-9_-]+}', [SubscriptionController::class, 'unsubscribe']);
     });
 
     // --- Public machine endpoints -----------------------------------------------------------
@@ -74,6 +82,13 @@ return static function (Router $r): void {
         $r->post('/social/{id:\d+}/visibility', [SocialProfilesController::class, 'visibility']);
         $r->post('/social/{id:\d+}/move', [SocialProfilesController::class, 'move']);
         $r->post('/social/{id:\d+}/delete', [SocialProfilesController::class, 'delete']);
+
+        $r->get('/subscribers', [SubscribersController::class, 'index']);
+        $r->get('/subscribers/export.csv', [SubscribersController::class, 'export']);
+        $r->get('/subscribers/import', [SubscribersController::class, 'showImport']);
+        $r->post('/subscribers/import', [SubscribersController::class, 'import']);
+        $r->post('/subscribers/{id:\d+}/unsubscribe', [SubscribersController::class, 'unsubscribe']);
+        $r->post('/subscribers/{id:\d+}/delete', [SubscribersController::class, 'delete']);
 
         $r->get('/settings/smtp', [SmtpSettingsController::class, 'show']);
         $r->post('/settings/smtp', [SmtpSettingsController::class, 'update']);

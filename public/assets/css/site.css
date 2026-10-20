@@ -245,3 +245,17 @@ a.btn-ghost { height: 40px; }
   .topnav a:not(#savedLink) { display: none; }
 }
 .btn-ghost, a.btn-ghost { font-size: 0.95rem; }
+
+/* Subscribe form (footer and subscription pages) */
+.subscribe { max-width: 460px; display: grid; gap: 8px; }
+.subscribe-title { font-size: 1rem; margin: 0; color: var(--ink); }
+.subscribe-fields { display: flex; gap: 8px; flex-wrap: wrap; }
+.subscribe-fields input {
+  flex: 1 1 160px; height: 42px; border: 1px solid var(--line); border-radius: 8px; padding: 0 12px; font-family: inherit; font-size: 0.95rem;
+}
+.subscribe .btn-primary { height: 42px; }
+.subscribe .consent { font-size: 0.85rem; align-items: flex-start; }
+.subscribe .consent input { margin-top: 3px; }
+.hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.field-error { color: #b42318; font-size: 0.85rem; }
+.panel-card form { margin-top: 16px; }
