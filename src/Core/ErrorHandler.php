@@ -8,6 +8,7 @@ use App\Core\Http\HttpException;
 use App\Core\Http\Request;
 use App\Core\Http\Response;
 use App\Core\Log\LoggerInterface;
+use App\Domain\NotFoundException;
 use ErrorException;
 use Throwable;
 
@@ -36,6 +37,9 @@ final class ErrorHandler
 
     public function render(Throwable $e, Request $request): Response
     {
+        if ($e instanceof NotFoundException) {
+            $e = HttpException::notFound($e->getMessage());
+        }
         $status = $e instanceof HttpException ? $e->status : 500;
 
         if ($status >= 500 && !($e instanceof HttpException)) {

@@ -16,6 +16,10 @@ if (!function_exists('e')) {
         if (is_bool($value)) {
             return '1';
         }
+        if (is_array($value) || (is_object($value) && !method_exists($value, '__toString'))) {
+            // Re-displayed form input can be an array if someone posts field[]=...; show nothing.
+            return '';
+        }
 
         return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5, 'UTF-8');
     }

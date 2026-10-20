@@ -21,7 +21,13 @@ abstract class HttpTestCase extends DatabaseTestCase
     /** @param array<string, mixed> $query */
     protected function get(string $path, array $query = []): Response
     {
-        return $this->send(new Request('GET', Request::normalisePath($path), $query, [], [], [], $this->cookies, $this->server()));
+        $parts = explode('?', $path, 2);
+        if (isset($parts[1])) {
+            parse_str($parts[1], $fromUrl);
+            $query = [...$fromUrl, ...$query];
+        }
+
+        return $this->send(new Request('GET', Request::normalisePath($parts[0]), $query, [], [], [], $this->cookies, $this->server()));
     }
 
     /**

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use App\Controllers\Admin\AccountController;
 use App\Controllers\Admin\AuthController;
+use App\Controllers\Admin\CategoriesController;
+use App\Controllers\Admin\JobsController;
 use App\Controllers\Admin\DashboardController;
 use App\Controllers\Public\HealthController;
 use App\Core\Http\Router;
@@ -26,6 +28,25 @@ return static function (Router $r): void {
     $r->group('/admin', [IdleTimeout::class, Authenticate::class], function (Router $r): void {
         $r->get('', [DashboardController::class, 'index']);
         $r->post('/logout', [AuthController::class, 'logout']);
+
+        $r->get('/jobs', [JobsController::class, 'index']);
+        $r->get('/jobs/new', [JobsController::class, 'create']);
+        $r->post('/jobs', [JobsController::class, 'store']);
+        $r->post('/jobs/bulk-status', [JobsController::class, 'bulkStatus']);
+        $r->get('/jobs/{id:\d+}/edit', [JobsController::class, 'edit']);
+        $r->post('/jobs/{id:\d+}', [JobsController::class, 'update']);
+        $r->post('/jobs/{id:\d+}/status', [JobsController::class, 'changeStatus']);
+        $r->post('/jobs/{id:\d+}/duplicate', [JobsController::class, 'duplicate']);
+        $r->post('/jobs/{id:\d+}/delete', [JobsController::class, 'delete']);
+
+        $r->get('/categories', [CategoriesController::class, 'index']);
+        $r->get('/categories/new', [CategoriesController::class, 'create']);
+        $r->post('/categories', [CategoriesController::class, 'store']);
+        $r->get('/categories/{id:\d+}/edit', [CategoriesController::class, 'edit']);
+        $r->post('/categories/{id:\d+}', [CategoriesController::class, 'update']);
+        $r->post('/categories/{id:\d+}/toggle', [CategoriesController::class, 'toggle']);
+        $r->post('/categories/{id:\d+}/move', [CategoriesController::class, 'move']);
+        $r->post('/categories/{id:\d+}/delete', [CategoriesController::class, 'delete']);
 
         $r->get('/account', [AccountController::class, 'show']);
         $r->post('/account/password', [AccountController::class, 'updatePassword']);

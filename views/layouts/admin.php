@@ -6,6 +6,8 @@
 
 $nav = [
     ['/admin', 'Dashboard'],
+    ['/admin/jobs', 'Jobs'],
+    ['/admin/categories', 'Categories'],
     ['/admin/account', 'Account'],
 ];
 $isActive = static fn (string $href): bool => $href === '/admin'

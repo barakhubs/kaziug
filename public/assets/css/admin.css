@@ -248,3 +248,12 @@ form.inline { display: inline; }
 .timeline li { font-size: 0.9rem; }
 .error-page { padding: 60px 20px; text-align: center; }
 .debug-trace { text-align: left; white-space: pre-wrap; font-size: 0.8rem; background: #fff; padding: 16px; border: 1px solid var(--line); overflow-x: auto; }
+.edit-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 20px; align-items: start; }
+.edit-layout .form-card { max-width: none; }
+.status-panel h2 { font-size: 1rem; }
+.row-link { color: var(--brand); font-weight: 600; padding: 4px 8px; text-decoration: none; }
+.row-actions button:disabled { opacity: 0.35; cursor: default; }
+.order-cell { text-align: left; width: 90px; }
+input.short { max-width: 120px; }
+td a { color: var(--ink); }
+@media (max-width: 1000px) { .edit-layout { grid-template-columns: 1fr; } }

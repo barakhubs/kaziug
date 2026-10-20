@@ -13,3 +13,15 @@
     if (message && !window.confirm(message)) event.preventDefault();
   });
 })();
+
+(() => {
+  'use strict';
+
+  // "Select all" checkbox for bulk actions: <input type="checkbox" data-check-all="ids[]">.
+  document.querySelectorAll('[data-check-all]').forEach((master) => {
+    master.addEventListener('change', () => {
+      document.querySelectorAll(`input[type="checkbox"][name="${master.dataset.checkAll}"]`)
+        .forEach((box) => { box.checked = master.checked; });
+    });
+  });
+})();

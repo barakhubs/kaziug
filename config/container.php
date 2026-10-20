@@ -24,16 +24,26 @@ use App\Middleware\StartSession;
 use App\Middleware\VerifyCsrfToken;
 use App\Repositories\Contracts\AdminUserRepositoryInterface;
 use App\Repositories\Contracts\AuditLogRepositoryInterface;
+use App\Repositories\Contracts\CategoryRepositoryInterface;
+use App\Repositories\Contracts\JobWriteRepositoryInterface;
 use App\Repositories\Contracts\ThrottleRepositoryInterface;
+use App\Repositories\Contracts\TransactionManagerInterface;
 use App\Repositories\PgAdminUserRepository;
 use App\Repositories\PgAuditLogRepository;
+use App\Repositories\PgCategoryRepository;
+use App\Repositories\PgJobRepository;
 use App\Repositories\PgThrottleRepository;
+use App\Repositories\PgTransactionManager;
 use App\Services\AdminAccountService;
 use App\Services\AuditService;
 use App\Services\AuthService;
+use App\Services\CategoryService;
 use App\Services\Contracts\AdminAccountServiceInterface;
 use App\Services\Contracts\AuditServiceInterface;
 use App\Services\Contracts\AuthServiceInterface;
+use App\Services\Contracts\CategoryServiceInterface;
+use App\Services\Contracts\JobServiceInterface;
+use App\Services\JobService;
 use App\Services\Contracts\HealthCheckInterface;
 use App\Services\Contracts\PasswordHasherInterface;
 use App\Services\Contracts\ThrottleInterface;
@@ -85,6 +95,9 @@ return static function (Container $c, Config $config): void {
     $c->bind(AdminUserRepositoryInterface::class, PgAdminUserRepository::class);
     $c->bind(ThrottleRepositoryInterface::class, PgThrottleRepository::class);
     $c->bind(AuditLogRepositoryInterface::class, PgAuditLogRepository::class);
+    $c->bind(TransactionManagerInterface::class, PgTransactionManager::class);
+    $c->bind(CategoryRepositoryInterface::class, PgCategoryRepository::class);
+    $c->bind(JobWriteRepositoryInterface::class, PgJobRepository::class);
 
     // --- Services -----------------------------------------------------------------------
     $c->bind(HealthCheckInterface::class, DatabaseHealthCheck::class);
@@ -93,4 +106,6 @@ return static function (Container $c, Config $config): void {
     $c->bind(AuditServiceInterface::class, AuditService::class);
     $c->bind(AuthServiceInterface::class, AuthService::class);
     $c->bind(AdminAccountServiceInterface::class, AdminAccountService::class);
+    $c->bind(CategoryServiceInterface::class, CategoryService::class);
+    $c->bind(JobServiceInterface::class, JobService::class);
 };
