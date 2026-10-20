@@ -21,7 +21,7 @@ $socialProfiles ??= [];
         <?php foreach ($socialProfiles as $profile): ?>
           <li>
             <a href="<?= e($profile->url) ?>" rel="noopener me" target="_blank" title="<?= e($profile->label) ?>">
-              <?= $this->insert('partials/icon', ['icon' => $profile->iconKey]) ?>
+              <?= $this->insert('partials/icon', ['icon' => $profile->icon]) ?>
               <span class="sr-only"><?= e($profile->label) ?></span>
             </a>
           </li>

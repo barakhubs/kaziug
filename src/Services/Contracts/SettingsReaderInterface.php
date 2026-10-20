@@ -10,4 +10,7 @@ use App\Domain\SiteSettings;
 interface SettingsReaderInterface
 {
     public function site(): SiteSettings;
+
+    /** Drops the per-request cache after settings change. */
+    public function forget(): void;
 }

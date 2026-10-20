@@ -29,6 +29,13 @@ use App\Repositories\Contracts\JobReadRepositoryInterface;
 use App\Repositories\Contracts\JobWriteRepositoryInterface;
 use App\Repositories\Contracts\SettingsRepositoryInterface;
 use App\Repositories\PgSettingsRepository;
+use App\Repositories\Contracts\SocialProfileRepositoryInterface;
+use App\Repositories\PgSocialProfileRepository;
+use App\Services\Contracts\SettingsServiceInterface;
+use App\Services\Contracts\SocialProfileServiceInterface;
+use App\Services\SettingsService;
+use App\Services\SocialProfileService;
+use App\Middleware\MaintenanceMode;
 use App\Services\Contracts\JobSearchServiceInterface;
 use App\Services\Contracts\SettingsReaderInterface;
 use App\Services\JobSearchService;
@@ -95,6 +102,7 @@ return static function (Container $c, Config $config): void {
             ShareViewData::class,
             RenderErrors::class,
             VerifyCsrfToken::class,
+            MaintenanceMode::class,
         ],
     ));
 
@@ -107,6 +115,7 @@ return static function (Container $c, Config $config): void {
     $c->bind(JobWriteRepositoryInterface::class, PgJobRepository::class);
     $c->bind(JobReadRepositoryInterface::class, PgJobRepository::class);
     $c->bind(SettingsRepositoryInterface::class, PgSettingsRepository::class);
+    $c->bind(SocialProfileRepositoryInterface::class, PgSocialProfileRepository::class);
 
     // --- Services -----------------------------------------------------------------------
     $c->bind(HealthCheckInterface::class, DatabaseHealthCheck::class);
@@ -119,4 +128,6 @@ return static function (Container $c, Config $config): void {
     $c->bind(JobServiceInterface::class, JobService::class);
     $c->bind(JobSearchServiceInterface::class, JobSearchService::class);
     $c->bind(SettingsReaderInterface::class, SettingsReader::class);
+    $c->bind(SettingsServiceInterface::class, SettingsService::class);
+    $c->bind(SocialProfileServiceInterface::class, SocialProfileService::class);
 };
