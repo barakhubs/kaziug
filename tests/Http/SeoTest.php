@@ -168,6 +168,26 @@ final class SeoTest extends HttpTestCase
         $this->assertSame(['100000', 'UGX'], [$service['offers']['price'], $service['offers']['priceCurrency']]);
     }
 
+    public function testDefaultLogoAndFavicons(): void
+    {
+        $html = $this->get('/')->body();
+
+        $this->assertStringContainsString('<img src="/assets/img/logo.png" alt="KaziUG" class="brand-logo"', $html);
+        $this->assertStringContainsString('<link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32.png">', $html);
+        $this->assertStringContainsString('<link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png">', $html);
+        $this->assertStringContainsString('<meta property="og:image" content="http://localhost/assets/img/logo.png">', $html);
+        $this->assertSame('http://localhost/assets/img/logo.png', $this->block($html, 'Organization')['logo']);
+        $this->assertStringContainsString('src="/assets/img/logo.png"', $this->get('/admin/login')->body());
+
+        $ico = $this->get('/favicon.ico');
+        $this->assertSame(301, $ico->status());
+        $this->assertSame('/assets/img/favicon-32.png', $ico->header('Location'));
+
+        foreach (['logo.png', 'favicon.png', 'favicon-32.png', 'apple-touch-icon.png'] as $file) {
+            $this->assertFileExists(dirname(__DIR__, 2) . '/public/assets/img/' . $file);
+        }
+    }
+
     public function testExcerptCutsAtWordBoundary(): void
     {
         $this->assertSame('Short text.', Format::excerpt('Short   text.'));

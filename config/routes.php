@@ -56,6 +56,7 @@ return static function (Router $r): void {
     // --- Public machine endpoints -----------------------------------------------------------
     $r->get('/health', [HealthController::class, 'show']);
     $r->get('/robots.txt', [SiteFilesController::class, 'robots']);
+    $r->get('/favicon.ico', [SiteFilesController::class, 'favicon']);
     $r->get('/sitemap.xml', [SiteFilesController::class, 'sitemap']);
     $r->get('/llms.txt', [SiteFilesController::class, 'llms']);
     $r->get('/jobs.rss', [SiteFilesController::class, 'rss']);

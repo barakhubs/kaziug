@@ -7,11 +7,6 @@
 /** @var string|null $head extra head markup captured by the page (JSON-LD, OpenGraph) */
 /** @var string|null $robots */
 $fullTitle = isset($pageTitle) && $pageTitle !== '' ? $pageTitle . ' · ' . $site->siteName : $site->siteName . ': ' . $site->tagline;
-$brandName = $site->siteName;
-$brandAccent = '';
-if (preg_match('/^(.+?)(UG)$/u', $brandName, $m) === 1) {
-    [$brandName, $brandAccent] = [$m[1], $m[2]];
-}
 ?>
 <!doctype html>
 <html lang="en">
@@ -28,8 +23,9 @@ if (preg_match('/^(.+?)(UG)$/u', $brandName, $m) === 1) {
   <meta property="og:description" content="<?= e($metaDescription ?? $site->metaDescription) ?>">
   <meta property="og:locale" content="en_UG">
   <?php if (isset($canonical)): ?><meta property="og:url" content="<?= e($canonical) ?>"><?php endif; ?>
-  <?php if ($site->hasLogo()): ?><meta property="og:image" content="<?= e(($appUrl ?? '') . '/media/logo?v=' . $site->logoVersion) ?>"><?php endif; ?>
+  <meta property="og:image" content="<?= e(($appUrl ?? '') . $site->logoPath()) ?>">
   <meta name="twitter:card" content="summary">
+  <?= $this->insert('partials/favicons') ?>
   <link rel="alternate" type="application/rss+xml" title="<?= e($site->siteName) ?> latest jobs" href="/jobs.rss">
   <?= $head ?? '' ?>
   <link rel="stylesheet" href="/assets/vendor/fontawesome/css/fontawesome.min.css">
@@ -43,12 +39,8 @@ if (preg_match('/^(.+?)(UG)$/u', $brandName, $m) === 1) {
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="topbar">
     <div class="container topbar-inner">
-      <a href="/" class="brand">
-        <?php if ($site->hasLogo()): ?>
-          <img src="/media/logo?v=<?= e($site->logoVersion) ?>" alt="<?= e($site->siteName) ?>" class="brand-logo">
-        <?php else: ?>
-          <?= e($brandName) ?><?php if ($brandAccent !== ''): ?><span><?= e($brandAccent) ?></span><?php endif; ?>
-        <?php endif; ?>
+      <a href="/" class="brand" aria-label="<?= e($site->siteName) ?> home">
+        <img src="<?= e($site->logoPath()) ?>" alt="<?= e($site->siteName) ?>" class="brand-logo" width="134" height="48">
       </a>
       <nav class="topnav" aria-label="Main">
         <a href="/cv-help"<?= ($currentPath ?? '') === '/cv-help' ? ' class="active" aria-current="page"' : '' ?>>CV help</a>

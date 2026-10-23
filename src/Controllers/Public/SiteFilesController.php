@@ -6,6 +6,7 @@ namespace App\Controllers\Public;
 
 use App\Core\Http\Request;
 use App\Core\Http\Response;
+use App\Domain\SiteSettings;
 use App\Services\Seo\SiteFiles;
 
 /** /robots.txt, /sitemap.xml, /llms.txt and /jobs.rss, generated from live data. */
@@ -33,6 +34,12 @@ final class SiteFilesController
     public function rss(Request $request): Response
     {
         return $this->text($this->files->rss(), 'application/rss+xml; charset=UTF-8');
+    }
+
+    /** Browsers and crawlers ask for /favicon.ico by default; point them at the PNG favicon. */
+    public function favicon(Request $request): Response
+    {
+        return Response::redirect(SiteSettings::FAVICON, 301)->setHeader('Cache-Control', 'public, max-age=86400');
     }
 
     private function text(string $body, string $type): Response

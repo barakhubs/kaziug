@@ -31,9 +31,8 @@ a { color: var(--brand); }
 
 /* Top bar */
 .topbar { background: var(--brand-dark); color: #fff; }
-.topbar-inner { display: flex; align-items: center; justify-content: space-between; height: 56px; }
-.brand { color: #fff; font-weight: 800; font-size: 1.35rem; text-decoration: none; letter-spacing: -0.02em; }
-.brand span { color: var(--accent); }
+.topbar-inner { display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 64px; }
+.brand { display: inline-flex; align-items: center; flex: none; background: #fff; border-radius: 10px; padding: 4px 10px; text-decoration: none; }
 .topnav { display: flex; gap: 18px; font-size: 0.95rem; }
 .topnav a { color: #e6f2ef; text-decoration: none; }
 .topnav a:hover { text-decoration: underline; }
@@ -170,7 +169,7 @@ select {
 [hidden] { display: none !important; }
 .skip-link { position: absolute; left: -999px; top: 8px; background: #fff; padding: 8px 12px; border-radius: 6px; z-index: 200; }
 .skip-link:focus { left: 8px; }
-.brand-logo { max-height: 36px; display: block; }
+.brand-logo { display: block; height: 40px; width: auto; max-width: 180px; object-fit: contain; }
 a.btn-primary, a.btn-ghost { display: inline-flex; align-items: center; text-decoration: none; }
 a.btn-ghost { height: 40px; }
 .title a { color: inherit; text-decoration: none; }
@@ -384,3 +383,9 @@ a.btn-ghost { height: 40px; }
 .deadline-box.soon .deadline-when { color: #7a5300; }
 .deadline-box.today { background: #fdecea; border-left-color: #b42318; }
 .deadline-box.today .deadline-when { color: #b42318; }
+.brand:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+@media (max-width: 760px) {
+  .topbar-inner { height: 56px; }
+  .brand { padding: 3px 8px; }
+  .brand-logo { height: 32px; max-width: 120px; }
+}

@@ -10,6 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
   <title><?= e($status) ?> · KaziUG</title>
+  <?= $this->insert('partials/favicons') ?>
   <link rel="stylesheet" href="/assets/css/site.css">
 </head>
 <body>

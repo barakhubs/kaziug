@@ -54,9 +54,22 @@ final class SiteSettings
         );
     }
 
+    /** The site's own logo and favicon files, used unless a logo is uploaded in Settings. */
+    public const DEFAULT_LOGO = '/assets/img/logo.png';
+    public const FAVICON = '/assets/img/favicon-32.png';
+    public const FAVICON_LARGE = '/assets/img/favicon.png';
+    public const APPLE_TOUCH_ICON = '/assets/img/apple-touch-icon.png';
+
+    /** Whether a logo was uploaded in Settings (it then replaces the default logo file). */
     public function hasLogo(): bool
     {
         return $this->logoVersion !== null;
+    }
+
+    /** Site-relative path of the logo to show: the uploaded one if any, otherwise the default file. */
+    public function logoPath(): string
+    {
+        return $this->hasLogo() ? '/media/logo?v=' . $this->logoVersion : self::DEFAULT_LOGO;
     }
 
     public function hasWhatsapp(): bool

@@ -30,6 +30,7 @@ $isActive = static fn (string $href): bool => $href === $activeHref;
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <title><?= e(($title ?? 'Back office') . ' · KaziUG') ?></title>
+  <?= $this->insert('partials/favicons') ?>
   <link rel="stylesheet" href="/assets/vendor/fontawesome/css/fontawesome.min.css">
   <link rel="stylesheet" href="/assets/vendor/fontawesome/css/brands.min.css">
   <link rel="stylesheet" href="/assets/vendor/fontawesome/css/solid.min.css">
@@ -39,7 +40,10 @@ $isActive = static fn (string $href): bool => $href === $activeHref;
 <body>
   <div class="app">
     <aside class="side">
-      <div class="side-brand">Kazi<span>UG</span><small>Back office</small></div>
+      <a class="side-brand" href="/admin" aria-label="<?= e($site->siteName) ?> back office home">
+        <span class="side-logo"><img src="<?= e($site->logoPath()) ?>" alt="<?= e($site->siteName) ?>" width="134" height="48"></span>
+        <small>Back office</small>
+      </a>
       <nav class="side-nav" aria-label="Back office">
         <?php foreach ($nav as [$href, $label]): ?>
           <a class="nav-btn<?= $isActive($href) ? ' active' : '' ?>" href="<?= e($href) ?>"<?= $isActive($href) ? ' aria-current="page"' : '' ?>><?= e($label) ?></a>

@@ -37,9 +37,7 @@ final class StructuredData
             'description' => $site->metaDescription,
             'areaServed' => ['@type' => 'Country', 'name' => 'Uganda'],
         ];
-        if ($site->hasLogo()) {
-            $data['logo'] = $this->url('/media/logo?v=' . $site->logoVersion);
-        }
+        $data['logo'] = $this->url($site->logoPath());
         if ($site->contactEmail !== '') {
             $data['email'] = $site->contactEmail;
         }

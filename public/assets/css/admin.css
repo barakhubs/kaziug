@@ -82,8 +82,7 @@ input:focus, select:focus, textarea:focus, button:focus-visible {
   background: var(--brand-dark); color: #e6f2ef; padding: 20px 14px;
   display: flex; flex-direction: column; gap: 22px;
 }
-.side-brand { font-size: 1.3rem; font-weight: 800; padding: 0 8px; color: #fff; }
-.side-brand span { color: var(--accent); }
+.side-brand { display: grid; gap: 6px; justify-items: start; padding: 0 4px; color: #fff; text-decoration: none; }
 .side-brand small {
   display: block; font-size: 0.75rem; font-weight: 500; color: #a9cfc5; letter-spacing: 0.02em;
 }
@@ -330,3 +329,8 @@ meter.bar::-moz-meter-bar { background: var(--brand); border-radius: 999px; }
 .deadline-pill.soon { background: #fdf1d6; color: #7a5300; }
 .deadline-pill.today, .deadline-pill.closed { background: #fdecea; color: var(--danger); }
 .kv .deadline-pill { margin-left: 8px; }
+.side-logo { display: inline-flex; background: #fff; border-radius: 10px; padding: 6px 10px; }
+.side-logo img { display: block; height: 40px; width: auto; max-width: 170px; object-fit: contain; }
+.auth-wrap { display: grid; justify-items: center; gap: 18px; width: 100%; max-width: 380px; }
+.auth-logo { display: block; height: 64px; width: auto; max-width: 220px; object-fit: contain; }
+@media (max-width: 800px) { .side-logo img { height: 30px; } }
