@@ -53,4 +53,13 @@ final class PgThrottleRepository implements ThrottleRepositoryInterface
     {
         $this->db->execute('DELETE FROM login_attempts WHERE key = ?', [$key]);
     }
+
+    public function purgeOlderThan(int $seconds): int
+    {
+        return $this->db->execute(
+            'DELETE FROM login_attempts WHERE updated_at < now() - make_interval(secs => ?)
+               AND (locked_until IS NULL OR locked_until < now())',
+            [$seconds],
+        );
+    }
 }

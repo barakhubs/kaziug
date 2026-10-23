@@ -15,6 +15,7 @@ use App\Controllers\Admin\SocialProfilesController;
 use App\Controllers\Admin\SubscribersController;
 use App\Controllers\Public\SubscriptionController;
 use App\Controllers\Public\AboutController;
+use App\Controllers\Public\LegalPageController;
 use App\Controllers\Public\CategoryController;
 use App\Controllers\Public\CityController;
 use App\Controllers\Public\SiteFilesController;
@@ -43,6 +44,9 @@ return static function (Router $r): void {
         $r->get('/saved', [SavedJobsController::class, 'index']);
 
         $r->get('/about', [AboutController::class, 'show']);
+        $r->get('/privacy', [LegalPageController::class, 'privacy']);
+        $r->get('/terms', [LegalPageController::class, 'terms']);
+        $r->get('/cookies', [LegalPageController::class, 'cookies']);
         $r->get('/contact', [ContactController::class, 'showContact']);
         $r->post('/contact', [ContactController::class, 'sendContact']);
         $r->get('/cv-help', [ContactController::class, 'showCvHelp']);

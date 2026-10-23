@@ -53,6 +53,9 @@ final class SiteFiles
             [$this->url('/'), null, 'hourly', '1.0'],
             [$this->url('/cv-help'), null, 'monthly', '0.6'],
             [$this->url('/about'), null, 'yearly', '0.4'],
+            [$this->url('/privacy'), null, 'yearly', '0.2'],
+            [$this->url('/terms'), null, 'yearly', '0.2'],
+            [$this->url('/cookies'), null, 'yearly', '0.2'],
             [$this->url('/contact'), null, 'yearly', '0.3'],
         ];
         foreach ($this->activeCategories() as $category) {

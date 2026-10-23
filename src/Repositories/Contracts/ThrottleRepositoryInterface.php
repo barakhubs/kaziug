@@ -17,4 +17,7 @@ interface ThrottleRepositoryInterface
     public function lock(string $key, int $seconds): void;
 
     public function clear(string $key): void;
+
+    /** Deletes counters untouched for $seconds whose lock (if any) has ended. Returns rows removed. */
+    public function purgeOlderThan(int $seconds): int;
 }

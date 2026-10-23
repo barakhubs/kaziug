@@ -47,6 +47,9 @@ $socialProfiles ??= [];
       </ul>
     <?php endif; ?>
   </div>
-  <div class="container footer-legal">© <?= e(date('Y')) ?> <?= e($site->siteName) ?></div>
+  <div class="container footer-legal">
+    © <?= e(date('Y')) ?> <?= e($site->siteName) ?> ·
+    <a href="/privacy">Privacy Policy</a> · <a href="/terms">Terms of Use</a> · <a href="/cookies">Cookie Policy</a>
+  </div>
 </footer>
 <div class="toast" role="status" aria-live="polite"></div>

@@ -37,4 +37,5 @@ $invalid = static fn (string $key): string => isset($errors[$key]) ? ' aria-inva
     <?= $this->insert('partials/field_error', ['field' => 'message']) ?>
   </label>
   <button class="btn-primary" type="submit"><?= e($submitLabel) ?></button>
+  <p class="form-note muted">We use your details only to reply to you. See our <a href="/privacy">Privacy Policy</a>.</p>
 </form>

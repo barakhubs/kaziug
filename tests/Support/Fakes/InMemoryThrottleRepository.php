@@ -37,6 +37,11 @@ final class InMemoryThrottleRepository implements ThrottleRepositoryInterface
         unset($this->counts[$key], $this->locks[$key]);
     }
 
+    public function purgeOlderThan(int $seconds): int
+    {
+        return 0;
+    }
+
     /** Simulates the lock expiring without waiting. */
     public function expireLocks(): void
     {

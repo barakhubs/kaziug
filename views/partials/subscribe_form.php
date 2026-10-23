@@ -22,7 +22,7 @@ $sv = static fn (string $key): mixed => $values[$key] ?? '';
   <?= $this->insert('partials/field_error', ['field' => 'email']) ?>
   <label class="check consent">
     <input type="checkbox" name="consent" value="1" required<?= $sv('consent') ? ' checked' : '' ?>>
-    I agree to receive job alerts from <?= e($site->siteName) ?>. I can unsubscribe at any time.
+    I agree to receive job alerts from <?= e($site->siteName) ?>. I can unsubscribe at any time. See our <a href="/privacy">Privacy Policy</a>.
   </label>
   <?= $this->insert('partials/field_error', ['field' => 'consent']) ?>
 </form>

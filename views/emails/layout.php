@@ -31,7 +31,7 @@
           <?php endif; ?>
           <?php if ($unsubscribeUrl !== null): ?>
             <p style="margin:0;">You are receiving this because you subscribed to <?= e($site->siteName) ?> job alerts.
-              <a href="<?= e($unsubscribeUrl) ?>" style="color:#0c6b58;">Unsubscribe</a>.</p>
+              <a href="<?= e($unsubscribeUrl) ?>" style="color:#0c6b58;">Unsubscribe</a> · <a href="<?= e($appUrl) ?>/privacy" style="color:#0c6b58;">Privacy Policy</a>.</p>
           <?php endif; ?>
         </td></tr>
       </table>
