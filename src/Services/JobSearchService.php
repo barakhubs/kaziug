@@ -79,6 +79,11 @@ final class JobSearchService implements JobSearchServiceInterface
         return $this->jobs->sitemapEntries();
     }
 
+    public function related(Job $job, int $limit): array
+    {
+        return $this->jobs->related($job->id, $job->categoryId, $job->location, $limit);
+    }
+
     public function latest(int $limit): array
     {
         return $this->jobs->searchPublished(new JobSearchCriteria(sort: 'date'), $limit, 0)['items'];

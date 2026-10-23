@@ -12,7 +12,7 @@ $headingTag = $inPane ? 'h2' : 'h1';
   <div class="deadline-box <?= e($dl['state']) ?>">
     <span class="deadline-label">Application deadline</span>
     <strong><time datetime="<?= e($job->expiresAt->format('Y-m-d')) ?>"><?= e(Format::date($job->expiresAt, 'l, j F Y')) ?></time></strong>
-    <span class="deadline-when"><?= e($dl['text']) ?></span>
+    <span class="deadline-when"><?= e(Format::deadlineCountdown($job->expiresAt)) ?></span>
   </div>
 <?php endif; ?>
 <div class="actions">

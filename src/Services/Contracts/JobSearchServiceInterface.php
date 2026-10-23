@@ -40,4 +40,7 @@ interface JobSearchServiceInterface
 
     /** @return list<Job> newest first */
     public function latest(int $limit): array;
+
+    /** @return list<Job> other open jobs like this one (same category, then same city, then newest) */
+    public function related(Job $job, int $limit): array;
 }

@@ -188,6 +188,36 @@ final class SeoTest extends HttpTestCase
         }
     }
 
+    public function testJobPageSidebarShowsRelatedJobsSameCategoryFirst(): void
+    {
+        $slug = (string) $this->db->fetchValue("SELECT slug FROM jobs WHERE title LIKE 'Frontend%'");
+        $html = $this->get("/jobs/{$slug}")->body();
+
+        preg_match_all('#<a class="related-title" href="/jobs/([a-z0-9-]+)">([^<]+)</a>#', $html, $m);
+        $this->assertCount(5, $m[1]);
+        $this->assertNotContains($slug, $m[1], 'never lists the job itself');
+        // The two other Technology jobs come first, then the rest.
+        $this->assertEqualsCanonicalizing(['Data Analyst', 'Backend Engineer (PHP / Laravel)'], array_map('html_entity_decode', array_slice($m[2], 0, 2)));
+        $this->assertStringContainsString('More Technology jobs →', $html);
+        $this->assertStringContainsString('All jobs in Kampala →', $html);
+        $this->assertStringContainsString('Need help with your CV?', $html);
+
+        // Closed jobs are never suggested.
+        $this->db->execute("UPDATE jobs SET status = 'closed' WHERE title = 'Data Analyst'");
+        $this->assertStringNotContainsString('>Data Analyst</a>', $this->get("/jobs/{$slug}")->body());
+    }
+
+    public function testDeadlineBoxCountsDaysInsteadOfRepeatingTheDate(): void
+    {
+        $deadline = (new \DateTimeImmutable('+18 days'))->setTime(23, 59, 59);
+        $this->db->execute("UPDATE jobs SET expires_at = ? WHERE title LIKE 'Frontend%'", [$deadline->format(DATE_ATOM)]);
+        $slug = (string) $this->db->fetchValue("SELECT slug FROM jobs WHERE title LIKE 'Frontend%'");
+
+        $box = $this->get("/jobs/{$slug}")->body();
+        $this->assertStringContainsString('<span class="deadline-when">18 days left</span>', $box);
+        $this->assertStringNotContainsString('<span class="deadline-when">Apply by', $box);
+    }
+
     public function testAboutPage(): void
     {
         $page = $this->get('/about');

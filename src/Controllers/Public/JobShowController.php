@@ -14,6 +14,8 @@ use App\Services\Seo\StructuredData;
 
 final class JobShowController
 {
+    private const RELATED = 5;
+
     public function __construct(
         private readonly JobSearchServiceInterface $search,
         private readonly JobPostingSchema $schema,
@@ -35,6 +37,7 @@ final class JobShowController
                 [$job->title, '/jobs/' . $job->slug],
             ]),
             'citySlug' => Slug::from($job->location),
+            'related' => $this->search->related($job, self::RELATED),
         ]);
     }
 }

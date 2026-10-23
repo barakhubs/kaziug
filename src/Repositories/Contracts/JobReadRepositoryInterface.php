@@ -24,6 +24,12 @@ interface JobReadRepositoryInterface
     /** @return list<string> distinct locations of visible jobs */
     public function publishedLocations(): array;
 
+    /**
+     * Visible jobs related to one job: same category first, then same location, then newest.
+     * @return list<Job>
+     */
+    public function related(int $jobId, int $categoryId, string $location, int $limit): array;
+
     /** @return list<array{location: string, count: int}> visible jobs per location, most first */
     public function locationCounts(): array;
 

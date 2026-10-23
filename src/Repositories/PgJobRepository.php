@@ -136,6 +136,17 @@ final class PgJobRepository implements JobWriteRepositoryInterface, JobReadRepos
         ), 'location');
     }
 
+    public function related(int $jobId, int $categoryId, string $location, int $limit): array
+    {
+        return array_map(JobRowMapper::map(...), $this->db->fetchAll(
+            'SELECT ' . JobRowMapper::SELECT . ' FROM ' . JobRowMapper::FROM
+            . ' WHERE ' . self::VISIBLE . ' AND j.id <> ?
+               ORDER BY (j.category_id = ?) DESC, (lower(j.location) = lower(?)) DESC, j.published_at DESC, j.id DESC
+               LIMIT ?',
+            [$jobId, $categoryId, $location, $limit],
+        ));
+    }
+
     public function locationCounts(): array
     {
         return array_map(static fn (array $r): array => ['location' => (string) $r['location'], 'count' => (int) $r['n']], $this->db->fetchAll(

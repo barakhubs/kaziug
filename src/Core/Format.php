@@ -58,6 +58,22 @@ final class Format
         };
     }
 
+    /**
+     * The deadline line for places that already show the full date: like deadline(), but far-off
+     * dates read "18 days left" instead of repeating the date.
+     */
+    public static function deadlineCountdown(DateTimeInterface $deadline, ?DateTimeInterface $now = null): string
+    {
+        $now ??= new DateTimeImmutable();
+        $label = self::deadline($deadline, $now);
+        if (!str_starts_with($label['text'], 'Apply by')) {
+            return $label['text'];
+        }
+        $days = (int) (new DateTimeImmutable($now->format('Y-m-d')))->diff(new DateTimeImmutable($deadline->format('Y-m-d')))->format('%a');
+
+        return "{$days} days left";
+    }
+
     /** Shortens text for meta descriptions: whole words only, ending in "…" when cut. */
     public static function excerpt(string $text, int $max = 155): string
     {
