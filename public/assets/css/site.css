@@ -220,7 +220,7 @@ a.btn-ghost { height: 40px; }
   border-radius: 999px; background: #eef3f1; color: var(--brand-dark);
 }
 .social a:hover { background: var(--brand); color: #fff; }
-.social svg { width: 18px; height: 18px; fill: currentColor; }
+.social i { font-size: 17px; line-height: 1; }
 
 /* Static pages (confirm, unsubscribe, maintenance, errors) */
 .page { max-width: 640px; padding-top: 32px; }
@@ -284,7 +284,7 @@ a.btn-ghost { height: 40px; }
   font-weight: 700; padding: 11px 16px; border-radius: 8px;
 }
 .btn-whatsapp:hover { background: #178a45; }
-.btn-whatsapp svg { width: 20px; height: 20px; fill: currentColor; }
+.btn-whatsapp i { font-size: 20px; line-height: 1; }
 .cv-offer { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px; align-items: center; margin-top: 0; }
 .cv-offer p { margin: 0 0 8px; }
 .cv-points { margin: 8px 0 0; padding-left: 20px; }
@@ -310,7 +310,7 @@ a.btn-ghost { height: 40px; }
     border: 1px solid var(--brand); border-radius: 8px; background: #fff; color: var(--brand);
     font: inherit; font-weight: 700; cursor: pointer;
   }
-  html.js .filters-toggle svg { width: 18px; height: 18px; fill: currentColor; }
+  html.js .filters-toggle i { font-size: 16px; }
   html.js .filters-toggle .badge { background: var(--brand); color: #fff; }
   html.js .results-head { flex-wrap: wrap; }
 

@@ -55,9 +55,7 @@ $max = max([1, ...array_map(static fn ($c) => $c->jobCount, $withJobs)]);
     <?php foreach ($withJobs as $category): ?>
       <div class="bar-row">
         <span><?= e($category->name) ?></span>
-        <svg class="bar" viewBox="0 0 100 10" preserveAspectRatio="none" role="img" aria-label="<?= e($category->jobCount) ?> jobs">
-          <rect width="<?= e(round($category->jobCount / $max * 100, 1)) ?>" height="10" rx="5"></rect>
-        </svg>
+        <meter class="bar" min="0" max="<?= e($max) ?>" value="<?= e($category->jobCount) ?>" aria-label="<?= e($category->name) ?>: <?= e($category->jobCount) ?> jobs"><?= e($category->jobCount) ?></meter>
         <b><?= e($category->jobCount) ?></b>
       </div>
     <?php endforeach; ?>

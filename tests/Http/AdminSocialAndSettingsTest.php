@@ -68,6 +68,9 @@ final class AdminSocialAndSettingsTest extends AdminHttpTestCase
 
         $footer = $this->get('/')->body();
         $this->assertStringContainsString('https://linkedin.com/company/k', $footer);
+        $this->assertStringContainsString('<i class="fa-brands fa-linkedin-in" aria-hidden="true"></i>', $footer);
+        $this->assertStringContainsString('/assets/vendor/fontawesome/css/brands.min.css', $footer);
+        $this->assertStringNotContainsString('<svg', $footer);
         $this->assertStringNotContainsString('tiktok.com', $footer, 'hidden profiles stay out of the footer');
         $this->assertLessThan(strpos($footer, 'x.com/k'), strpos($footer, 'linkedin.com'));
 

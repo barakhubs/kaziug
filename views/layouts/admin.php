@@ -30,6 +30,9 @@ $isActive = static fn (string $href): bool => $href === $activeHref;
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <title><?= e(($title ?? 'Back office') . ' · KaziUG') ?></title>
+  <link rel="stylesheet" href="/assets/vendor/fontawesome/css/fontawesome.min.css">
+  <link rel="stylesheet" href="/assets/vendor/fontawesome/css/brands.min.css">
+  <link rel="stylesheet" href="/assets/vendor/fontawesome/css/solid.min.css">
   <link rel="stylesheet" href="/assets/css/admin.css">
   <script src="/assets/js/admin.js" defer></script>
 </head>

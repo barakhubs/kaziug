@@ -257,7 +257,7 @@ form.inline { display: inline; }
 input.short { max-width: 120px; }
 td a { color: var(--ink); }
 @media (max-width: 1000px) { .edit-layout { grid-template-columns: 1fr; } }
-.icon-cell svg, .icon-option svg { width: 20px; height: 20px; fill: var(--brand-dark); }
+.icon-cell i, .icon-option i { width: 20px; font-size: 18px; text-align: center; color: var(--brand-dark); }
 .icon-picker { border: 0; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
 .icon-picker legend { font-weight: 600; font-size: 0.9rem; margin-bottom: 6px; }
 .icon-option {
@@ -285,8 +285,10 @@ code { background: #eef1f4; padding: 1px 5px; border-radius: 4px; font-size: 0.8
 .email-preview { width: 100%; height: 640px; border: 1px solid var(--line); border-radius: 8px; background: #f4f6f8; }
 .stack form, form.stack { display: grid; gap: 8px; }
 .stat strong .pill { font-size: 0.95rem; vertical-align: middle; }
-svg.bar { width: 100%; height: 10px; background: #eef1f4; border-radius: 999px; display: block; }
-svg.bar rect { fill: var(--brand); }
+meter.bar { width: 100%; height: 10px; display: block; border: 0; border-radius: 999px; background: #eef1f4; appearance: none; -webkit-appearance: none; }
+meter.bar::-webkit-meter-bar { background: #eef1f4; border: 0; border-radius: 999px; height: 10px; }
+meter.bar::-webkit-meter-optimum-value { background: var(--brand); border-radius: 999px; }
+meter.bar::-moz-meter-bar { background: var(--brand); border-radius: 999px; }
 .dash-grid { display: grid; grid-template-columns: minmax(260px, 1fr) minmax(0, 2fr); gap: 20px; align-items: start; }
 .panel-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
 .panel-head a { color: var(--brand); font-size: 0.9rem; }

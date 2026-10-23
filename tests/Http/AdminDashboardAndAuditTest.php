@@ -34,7 +34,8 @@ final class AdminDashboardAndAuditTest extends AdminHttpTestCase
         $this->assertStringContainsString('Weekly &lt;jobs&gt;', $body);
         $this->assertStringContainsString('newsletter.created', $body);
         $this->assertStringContainsString('category.created', $body, 'seeding is audited as the console');
-        $this->assertMatchesRegularExpression('#<span>Technology</span>\s*<svg class="bar"#', $body);
+        $this->assertMatchesRegularExpression('#<span>Technology</span>\s*<meter class="bar" min="0" max="3" value="3"#', $body);
+        $this->assertStringNotContainsString('<svg', $body);
     }
 
     public function testAuditLogFiltersAndEscaping(): void

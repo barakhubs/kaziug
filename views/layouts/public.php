@@ -32,6 +32,9 @@ if (preg_match('/^(.+?)(UG)$/u', $brandName, $m) === 1) {
   <meta name="twitter:card" content="summary">
   <link rel="alternate" type="application/rss+xml" title="<?= e($site->siteName) ?> latest jobs" href="/jobs.rss">
   <?= $head ?? '' ?>
+  <link rel="stylesheet" href="/assets/vendor/fontawesome/css/fontawesome.min.css">
+  <link rel="stylesheet" href="/assets/vendor/fontawesome/css/brands.min.css">
+  <link rel="stylesheet" href="/assets/vendor/fontawesome/css/solid.min.css">
   <link rel="stylesheet" href="/assets/css/site.css">
   <script src="/assets/js/js-flag.js"></script>
   <script src="/assets/js/site.js" defer></script>
