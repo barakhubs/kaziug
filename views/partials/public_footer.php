@@ -10,7 +10,7 @@ $socialProfiles ??= [];
       <?php if ($site->footerText !== ''): ?><p><?= e($site->footerText) ?></p><?php endif; ?>
       <?php if ($site->physicalAddress !== ''): ?><p class="muted"><?= nl2br(e($site->physicalAddress)) ?></p><?php endif; ?>
       <?php if ($site->contactEmail !== ''): ?><p><a href="mailto:<?= e($site->contactEmail) ?>"><?= e($site->contactEmail) ?></a></p><?php endif; ?>
-      <p class="footer-links"><a href="/contact">Contact us</a> · <a href="/cv-help">CV help</a></p>
+      <p class="footer-links"><a href="/about">About us</a> · <a href="/contact">Contact us</a> · <a href="/cv-help">CV help</a></p>
     </div>
 
     <?php if (($footerCities ?? []) !== [] || ($footerCategories ?? []) !== []): ?>

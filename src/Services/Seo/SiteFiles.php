@@ -52,6 +52,7 @@ final class SiteFiles
         $urls = [
             [$this->url('/'), null, 'hourly', '1.0'],
             [$this->url('/cv-help'), null, 'monthly', '0.6'],
+            [$this->url('/about'), null, 'yearly', '0.4'],
             [$this->url('/contact'), null, 'yearly', '0.3'],
         ];
         foreach ($this->activeCategories() as $category) {
@@ -87,6 +88,7 @@ final class SiteFiles
             . '- [Latest jobs](' . $this->url('/') . "): searchable list of all open vacancies\n"
             . '- [CV help](' . $this->url('/cv-help') . "): CV fix service for job seekers, {$price} per CV"
             . ($site->hasWhatsapp() ? ', also available on WhatsApp' : '') . "\n"
+            . '- [About us](' . $this->url('/about') . "): who runs the site and what it offers\n"
             . '- [Contact](' . $this->url('/contact') . ")\n"
             . '- [Jobs feed (RSS)](' . $this->url('/jobs.rss') . "): the newest " . self::FEED_SIZE . " open jobs\n"
             . '- [Sitemap](' . $this->url('/sitemap.xml') . ")\n";

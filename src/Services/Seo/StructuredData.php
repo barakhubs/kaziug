@@ -82,6 +82,21 @@ final class StructuredData
         ]);
     }
 
+    /** The About page, pointing at the full Organization description. */
+    public function aboutPage(): string
+    {
+        $site = $this->settings->site();
+
+        return $this->encode([
+            '@context' => 'https://schema.org',
+            '@type' => 'AboutPage',
+            'name' => 'About ' . $site->siteName,
+            'url' => $this->url('/about'),
+            'inLanguage' => 'en-UG',
+            'about' => json_decode($this->organization(), true, 512, JSON_THROW_ON_ERROR),
+        ]);
+    }
+
     /** @param list<array{0: string, 1: string}> $trail [name, path] pairs from the home page down */
     public function breadcrumbs(array $trail): string
     {

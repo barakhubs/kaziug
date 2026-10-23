@@ -188,6 +188,24 @@ final class SeoTest extends HttpTestCase
         }
     }
 
+    public function testAboutPage(): void
+    {
+        $page = $this->get('/about');
+        $html = $page->body();
+
+        $this->assertStatus(200, $page);
+        $this->assertStringContainsString('<h1>About KaziUG</h1>', $html);
+        $this->assertStringContainsString('KaziUG is a job board for Uganda.', $html);
+        $this->assertStringContainsString('for UGX 100,000', $html, 'price placeholder filled from settings');
+        $this->assertMatchesRegularExpression('#<strong>14</strong><span>open jobs right now</span>#', $html);
+        $this->assertSame('AboutPage', $this->block($html, 'AboutPage')['@type']);
+        $this->assertSame('KaziUG', $this->block($html, 'AboutPage')['about']['name']);
+        $this->assertStringContainsString('<link rel="canonical" href="http://localhost/about">', $html);
+        $this->assertStringContainsString('href="/about"', $this->get('/')->body(), 'linked from header and footer');
+        $this->assertStringContainsString('<loc>http://localhost/about</loc>', $this->get('/sitemap.xml')->body());
+        $this->assertStringContainsString('[About us](http://localhost/about)', $this->get('/llms.txt')->body());
+    }
+
     public function testExcerptCutsAtWordBoundary(): void
     {
         $this->assertSame('Short text.', Format::excerpt('Short   text.'));

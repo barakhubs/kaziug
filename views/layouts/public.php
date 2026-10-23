@@ -44,6 +44,7 @@ $fullTitle = isset($pageTitle) && $pageTitle !== '' ? $pageTitle . ' · ' . $sit
       </a>
       <nav class="topnav" aria-label="Main">
         <a href="/cv-help"<?= ($currentPath ?? '') === '/cv-help' ? ' class="active" aria-current="page"' : '' ?>>CV help</a>
+        <a href="/about"<?= ($currentPath ?? '') === '/about' ? ' class="active" aria-current="page"' : '' ?>>About</a>
         <a href="/contact"<?= ($currentPath ?? '') === '/contact' ? ' class="active" aria-current="page"' : '' ?>>Contact</a>
         <a href="/saved" id="savedLink">Saved <span id="savedCount" class="badge">0</span></a>
       </nav>
