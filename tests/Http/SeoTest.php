@@ -18,7 +18,7 @@ final class SeoTest extends HttpTestCase
         $this->container->get(SeedCommand::class)->run([], new Io([], echo: false));
         $this->db->execute("UPDATE settings SET value = '\"256772123456\"' WHERE key = 'whatsapp_number'");
         $this->db->execute("UPDATE settings SET value = '\"hello@kazi.ug\"' WHERE key = 'contact_email'");
-        $this->db->execute("UPDATE settings SET value = '\"Plot 1, Kampala Road\nKampala\"' WHERE key = 'physical_address'");
+        $this->db->execute("UPDATE settings SET value = ? WHERE key = 'physical_address'", [json_encode("Plot 1, Kampala Road\nKampala")]);
     }
 
     /** @return list<array<string, mixed>> every JSON-LD block on a page */
