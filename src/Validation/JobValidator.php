@@ -9,6 +9,7 @@ use App\Domain\JobInput;
 use App\Domain\JobType;
 use App\Validation\Rules\DateTimeRule;
 use App\Validation\Rules\IntegerRule;
+use DateTimeImmutable;
 
 /**
  * Turns the job form into a JobInput. Lists come from textareas (one item per line)
@@ -27,9 +28,10 @@ final class JobValidator
 
     /**
      * @param array<string, mixed> $input
+     * @param DateTimeImmutable|null $currentDeadline the saved deadline when editing; it may be kept even if it has passed
      * @return array{0: ?JobInput, 1: array<string, string>}
      */
-    public function validate(array $input): array
+    public function validate(array $input, ?DateTimeImmutable $currentDeadline = null): array
     {
         $result = $this->validator->validate($input, [
             'title' => 'required|max:200',
@@ -49,10 +51,19 @@ final class JobValidator
             'apply_method' => 'required|in:' . implode(',', self::APPLY_METHODS),
             'apply_url' => 'url',
             'apply_email' => 'email',
-            'expires_at' => 'datetime',
+            'expires_at' => 'required|datetime',
         ]);
         $data = $result->data;
         $errors = $result->errors;
+
+        // The deadline is a calendar day: applications stay open until the end of it.
+        $deadline = isset($errors['expires_at']) ? null : DateTimeRule::parse($data['expires_at'])?->setTime(23, 59, 59);
+        if (isset($errors['expires_at'])) {
+            $errors['expires_at'] = in_array($data['expires_at'], [null, ''], true) ? 'Set the application deadline.' : 'Enter a valid date.';
+        } elseif ($deadline !== null && $deadline < new DateTimeImmutable('today')
+            && $deadline->format('Y-m-d') !== $currentDeadline?->format('Y-m-d')) {
+            $errors['expires_at'] = 'The deadline can’t be in the past.';
+        }
 
         $salaryMin = isset($errors['salary_min']) ? null : IntegerRule::toInt($data['salary_min']);
         $salaryMax = isset($errors['salary_max']) ? null : IntegerRule::toInt($data['salary_max']);
@@ -115,7 +126,7 @@ final class JobValidator
             $skills,
             $applyUrl,
             $applyEmail,
-            DateTimeRule::parse($data['expires_at']),
+            $deadline,
         ), []];
     }
 

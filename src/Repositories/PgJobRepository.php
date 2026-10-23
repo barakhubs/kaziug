@@ -159,6 +159,7 @@ final class PgJobRepository implements JobWriteRepositoryInterface, JobReadRepos
             'title' => "lower(j.title) {$dir}",
             'status' => "j.status {$dir}, j.updated_at DESC",
             'posted' => "j.published_at {$dir} NULLS LAST",
+            'deadline' => "j.expires_at {$dir} NULLS LAST",
             default => "j.updated_at {$dir}",
         };
 

@@ -12,7 +12,7 @@ use DateTimeImmutable;
 /** Back-office access to jobs (all statuses). Public reads live in JobReadRepositoryInterface. */
 interface JobWriteRepositoryInterface
 {
-    public const SORTS = ['title', 'status', 'posted', 'updated'];
+    public const SORTS = ['title', 'status', 'posted', 'deadline', 'updated'];
 
     /**
      * @param array{q?: string, status?: string, category_id?: int} $filters

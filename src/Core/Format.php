@@ -35,6 +35,29 @@ final class Format
         return self::money($min, $currency) . $range . ' / month';
     }
 
+    /**
+     * How an application deadline reads to a job seeker, by calendar day in the app timezone.
+     * @return array{text: string, state: 'closed'|'today'|'soon'|'open'} state drives the styling
+     */
+    public static function deadline(DateTimeInterface $deadline, ?DateTimeInterface $now = null): array
+    {
+        $now ??= new DateTimeImmutable();
+        if ($deadline <= $now) {
+            return ['text' => 'Applications closed ' . self::date($deadline), 'state' => 'closed'];
+        }
+        $today = new DateTimeImmutable($now->format('Y-m-d'));
+        $day = new DateTimeImmutable($deadline->format('Y-m-d'));
+        $days = (int) $today->diff($day)->format('%r%a');
+
+        return match (true) {
+            $days <= 0 => ['text' => 'Closes today', 'state' => 'today'],
+            $days === 1 => ['text' => 'Closes tomorrow', 'state' => 'soon'],
+            $days <= 3 => ['text' => "Closes in {$days} days", 'state' => 'soon'],
+            $days <= 14 => ['text' => "Closes in {$days} days", 'state' => 'open'],
+            default => ['text' => 'Apply by ' . self::date($deadline), 'state' => 'open'],
+        };
+    }
+
     /** Shortens text for meta descriptions: whole words only, ending in "…" when cut. */
     public static function excerpt(string $text, int $max = 155): string
     {

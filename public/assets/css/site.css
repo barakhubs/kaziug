@@ -365,3 +365,22 @@ a.btn-ghost { height: 40px; }
 .footer-browse ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 4px; }
 .footer-browse a { color: var(--muted); text-decoration: none; }
 .footer-browse a:hover { color: var(--brand); text-decoration: underline; }
+
+/* Application deadline */
+.deadline-pill {
+  display: inline-block; margin-left: 6px; padding: 1px 8px; border-radius: 999px;
+  font-size: 0.78rem; font-weight: 700; background: #eef3f1; color: var(--brand-dark); white-space: nowrap;
+}
+.deadline-pill.soon { background: #fdf1d6; color: #7a5300; }
+.deadline-pill.today, .deadline-pill.closed { background: #fdecea; color: #b42318; }
+.deadline-box {
+  display: grid; gap: 2px; margin: 12px 0 4px; padding: 10px 14px; border-radius: 8px;
+  background: #eef3f1; border-left: 4px solid var(--brand);
+}
+.deadline-box .deadline-label { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); font-weight: 700; }
+.deadline-box strong { font-size: 1.05rem; color: var(--ink); }
+.deadline-box .deadline-when { font-size: 0.9rem; font-weight: 600; color: var(--brand-dark); }
+.deadline-box.soon { background: #fdf6e3; border-left-color: #d49a12; }
+.deadline-box.soon .deadline-when { color: #7a5300; }
+.deadline-box.today { background: #fdecea; border-left-color: #b42318; }
+.deadline-box.today .deadline-when { color: #b42318; }

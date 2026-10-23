@@ -324,3 +324,7 @@ svg.bar rect { fill: var(--brand); }
 .section-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
 .section-head h2 { margin: 0; font-size: 1.15rem; }
 .section-head .hint { margin: 0; }
+.deadline-pill { display: inline-block; margin-top: 2px; padding: 1px 8px; border-radius: 999px; font-size: 0.75rem; font-weight: 700; background: #eef3f1; color: var(--brand-dark); }
+.deadline-pill.soon { background: #fdf1d6; color: #7a5300; }
+.deadline-pill.today, .deadline-pill.closed { background: #fdecea; color: var(--danger); }
+.kv .deadline-pill { margin-left: 8px; }

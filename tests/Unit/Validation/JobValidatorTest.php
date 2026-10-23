@@ -79,6 +79,36 @@ final class JobValidatorTest extends TestCase
         $this->assertSame('', JobValidator::applyMethodFor(null, null));
     }
 
+    public function testDeadlineIsRequiredNotPastAndLastsTheWholeDay(): void
+    {
+        [, $errors] = $this->validator->validate($this->form(['expires_at' => '']));
+        $this->assertSame('Set the application deadline.', $errors['expires_at']);
+
+        $yesterday = date('Y-m-d', strtotime('-1 day'));
+        [, $errors] = $this->validator->validate($this->form(['expires_at' => $yesterday]));
+        $this->assertSame('The deadline can’t be in the past.', $errors['expires_at']);
+
+        // Editing a job whose saved deadline has already passed may keep that date.
+        [$kept] = $this->validator->validate($this->form(['expires_at' => $yesterday]), new DateTimeImmutable($yesterday . ' 23:59:59'));
+        $this->assertNotNull($kept);
+
+        [$today] = $this->validator->validate($this->form(['expires_at' => date('Y-m-d')]));
+        $this->assertSame(date('Y-m-d') . ' 23:59:59', $today?->expiresAt?->format('Y-m-d H:i:s'));
+    }
+
+    public function testDeadlineWording(): void
+    {
+        $now = new DateTimeImmutable('2026-10-20 10:00');
+        $at = static fn (string $d): DateTimeImmutable => new DateTimeImmutable($d . ' 23:59:59');
+
+        $this->assertSame(['text' => 'Closes today', 'state' => 'today'], Format::deadline($at('2026-10-20'), $now));
+        $this->assertSame(['text' => 'Closes tomorrow', 'state' => 'soon'], Format::deadline($at('2026-10-21'), $now));
+        $this->assertSame(['text' => 'Closes in 3 days', 'state' => 'soon'], Format::deadline($at('2026-10-23'), $now));
+        $this->assertSame(['text' => 'Closes in 10 days', 'state' => 'open'], Format::deadline($at('2026-10-30'), $now));
+        $this->assertSame(['text' => 'Apply by 30 Nov 2026', 'state' => 'open'], Format::deadline($at('2026-11-30'), $now));
+        $this->assertSame('closed', Format::deadline($at('2026-10-19'), $now)['state']);
+    }
+
     public function testFormattingHelpers(): void
     {
         $this->assertSame('frontend-developer-react', Slug::from('Frontend Developer (React)'));
@@ -108,6 +138,7 @@ final class JobValidatorTest extends TestCase
             'apply_method' => 'both',
             'apply_url' => 'https://savanna.example/careers/42',
             'apply_email' => 'Jobs@Savanna.example',
+            'expires_at' => date('Y-m-d', strtotime('+14 days')),
         ], ...$overrides];
     }
 }

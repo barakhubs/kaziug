@@ -67,8 +67,8 @@ $action = $job === null ? '/admin/jobs' : "/admin/jobs/{$job->id}";
           <?php endforeach; ?>
         </select>
       </label>
-      <label class="<?= $err('expires_at') ?>">Expires on <span class="hint">(optional; hidden from the site after this date)</span>
-        <input type="date" name="expires_at" value="<?= e($v('expires_at')) ?>">
+      <label class="<?= $err('expires_at') ?>">Application deadline <span class="hint">(applications close at the end of this day; the job then leaves the site)</span>
+        <input type="date" name="expires_at" value="<?= e($v('expires_at')) ?>" required min="<?= e($job?->expiresAt !== null && $job->expiresAt < new DateTimeImmutable('today') ? $job->expiresAt->format('Y-m-d') : date('Y-m-d')) ?>">
         <?= $this->insert('partials/field_error', ['field' => 'expires_at']) ?>
       </label>
       <label class="<?= $err('salary_min') ?>">Salary min (per month)

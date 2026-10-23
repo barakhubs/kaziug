@@ -88,7 +88,7 @@ final class JobsController
     public function update(Request $request): Response
     {
         $job = $this->jobs->get($this->id($request));
-        [$input, $errors] = $this->validator->validate($request->all());
+        [$input, $errors] = $this->validator->validate($request->all(), $job->expiresAt);
         if ($input === null) {
             return $this->form($job, $request->all(), $errors, 422);
         }

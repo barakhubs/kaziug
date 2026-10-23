@@ -68,7 +68,7 @@ final class AdminDashboardAndAuditTest extends AdminHttpTestCase
         $categoryId = (int) $this->db->fetchValue('SELECT id FROM job_categories');
         $this->post('/admin/jobs', ['title' => 'Dev', 'company' => 'Co', 'location' => 'Kampala', 'job_type' => 'full-time',
             'experience_level' => 'mid', 'category_id' => (string) $categoryId, 'summary' => 'S', 'intent' => 'draft',
-            'apply_method' => 'email', 'apply_email' => 'jobs@co.ug']);
+            'apply_method' => 'email', 'apply_email' => 'jobs@co.ug', 'expires_at' => date('Y-m-d', strtotime('+14 days'))]);
         $this->post('/admin/settings/social', ['platform' => 'X', 'label' => 'X', 'url' => 'https://x.com/k', 'icon_key' => 'x']);
         $this->post('/admin/settings', ['site_name' => 'KaziUG', 'jobs_per_page' => '9']);
         $this->post('/admin/settings/smtp', ['host' => 'smtp.test', 'port' => '25', 'encryption' => 'none', 'from_email' => 'a@b.ug']);

@@ -43,6 +43,8 @@ final class SampleJobSource implements JobSourceInterface
                 array_map('strval', $job['requirements'] ?? []),
                 array_map('strval', $job['skills'] ?? []),
                 (int) ($job['daysAgo'] ?? 0),
+                // Three weeks to apply from the posting date, but at least two more days.
+                max(2, 21 - (int) ($job['daysAgo'] ?? 0)),
             );
         }
     }

@@ -64,12 +64,13 @@ $sort = fn (string $key, string $label, string $first = 'asc'): string => $this-
         <?= $sort('title', 'Job') ?>
         <?= $sort('status', 'Status') ?>
         <?= $sort('posted', 'Posted', 'desc') ?>
+        <?= $sort('deadline', 'Deadline') ?>
         <th><span class="sr-only">Actions</span></th>
       </tr>
     </thead>
     <tbody>
     <?php if ($result->items === []): ?>
-      <tr><td colspan="5" class="muted center">No jobs match these filters.</td></tr>
+      <tr><td colspan="6" class="muted center">No jobs match these filters.</td></tr>
     <?php endif; ?>
     <?php foreach ($result->items as $job): ?>
       <tr>
@@ -80,6 +81,7 @@ $sort = fn (string $key, string $label, string $first = 'asc'): string => $this-
         </td>
         <td><span class="pill <?= e($job->status->value) ?>"><?= e($job->status->label()) ?></span></td>
         <td class="small nowrap"><?= e($job->publishedAt !== null ? Format::date($job->publishedAt) : '—') ?></td>
+        <td class="small nowrap"><?php if ($job->expiresAt !== null): $dl = Format::deadline($job->expiresAt); ?><?= e(Format::date($job->expiresAt)) ?><div class="deadline-pill <?= e($dl['state']) ?>"><?= e($dl['text']) ?></div><?php else: ?><span class="field-error">Not set</span><?php endif; ?></td>
         <td class="row-actions">
           <?php if ($job->status->allowedNext() !== []): ?>
             <form class="status-form" method="post" action="/admin/jobs/<?= e($job->id) ?>/status">

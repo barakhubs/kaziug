@@ -15,5 +15,10 @@ use App\Core\Format;
   <p class="salary"><?= e(Format::salary($job->salaryMin, $job->salaryMax, $job->currency)) ?></p>
   <p class="snippet"><?= e($job->summary) ?></p>
   <div class="tags"><span><?= e($job->jobType->label()) ?></span><span><?= e($job->experienceLevel->label()) ?> level</span><span><?= e($job->categoryName) ?></span></div>
-  <p class="posted"><?= e(Format::posted($job->publishedAt)) ?></p>
+  <p class="posted">
+    <?= e(Format::posted($job->publishedAt)) ?>
+    <?php if ($job->expiresAt !== null): $dl = Format::deadline($job->expiresAt); ?>
+      <span class="deadline-pill <?= e($dl['state']) ?>" title="Application deadline: <?= e(Format::date($job->expiresAt, 'l, j F Y')) ?>"><?= e($dl['text']) ?></span>
+    <?php endif; ?>
+  </p>
 </li>

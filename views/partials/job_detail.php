@@ -8,6 +8,13 @@ $headingTag = $inPane ? 'h2' : 'h1';
 <<?= $headingTag ?> class="detail-title"><?php if ($inPane): ?><a href="/jobs/<?= e($job->slug) ?>"><?= e($job->title) ?></a><?php else: ?><?= e($job->title) ?><?php endif; ?></<?= $headingTag ?>>
 <p class="company"><?= e($job->company) ?> · <a href="/jobs-in/<?= e(\App\Domain\Slug::from($job->location)) ?>"><?= e($job->location) ?></a><?= $job->isRemote ? ' · Remote' : '' ?></p>
 <p class="salary"><?= e(Format::salary($job->salaryMin, $job->salaryMax, $job->currency)) ?></p>
+<?php if ($job->expiresAt !== null): $dl = Format::deadline($job->expiresAt); ?>
+  <div class="deadline-box <?= e($dl['state']) ?>">
+    <span class="deadline-label">Application deadline</span>
+    <strong><time datetime="<?= e($job->expiresAt->format('Y-m-d')) ?>"><?= e(Format::date($job->expiresAt, 'l, j F Y')) ?></time></strong>
+    <span class="deadline-when"><?= e($dl['text']) ?></span>
+  </div>
+<?php endif; ?>
 <div class="actions">
   <?php if ($job->applyUrl !== null): ?>
     <a class="btn-primary" href="<?= e($job->applyUrl) ?>" target="_blank" rel="noopener nofollow">Apply / more info ↗</a>
@@ -23,7 +30,6 @@ $headingTag = $inPane ? 'h2' : 'h1';
 <p class="muted">
   <?= e($job->jobType->label()) ?> · <?= e($job->experienceLevel->label()) ?> level ·
   <a href="/categories/<?= e($job->categorySlug) ?>"><?= e($job->categoryName) ?></a> · <?= e(Format::posted($job->publishedAt)) ?>
-  <?php if ($job->expiresAt !== null): ?> · Closes <?= e(Format::date($job->expiresAt)) ?><?php endif; ?>
 </p>
 <h3>About the role</h3>
 <p><?= e($job->summary) ?></p>

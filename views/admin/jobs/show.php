@@ -29,7 +29,15 @@ $this->set('title', $job->title);
       <dt>Experience</dt><dd><?= e($job->experienceLevel->label()) ?></dd>
       <dt>Salary</dt><dd><?= e(Format::salary($job->salaryMin, $job->salaryMax, $job->currency)) ?></dd>
       <dt>Posted</dt><dd><?= e($job->publishedAt !== null ? Format::dateTime($job->publishedAt) : 'Not published yet') ?></dd>
-      <dt>Expires</dt><dd><?= e($job->expiresAt !== null ? Format::date($job->expiresAt) . ($job->isExpired() ? ' (expired)' : '') : 'No expiry') ?></dd>
+      <dt>Application deadline</dt>
+      <dd>
+        <?php if ($job->expiresAt !== null): $dl = Format::deadline($job->expiresAt); ?>
+          <strong><?= e(Format::date($job->expiresAt, 'l, j F Y')) ?></strong>
+          <span class="deadline-pill <?= e($dl['state']) ?>"><?= e($dl['text']) ?></span>
+        <?php else: ?>
+          <span class="field-error">Not set. <a href="/admin/jobs/<?= e($job->id) ?>/edit">Add a deadline</a>.</span>
+        <?php endif; ?>
+      </dd>
       <dt>Skills</dt><dd><?= e($job->skills !== [] ? implode(', ', $job->skills) : '—') ?></dd>
       <dt>Public URL</dt><dd class="small">/jobs/<?= e($job->slug) ?></dd>
     </dl>

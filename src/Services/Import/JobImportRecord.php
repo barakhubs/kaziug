@@ -30,6 +30,8 @@ final class JobImportRecord
         public readonly array $requirements,
         public readonly array $skills,
         public readonly int $publishedDaysAgo,
+        /** Days from today until applications close (end of that day). */
+        public readonly int $deadlineInDays = 30,
     ) {
     }
 }

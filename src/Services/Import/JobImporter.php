@@ -44,7 +44,8 @@ final class JobImporter
                 $input = new JobInput(
                     $record->title, $record->company, $record->location, $record->isRemote, $record->jobType,
                     $record->experienceLevel, $category->id, $record->salaryMin, $record->salaryMax, 'UGX',
-                    $record->summary, $record->responsibilities, $record->requirements, $record->skills, null, null, null,
+                    $record->summary, $record->responsibilities, $record->requirements, $record->skills, null, null,
+                    (new DateTimeImmutable("+{$record->deadlineInDays} days"))->setTime(23, 59, 59),
                 );
                 $publishedAt = new DateTimeImmutable("-{$record->publishedDaysAgo} days");
                 $id = $this->jobs->insert($input, $slug, JobStatus::Published, $publishedAt);

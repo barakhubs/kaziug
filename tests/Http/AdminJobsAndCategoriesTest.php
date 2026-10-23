@@ -39,6 +39,7 @@ final class AdminJobsAndCategoriesTest extends AdminHttpTestCase
             'skills' => 'SQL, Python',
             'apply_method' => 'link',
             'apply_url' => 'https://insights.example/careers/analyst',
+            'expires_at' => date('Y-m-d', strtotime('+14 days')),
         ], ...$overrides];
     }
 
@@ -95,6 +96,41 @@ final class AdminJobsAndCategoriesTest extends AdminHttpTestCase
         $public = $this->get('/jobs/' . $this->db->fetchValue('SELECT slug FROM jobs'))->body();
         $this->assertStringContainsString('Apply / more info', $public);
         $this->assertStringContainsString('mailto:hr@insights.example', $public);
+    }
+
+    public function testDeadlineIsRequiredAndShownEverywhere(): void
+    {
+        $missing = $this->post('/admin/jobs', $this->jobForm(['expires_at' => '', 'intent' => 'publish']));
+        $this->assertStatus(422, $missing);
+        $this->assertStringContainsString('Set the application deadline.', $missing->body());
+
+        $deadline = date('Y-m-d', strtotime('+2 days'));
+        $this->post('/admin/jobs', $this->jobForm(['expires_at' => $deadline, 'intent' => 'publish']));
+        $id = (int) $this->db->fetchValue('SELECT id FROM jobs');
+        $slug = (string) $this->db->fetchValue('SELECT slug FROM jobs');
+
+        $this->assertStringContainsString('Closes in 2 days', $this->get('/admin/jobs')->body());
+        $this->assertStringContainsString('Closes in 2 days', $this->get("/admin/jobs/{$id}")->body());
+
+        $page = $this->get("/jobs/{$slug}")->body();
+        $this->assertStringContainsString('Application deadline', $page);
+        $this->assertStringContainsString('<time datetime="' . $deadline . '">', $page);
+        $this->assertStringContainsString('deadline-box soon', $page);
+        preg_match('#<script type="application/ld\+json">(.+?)</script>#s', $page, $m);
+        $this->assertStringStartsWith($deadline . 'T23:59:59', json_decode($m[1], true)['validThrough']);
+        $this->assertStringContainsString('Closes in 2 days', $this->get('/')->body(), 'job cards show it too');
+    }
+
+    public function testJobStaysListedUntilTheEndOfItsDeadlineDay(): void
+    {
+        $this->post('/admin/jobs', $this->jobForm(['expires_at' => date('Y-m-d'), 'intent' => 'publish']));
+        $slug = (string) $this->db->fetchValue('SELECT slug FROM jobs');
+
+        $this->assertStatus(200, $this->get("/jobs/{$slug}"));
+        $this->assertStringContainsString('Closes today', $this->get("/jobs/{$slug}")->body());
+
+        $this->db->execute("UPDATE jobs SET expires_at = now() - interval '1 second'");
+        $this->assertStatus(404, $this->get("/jobs/{$slug}"));
     }
 
     public function testJobCannotBeSavedWithoutApplicationDetails(): void
