@@ -38,6 +38,8 @@ final class JobImportRecord
         /** A fixed closing day from the advert; when set it wins over $deadlineInDays. */
         public readonly ?DateTimeImmutable $deadline = null,
         public readonly ?string $applicationInstructions = null,
+        public readonly ?string $applyUrl = null,
+        public readonly ?string $applyEmail = null,
     ) {
     }
 }

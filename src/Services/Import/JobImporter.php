@@ -44,7 +44,8 @@ final class JobImporter
                 $input = new JobInput(
                     $record->title, $record->company, $record->location, $record->isRemote, $record->jobType,
                     $record->experienceLevel, $category->id, $record->salaryMin, $record->salaryMax, 'UGX',
-                    $record->summary, $record->responsibilities, $record->requirements, $record->skills, null, null,
+                    $record->summary, $record->responsibilities, $record->requirements, $record->skills, $record->applyUrl,
+                    $record->applyEmail === null ? null : strtolower($record->applyEmail),
                     ($record->deadline ?? new DateTimeImmutable("+{$record->deadlineInDays} days"))->setTime(23, 59, 59),
                     $record->positions,
                     $record->salaryScale,

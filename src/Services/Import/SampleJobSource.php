@@ -11,7 +11,7 @@ use RuntimeException;
 
 /**
  * Sample jobs from database/seeds/sample_jobs.json. Optional keys: salaryScale, posts
- * (number of positions), deadline (Y-m-d) and howToApply (application instructions).
+ * (number of positions), deadline (Y-m-d), applicationInstruction, applicationUrl and applicationEmail.
  */
 final class SampleJobSource implements JobSourceInterface
 {
@@ -50,10 +50,20 @@ final class SampleJobSource implements JobSourceInterface
                 // Three weeks to apply from the posting date, but at least two more days.
                 max(2, 21 - (int) ($job['daysAgo'] ?? 0)),
                 max(1, (int) ($job['posts'] ?? 1)),
-                isset($job['salaryScale']) && trim((string) $job['salaryScale']) !== '' ? trim((string) $job['salaryScale']) : null,
+                self::text($job['salaryScale'] ?? null),
                 isset($job['deadline']) ? new DateTimeImmutable((string) $job['deadline']) : null,
-                isset($job['howToApply']) && trim((string) $job['howToApply']) !== '' ? trim((string) $job['howToApply']) : null,
+                self::text($job['applicationInstruction'] ?? null),
+                filter_var(self::text($job['applicationUrl'] ?? null), FILTER_VALIDATE_URL) ?: null,
+                // A malformed address is dropped rather than published.
+                filter_var(self::text($job['applicationEmail'] ?? null), FILTER_VALIDATE_EMAIL) ?: null,
             );
         }
+    }
+
+    private static function text(mixed $value): ?string
+    {
+        $text = trim((string) $value);
+
+        return $text === '' ? null : $text;
     }
 }
