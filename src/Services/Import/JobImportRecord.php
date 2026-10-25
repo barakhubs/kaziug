@@ -37,6 +37,7 @@ final class JobImportRecord
         public readonly ?string $salaryScale = null,
         /** A fixed closing day from the advert; when set it wins over $deadlineInDays. */
         public readonly ?DateTimeImmutable $deadline = null,
+        public readonly ?string $applicationInstructions = null,
     ) {
     }
 }

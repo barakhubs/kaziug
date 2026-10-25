@@ -85,6 +85,9 @@ final class JobPostingSchema
                     . implode('', array_map(static fn (string $i): string => '<li>' . e($i) . '</li>', $items)) . '</ul>';
             }
         }
+        if ($job->applicationInstructions !== null) {
+            $html .= '<p><strong>How to apply</strong></p><p>' . nl2br(e($job->applicationInstructions), false) . '</p>';
+        }
 
         return $html;
     }

@@ -18,7 +18,8 @@ final class JobRowMapper
     public const SELECT = 'j.id, j.title, j.slug, j.company, j.location, j.is_remote, j.job_type, j.experience_level,
         j.category_id, c.name AS category_name, c.slug AS category_slug, j.salary_min, j.salary_max, j.currency,
         j.summary, j.responsibilities, j.requirements, j.skills, j.apply_url, j.apply_email, j.status,
-        j.published_at, j.expires_at, j.deleted_at, j.created_at, j.updated_at, j.positions, j.salary_scale';
+        j.published_at, j.expires_at, j.deleted_at, j.created_at, j.updated_at, j.positions, j.salary_scale,
+        j.application_instructions';
 
     public const FROM = 'jobs j JOIN job_categories c ON c.id = j.category_id';
 
@@ -54,6 +55,7 @@ final class JobRowMapper
             self::date($row['updated_at']) ?? new DateTimeImmutable(),
             (int) ($row['positions'] ?? 1),
             isset($row['salary_scale']) ? (string) $row['salary_scale'] : null,
+            isset($row['application_instructions']) ? (string) $row['application_instructions'] : null,
         );
     }
 

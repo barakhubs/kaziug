@@ -334,3 +334,6 @@ meter.bar::-moz-meter-bar { background: var(--brand); border-radius: 999px; }
 .auth-wrap { display: grid; justify-items: center; gap: 18px; width: 100%; max-width: 380px; }
 .auth-logo { display: block; height: 64px; width: auto; max-width: 220px; object-fit: contain; }
 @media (max-width: 800px) { .side-logo img { height: 30px; } }
+
+/* Admin-written application steps keep their line breaks (text is escaped, never HTML). */
+.apply-instructions { white-space: pre-line; }

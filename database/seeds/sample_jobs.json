@@ -1,856 +1,536 @@
 [
   {
-    "title": "Associate Consultant – Adult Cardiology",
+    "title": "Post: Associate Consultant-Adult Cardiology",
     "company": "Uganda Heart Institute",
-    "location": "Mulago, Kampala",
+    "location": "Kampala",
     "remote": false,
     "type": "Full-time",
     "category": "Healthcare",
     "exp": "Senior",
+    "salaryScale": "UHI 2 MED-1",
     "salaryMin": null,
     "salaryMax": null,
-    "salaryScale": "UHI 2 MED-1",
-    "posts": 4,
-    "reportsTo": "Consultant – Adult Cardiology",
-    "deadline": "2026-11-11",
-    "daysAgo": null,
+    "daysAgo": 0,
+    "applicationInstruction": "Eligible persons should address their applications featuring a cover letter, copies of the academic/professional certificates, and transcripts, certificates of registration and a valid practicing license, copies of the National Identity Card, and evidence of work experience where required to the Executive Director, Uganda Heart Institute, P.O. Box 37392, Kampala. Applications can be hand delivered in Uganda Heart Institute Headquarters, Mulago-Kampala. Online can be sent on the official email recruitment.go.ug [Note: source text shows recruitment.go.ug or recruitment email]. Applications both physical and online must be received not later than 5:00 pm on 11 November 2026[cite: 1].",
+    "applicationEmail": "recruitment.go.ug",
+    "applicationUrl": "https://www.uhi.go.ug",
     "skills": [
-      "Adult cardiology",
-      "Patient management",
-      "Supervision",
-      "Ward rounds"
+      "Cardiovascular adult conditions",
+      "Diagnosis and treatment"
     ],
-    "summary": "Provide comprehensive specialist care to adult patients with cardiovascular conditions, from diagnosis through follow-up.",
+    "summary": "To provide comprehensive specialist care to adult patients requiring cardiovascular conditions through accurate diagnosis, evidence-based management, treatment and ongoing follow-up with the aim of improving cardiovascular health outcomes and quality of life[cite: 1].",
     "responsibilities": [
-      "Diagnose and treat adult cardiovascular conditions",
-      "Supervise medical officers, interns and trainees",
-      "Prepare departmental workplans, budgets and reports"
+      "Diagnose and treat cardiovascular adult conditions[cite: 1]",
+      "Implement patient care management plans[cite: 1]",
+      "Conduct ward rounds in the specialty areas[cite: 1]",
+      "Participate in training programmes for all health Professionals[cite: 1]",
+      "Supervise medical officers, interns and trainees[cite: 1]",
+      "Identify procurement needs of the department for equipment, drugs and other logistics[cite: 1]",
+      "Prepare departmental workplans, budgets and reports[cite: 1]",
+      "Prepares duty rosters[cite: 1]",
+      "Conduct performance evaluation of subordinates, provide constructive feedback and inform growth[cite: 1]"
     ],
     "requirements": [
-      "MBChB and a Master of Medicine (Internal Medicine) or equivalent",
-      "Fellowship or Masters in Cardiology",
-      "Registered with UMDPC with a valid practising licence",
-      "At least 3 years at Medical Officer level"
+      "MB.Ch.B degree or its equivalent from a recognized University[cite: 1]",
+      "Master of Science (MSc) in Medicine (Internal Medicine) or its equivalent from a recognized University/Institution[cite: 1]",
+      "Fellowship training in Adult Cardiology or a Masters in Cardiology from a recognized institution[cite: 1]",
+      "Should be registered with the Uganda Medical and Dental Practitioners Council[cite: 1]",
+      "Must possess a valid practicing license[cite: 1]",
+      "Working experience of at least three (3) years at a Medical Officer level[cite: 1]"
     ]
   },
   {
-    "title": "Medical Officer",
+    "title": "Post: Associate Consultant-Adult Cardiovascular Surgery",
     "company": "Uganda Heart Institute",
-    "location": "Mulago, Kampala",
+    "location": "Kampala",
+    "remote": false,
+    "type": "Full-time",
+    "category": "Healthcare",
+    "exp": "Senior",
+    "salaryScale": "UHI 2 MED-1",
+    "salaryMin": null,
+    "salaryMax": null,
+    "daysAgo": 0,
+    "applicationInstruction": "Eligible persons should address their applications featuring a cover letter, copies of the academic/professional certificates, and transcripts, certificates of registration and a valid practicing license, copies of the National Identity Card, and evidence of work experience where required to the Executive Director, Uganda Heart Institute, P.O. Box 37392, Kampala. Applications can be hand delivered in Uganda Heart Institute Headquarters, Mulago-Kampala. Online can be sent on the official email recruitment.go.ug. Applications both physical and online must be received not later than 5:00 pm on 11 November 2026[cite: 1].",
+    "applicationEmail": "recruitment.go.ug",
+    "applicationUrl": "https://www.uhi.go.ug",
+    "skills": [
+      "Cardiovascular conditions",
+      "Cardiac surgery"
+    ],
+    "summary": "To provide comprehensive specialist care to adult patients requiring cardiovascular surgical intervention through accurate diagnosis, preoperative management, surgical treatment and post-operative follow up with the aim of achieving optimal patient outcomes[cite: 1].",
+    "responsibilities": [
+      "Diagnose and treat cardiovascular conditions and conduct cardiac surgeries[cite: 1]",
+      "Implement patient care management plans[cite: 1]",
+      "Conduct ward rounds and in the specialty areas[cite: 1]",
+      "Participating programmes for all health professionals[cite: 1]",
+      "Supervise medical officers and trainees[cite: 1]",
+      "Identify procurement needs of the department for equipment, drugs and other logistics[cite: 1]",
+      "Prepares departmental work plans, budgets and reports[cite: 1]",
+      "Prepares duty rosters[cite: 1]",
+      "Conduct performance evaluation of subordinates, provide constructive feedback and inform growth[cite: 1]"
+    ],
+    "requirements": [
+      "MB.Ch.B degree or its equivalent from a recognized University[cite: 1]",
+      "Master of Medicine degree in General Surgery from a recognized University/Institution[cite: 1]",
+      "Applicants should be registered with the Uganda Medical and Dental Practitioners Council[cite: 1]",
+      "Must possess a valid practicing license[cite: 1]",
+      "Working experience of at least three (3) years as a Medical Officer[cite: 1]"
+    ]
+  },
+  {
+    "title": "Post: Associate Consultant-Paediatric Cardiac Surgery",
+    "company": "Uganda Heart Institute",
+    "location": "Kampala",
+    "remote": false,
+    "type": "Full-time",
+    "category": "Healthcare",
+    "exp": "Senior",
+    "salaryScale": "UHI 2 MED-1",
+    "salaryMin": null,
+    "salaryMax": null,
+    "daysAgo": 0,
+    "applicationInstruction": "Eligible persons should address their applications featuring a cover letter, copies of the academic/professional certificates, and transcripts, certificates of registration and a valid practicing license, copies of the National Identity Card, and evidence of work experience where required to the Executive Director, Uganda Heart Institute, P.O. Box 37392, Kampala. Applications can be hand delivered in Uganda Heart Institute Headquarters, Mulago-Kampala. Online can be sent on the official email recruitment.go.ug. Applications both physical and online must be received not later than 5:00 pm on 11 November 2026[cite: 1].",
+    "applicationEmail": "recruitment.go.ug",
+    "applicationUrl": "https://www.uhi.go.ug",
+    "skills": [
+      "Paediatric patients",
+      "Cardiac surgery"
+    ],
+    "summary": "To diagnose and manage paediatric patients requiring cardiac surgery ensuring timely and effective treatment and optimal patient outcomes[cite: 1].",
+    "responsibilities": [
+      "Diagnose and treat paediatric conditions and conduct cardiac surgeries[cite: 1]",
+      "Implement patient care management plans[cite: 1]",
+      "Conduct ward rounds in the specialty areas[cite: 1]",
+      "Participate in training programmes for all health Professionals[cite: 1]",
+      "Supervise medical officers, interns and trainees[cite: 1]",
+      "Identify procurement needs of the department for equipment, drugs and other logistics[cite: 1]",
+      "Participate in preparation of departmental workplans, budgets and reports[cite: 1]",
+      "Prepare duty rosters[cite: 1]",
+      "Conduct performance evaluation of subordinates, provide constructive feedback and inform growth[cite: 1]"
+    ],
+    "requirements": [
+      "MB.Ch.B degree or its equivalent from a recognized University[cite: 1]",
+      "Master of Medicine degree in General Surgery from a recognized University/Institution[cite: 1]",
+      "Applicants should be registered with the Uganda Medical and Dental Practitioners Council[cite: 1]",
+      "Must possess a valid practicing license[cite: 1]",
+      "Working experience of at least three (3) years at a Medical Officer level[cite: 1]"
+    ]
+  },
+  {
+    "title": "Post: Medical Officer",
+    "company": "Uganda Heart Institute",
+    "location": "Kampala",
     "remote": false,
     "type": "Full-time",
     "category": "Healthcare",
     "exp": "Entry",
+    "salaryScale": "UHI 4 MED-",
     "salaryMin": null,
     "salaryMax": null,
-    "salaryScale": "UHI 4 MED-1",
-    "posts": 5,
-    "reportsTo": "Associate Consultant – Adult Cardiology",
-    "deadline": "2026-11-11",
-    "daysAgo": null,
+    "daysAgo": 0,
+    "applicationInstruction": "Eligible persons should address their applications featuring a cover letter, copies of the academic/professional certificates, and transcripts, certificates of registration and a valid practicing license, copies of the National Identity Card, and evidence of work experience where required to the Executive Director, Uganda Heart Institute, P.O. Box 37392, Kampala. Applications can be hand delivered in Uganda Heart Institute Headquarters, Mulago-Kampala. Online can be sent on the official email recruitment.go.ug. Applications both physical and online must be received not later than 5:00 pm on 11 November 2026[cite: 1].",
+    "applicationEmail": "recruitment.go.ug",
+    "applicationUrl": "https://www.uhi.go.ug",
     "skills": [
-      "Clinical care",
-      "Patient records",
-      "Investigations",
-      "Clerking"
+      "Adult cardiovascular conditions",
+      "Clinical management"
     ],
-    "summary": "Participate in the management of adult cardiovascular patients, with a fellowship pathway in cardiology during service.",
+    "summary": "To participate in the management of adult cardiovascular conditions[cite: 1].",
     "responsibilities": [
-      "Receive, clerk, admit and discharge patients",
-      "Develop patient treatment plans and carry out investigations",
-      "Supervise medical interns and trainees"
+      "Receive, clerk, admit and discharge patients[cite: 1]",
+      "Develop patient treatment plans[cite: 1]",
+      "Collect data for research and carry out investigations[cite: 1]",
+      "Update patient records[cite: 1]",
+      "Participate in ward rounds and in the specialty areas[cite: 1]",
+      "Supervision of medical students and interns[cite: 1]"
     ],
     "requirements": [
-      "MBChB and an MSc in Medicine (Internal Medicine) or equivalent",
-      "Registered with UMDPC with a valid practising licence"
+      "MB.Ch.B degree or its equivalent from a recognized University[cite: 1]",
+      "Should be registered with the Uganda Medical and Dental Practitioners Council[cite: 1]",
+      "Must possess a valid practicing license[cite: 1]"
     ]
   },
   {
-    "title": "Associate Consultant – Paediatric Cardiology",
+    "title": "Post: Associate Consultant-Paediatric Cardiology",
     "company": "Uganda Heart Institute",
-    "location": "Mulago, Kampala",
+    "location": "Kampala",
     "remote": false,
     "type": "Full-time",
     "category": "Healthcare",
     "exp": "Senior",
+    "salaryScale": "UHI 2 MED-1",
     "salaryMin": null,
     "salaryMax": null,
-    "salaryScale": "UHI 2 MED-1",
-    "posts": 3,
-    "reportsTo": "Consultant – Paediatric Cardiology",
-    "deadline": "2026-11-11",
-    "daysAgo": null,
-    "skills": ["Paediatric cardiology", "Patient management", "Supervision"],
-    "summary": "Provide specialist care for children with cardiovascular conditions, from accurate diagnosis through ongoing follow-up.",
-    "responsibilities": [
-      "Diagnose and treat paediatric cardiovascular conditions",
-      "Train health professionals in paediatric cardiology",
-      "Supervise medical officers, interns and trainees"
-    ],
-    "requirements": [
-      "MBChB and a Master of Medicine in Paediatrics and Child Health or equivalent",
-      "Fellowship or Masters in Paediatric Cardiology",
-      "At least 3 years at Medical Officer level"
-    ]
-  },
-  {
-    "title": "Associate Consultant – Adult Cardiovascular Surgery",
-    "company": "Uganda Heart Institute",
-    "location": "Mulago, Kampala",
-    "remote": false,
-    "type": "Full-time",
-    "category": "Healthcare",
-    "exp": "Senior",
-    "salaryMin": null,
-    "salaryMax": null,
-    "salaryScale": "UHI 2 MED-1",
-    "posts": 2,
-    "reportsTo": "Consultant – Adult Cardiac Surgery",
-    "deadline": "2026-11-11",
-    "daysAgo": null,
-    "skills": ["Cardiac surgery", "Perioperative care", "Surgical management"],
-    "summary": "Provide specialist surgical care for adults needing cardiovascular intervention, from assessment through postoperative follow-up.",
-    "responsibilities": [
-      "Diagnose conditions and conduct cardiovascular surgeries",
-      "Supervise medical officers, interns and trainees",
-      "Evaluate subordinates and identify growth opportunities"
-    ],
-    "requirements": [
-      "MBChB and a Master of Science in Surgery or equivalent",
-      "Completed fellowship in cardiovascular surgery",
-      "Registered with UMDPC with a valid practising licence",
-      "At least 3 years at Medical Officer level"
-    ]
-  },
-  {
-    "title": "Associate Consultant – Paediatric Cardiac Surgery",
-    "company": "Uganda Heart Institute",
-    "location": "Mulago, Kampala",
-    "remote": false,
-    "type": "Full-time",
-    "category": "Healthcare",
-    "exp": "Senior",
-    "salaryMin": null,
-    "salaryMax": null,
-    "salaryScale": "UHI 2 MED-1",
-    "posts": 2,
-    "reportsTo": "Consultant – Paediatric Cardiac Surgery",
-    "deadline": "2026-11-11",
-    "daysAgo": null,
-    "skills": ["Paediatric cardiac surgery", "Surgical management"],
-    "summary": "Diagnose and manage paediatric patients requiring cardiac surgery, aiming for timely treatment and good outcomes.",
-    "responsibilities": [
-      "Diagnose and treat paediatric cardiovascular conditions and conduct surgeries",
-      "Supervise medical officers, interns and trainees",
-      "Plan equipment and drug procurement for the department"
-    ],
-    "requirements": [
-      "MBChB and a Master of Medicine in General Surgery or equivalent",
-      "Fellowship in cardiovascular surgery",
-      "Registered with UMDPC with a valid practising licence",
-      "At least 3 years as a Medical Officer"
-    ]
-  },
-  {
-    "title": "Associate Consultant – Cardiac Critical Care",
-    "company": "Uganda Heart Institute",
-    "location": "Mulago, Kampala",
-    "remote": false,
-    "type": "Full-time",
-    "category": "Healthcare",
-    "exp": "Senior",
-    "salaryMin": null,
-    "salaryMax": null,
-    "salaryScale": "UHI 2 MED-1",
-    "posts": 4,
-    "reportsTo": "Consultant – Cardiac Critical Care",
-    "deadline": "2026-11-11",
-    "daysAgo": null,
+    "daysAgo": 0,
+    "applicationInstruction": "Eligible persons should address their applications featuring a cover letter, copies of the academic/professional certificates, and transcripts, certificates of registration and a valid practicing license, copies of the National Identity Card, and evidence of work experience where required to the Executive Director, Uganda Heart Institute, P.O. Box 37392, Kampala. Applications can be hand delivered in Uganda Heart Institute Headquarters, Mulago-Kampala. Online can be sent on the official email recruitment.go.ug. Applications both physical and online must be received not later than 5:00 pm on 11 November 2026[cite: 1, 2].",
+    "applicationEmail": "recruitment.go.ug",
+    "applicationUrl": "https://www.uhi.go.ug",
     "skills": [
-      "Critical care",
-      "Cardiac intensive care",
-      "Operational research",
-      "Clinical supervision"
+      "Congenital heart conditions",
+      "Paediatric Cardiology"
     ],
-    "summary": "Provide specialist care for cardiac critical care patients and lead training, research and clinical standards in the unit.",
+    "summary": "To provide comprehensive specialist care to paediatric patients with cardiovascular conditions through accurate diagnosis, treatment, and ongoing follow-up with the aim of improving cardiovascular health outcomes and quality of life[cite: 1, 2].",
     "responsibilities": [
-      "Diagnose and manage cardiac conditions and complications",
-      "Plan and conduct operational research",
-      "Supervise and train medical officers and other health professionals"
+      "Diagnose and treat congenital heart conditions[cite: 1, 2]",
+      "Conduct ward rounds in the specialty areas[cite: 1, 2]",
+      "Participate in training programmes for health Professionals in Paediatric Cardiology[cite: 1, 2]",
+      "Supervise medical officers, and trainees[cite: 1, 2]",
+      "Identify procurement needs of the department for equipment, drugs and other logistics[cite: 1, 2]",
+      "Participate in preparation of departmental workplans, budgets and reports[cite: 2]",
+      "Prepare duty rosters[cite: 2]"
     ],
     "requirements": [
-      "MBChB and a Master of Medicine (Anaesthesia, Surgery or Internal Medicine) or equivalent",
-      "Fellowship in cardiac intensive care (at least two years)",
-      "Interest in research",
-      "At least 3 years as a General Practitioner"
+      "MB.Ch.B degree or its equivalent from a recognized University[cite: 1, 2]",
+      "A Master of Medicine degree in Paediatrics and Child Health or equivalent from a recognized University[cite: 1, 2]",
+      "Fellowship in Paediatric Cardiology or a Masters in Paediatric Cardiology from a recognized institution[cite: 1, 2]",
+      "Should be registered with the Uganda Medical and Dental Practitioners Council[cite: 1, 2]",
+      "Must possess a valid practicing license[cite: 1, 2]",
+      "Working experience of at least three (3) years at a Medical Officer level[cite: 1, 2]"
     ]
   },
   {
-    "title": "Associate Consultant – Cardiac Anaesthesia",
+    "title": "Post: Associate Consultant-Cardiac Critical Care",
     "company": "Uganda Heart Institute",
-    "location": "Mulago, Kampala",
+    "location": "Kampala",
     "remote": false,
     "type": "Full-time",
     "category": "Healthcare",
     "exp": "Senior",
+    "salaryScale": "U2 MED-1",
     "salaryMin": null,
     "salaryMax": null,
-    "salaryScale": "UHI 2 MED-1",
-    "posts": 2,
-    "reportsTo": "Consultant – Adult Cardiac Anaesthesia",
-    "deadline": "2026-11-11",
-    "daysAgo": null,
-    "skills": ["Cardiac anaesthesia", "Perioperative care", "Patient safety"],
-    "summary": "Provide perioperative anaesthetic care for patients undergoing cardiac procedures, from preoperative assessment to postoperative care.",
-    "responsibilities": [
-      "Manage intraoperative anaesthesia and postoperative care",
-      "Conduct ward rounds and supervise medical officers and interns",
-      "Plan equipment and drug needs for the department"
-    ],
-    "requirements": [
-      "MBChB and a Master of Medicine in Anaesthesia or equivalent",
-      "Fellowship or equivalent in cardiac anaesthesia",
-      "Registered with UMDPC with a valid practising licence",
-      "At least 3 years as a General Anaesthesiologist"
-    ]
-  },
-  {
-    "title": "Associate Consultant – Radiologist",
-    "company": "Uganda Heart Institute",
-    "location": "Mulago, Kampala",
-    "remote": false,
-    "type": "Full-time",
-    "category": "Imaging & Diagnostics",
-    "exp": "Senior",
-    "salaryMin": null,
-    "salaryMax": null,
-    "salaryScale": "UHI 2 MED-1",
-    "posts": 1,
-    "reportsTo": "Consultant – Radiologist",
-    "deadline": "2026-11-11",
-    "daysAgo": null,
+    "daysAgo": 0,
+    "applicationInstruction": "Eligible persons should address their applications featuring a cover letter, copies of the academic/professional certificates, and transcripts, certificates of registration and a valid practicing license, copies of the National Identity Card, and evidence of work experience where required to the Executive Director, Uganda Heart Institute, P.O. Box 37392, Kampala. Applications can be hand delivered in Uganda Heart Institute Headquarters, Mulago-Kampala. Online can be sent on the official email recruitment.go.ug. Applications both physical and online must be received not later than 5:00 pm on 11 November 2026[cite: 2].",
+    "applicationEmail": "recruitment.go.ug",
+    "applicationUrl": "https://www.uhi.go.ug",
     "skills": [
-      "Diagnostic imaging",
-      "Cardiovascular imaging",
-      "Radiology reporting"
+      "Cardiac critical care",
+      "Emergency care"
     ],
-    "summary": "Interpret and report diagnostic imaging, focused on cardiovascular conditions, to support diagnosis and treatment planning.",
+    "summary": "To provide comprehensive care in management of cardiac and critical care patients with the aim of achieving optimal patient outcomes[cite: 2].",
     "responsibilities": [
-      "Interpret and report imaging studies",
-      "Lead case discussions and train intern doctors",
-      "Plan and conduct operational research"
+      "Diagnose and manage cardiac conditions and complications[cite: 2]",
+      "Assist in planning and coordinating Continuing Professional Development in his/her area of specialty for Health professional at the Institute[cite: 2]",
+      "Plan, co-ordinate and conduct operational research in his/her specialty area[cite: 2]",
+      "Manage national referral system for patients at a supra-specialized level[cite: 2]",
+      "Ensure that discipline and the ethics of conduct are cherished by the staff under him/her[cite: 2]",
+      "Provide technical and professional advice in his/her area of specialty[cite: 2]",
+      "Advice on the procurement of equipment, drugs and other logistics required for his/her specialty[cite: 2]"
     ],
     "requirements": [
-      "MBChB and a Master of Science in Radiology or equivalent",
-      "Registered with UMDPC with a valid practising licence",
-      "Research evidence is an advantage",
-      "Served as a Medical Officer for at least 3 years"
+      "MB.Ch.B degree or its equivalent from a recognized University or Institution[cite: 2]",
+      "Master of Medicine (Anaesthesia, Surgery, Internal Medicine) or its equivalent in the relevant specialty from a recognized University or Institution[cite: 2]",
+      "Should be registered with the Uganda Medical and Dental Practitioners Council[cite: 2]",
+      "Should be interested in research[cite: 2]",
+      "Must possess a valid practicing license[cite: 2]",
+      "Should have a good working experience of at least three (3) years as a Medical Officer/General Anaesthetist/Surgeon/Internal Medicine specialist[cite: 2]"
     ]
   },
   {
-    "title": "Radiographer",
+    "title": "Post: Associate Consultant-Cardiac Anaesthesia",
     "company": "Uganda Heart Institute",
-    "location": "Mulago, Kampala",
+    "location": "Kampala",
     "remote": false,
     "type": "Full-time",
-    "category": "Imaging & Diagnostics",
-    "exp": "Entry",
+    "category": "Healthcare",
+    "exp": "Senior",
+    "salaryScale": "UHI 2 MED-1",
     "salaryMin": null,
     "salaryMax": null,
+    "daysAgo": 0,
+    "applicationInstruction": "Eligible persons should address their applications featuring a cover letter, copies of the academic/professional certificates, and transcripts, certificates of registration and a valid practicing license, copies of the National Identity Card, and evidence of work experience where required to the Executive Director, Uganda Heart Institute, P.O. Box 37392, Kampala. Applications can be hand delivered in Uganda Heart Institute Headquarters, Mulago-Kampala. Online can be sent on the official email recruitment.go.ug. Applications both physical and online must be received not later than 5:00 pm on 11 November 2026[cite: 2].",
+    "applicationEmail": "recruitment.go.ug",
+    "applicationUrl": "https://www.uhi.go.ug",
+    "skills": [
+      "Cardiac anaesthesia",
+      "Perioperative management"
+    ],
+    "summary": "To provide comprehensive anaesthetic care to patients undergoing cardiac procedures, including preoperative assessment, intraoperative management and postoperative care, with the aim of achieving safety and optimal clinical outcomes[cite: 2].",
+    "responsibilities": [
+      "Implement patient plans[cite: 2]",
+      "Conduct ward rounds in the specialty area[cite: 2]",
+      "Participate in training programmes[cite: 2]",
+      "Supervise medical officers, interns and trainees[cite: 2]",
+      "Identify procurement needs of the department for equipment, drugs and other logistics[cite: 2]",
+      "Prepare departmental workplans, budgets and reports[cite: 2]"
+    ],
+    "requirements": [
+      "MB Ch.B from a recognized University/Institution[cite: 2]",
+      "Master of Medicine degree in Anaesthesia or its equivalent from a recognized University/Institution[cite: 2]",
+      "Fellowship or equivalent in Cardiac Anaesthesia[cite: 2]",
+      "Should be registered with the Uganda Medical and Dental Practitioners Council[cite: 2]",
+      "Must possess a valid practicing license[cite: 2]",
+      "Should have a good working experience of at least three (3) years as a General Anaesthetist/Specialist[cite: 2]"
+    ]
+  },
+  {
+    "title": "Post: Associate Consultant Radiologist",
+    "company": "Uganda Heart Institute",
+    "location": "Kampala",
+    "remote": false,
+    "type": "Full-time",
+    "category": "Healthcare",
+    "exp": "Senior",
+    "salaryScale": "UHI 2 MED-1",
+    "salaryMin": null,
+    "salaryMax": null,
+    "daysAgo": 0,
+    "applicationInstruction": "Eligible persons should address their applications featuring a cover letter, copies of the academic/professional certificates, and transcripts, certificates of registration and a valid practicing license, copies of the National Identity Card, and evidence of work experience where required to the Executive Director, Uganda Heart Institute, P.O. Box 37392, Kampala. Applications can be hand delivered in Uganda Heart Institute Headquarters, Mulago-Kampala. Online can be sent on the official email recruitment.go.ug. Applications both physical and online must be received not later than 5:00 pm on 11 November 2026[cite: 2].",
+    "applicationEmail": "recruitment.go.ug",
+    "applicationUrl": "https://www.uhi.go.ug",
+    "skills": [
+      "Specialist radiology",
+      "Diagnostic imaging"
+    ],
+    "summary": "To provide specialist radiology through the interpretation and reporting of diagnostic imaging studies, with a focus on cardiovascular and related conditions supporting accurate diagnosis, treatment planning, and ongoing management of patients while ensuring high-quality safety, and efficiency[cite: 2].",
+    "responsibilities": [
+      "Assist the Consultant and participate in ensuring efficient management of services in his/her specialty at the Institute[cite: 2]",
+      "Work hand in hand with the Medical Imaging Technologists, Radiographers, Sonographers and other Allied health professionals to ensure effective utilization of the imaging services as well as patient safety[cite: 2]",
+      "Lead journal discussion sessions in the respective units of the imaging department[cite: 2]",
+      "Oversee schedule for preventive equipment maintenance[cite: 2]",
+      "Supervise and train Medical Officers, and other health Professionals[cite: 2]",
+      "Participate in training programs for all health Professions under him/her[cite: 2]",
+      "Participate in continuing Medical Education in his/her area of specialty for Health professional at the Institute and the catchment area of the Institute including outreaches[cite: 2]",
+      "Plan and conduct operational research in his/her specialty area[cite: 2]",
+      "Participate in the management of scientific meetings[cite: 2]",
+      "Ensure that discipline and the ethical code of conduct are cherished by the staff under him/her[cite: 2]",
+      "Seek technical and professional advice in his/her area of specialty from the supervising consultant of institution[cite: 2]",
+      "Advise on the procurement of equipment, drugs and other logistics required for his/her specialty[cite: 2]"
+    ],
+    "requirements": [
+      "MB Ch.B degree or its equivalent from a recognized University or Institution[cite: 2]",
+      "Master of Science (MSc) in Medicine (Radiology) or its equivalent in the respective specialty from a recognized University or Institution[cite: 2]",
+      "Should be registered with the Uganda Medical and Dental Practitioners Council[cite: 2]",
+      "Must possess a valid practicing license[cite: 2]",
+      "Evidence of research will be an added advantage[cite: 2]",
+      "Should have served as a Medical Officer for at least three (3) years[cite: 2]"
+    ]
+  },
+  {
+    "title": "Post: Radiographer",
+    "company": "Uganda Heart Institute",
+    "location": "Kampala",
+    "remote": false,
+    "type": "Full-time",
+    "category": "Healthcare",
+    "exp": "Mid",
+    "salaryScale": "UHI MED",
+    "salaryMin": null,
+    "salaryMax": null,
+    "daysAgo": 0,
+    "applicationInstruction": "Eligible persons should address their applications featuring a cover letter, copies of the academic/professional certificates, and transcripts, certificates of registration and a valid practicing license, copies of the National Identity Card, and evidence of work experience where required to the Executive Director, Uganda Heart Institute, P.O. Box 37392, Kampala. Applications can be hand delivered in Uganda Heart Institute Headquarters, Mulago-Kampala. Online can be sent on the official email recruitment.go.ug. Applications both physical and online must be received not later than 5:00 pm on 11 November 2026[cite: 2].",
+    "applicationEmail": "recruitment.go.ug",
+    "applicationUrl": "https://www.uhi.go.ug",
+    "skills": [
+      "Radiographic examination",
+      "Diagnostic imaging"
+    ],
+    "summary": "To provide safe, accurate and timely diagnostic imaging services by performing radiographic examinations in accordance with established clinical protocols[cite: 2].",
+    "responsibilities": [
+      "Receive Patients and analyse their requests[cite: 2]",
+      "Prepare patient and liaise with ward management in the preparation of Patients for X-rays[cite: 2]",
+      "Take x-ray pictures, process and prepare reports to the Order/Clinical Officer[cite: 2]",
+      "Maintain x-ray equipment[cite: 2]"
+    ],
+    "requirements": [
+      "Must have a Diploma in Medical Radiology from a recognized institution[cite: 2]",
+      "Must be registered with the Allied Health Professionals Council[cite: 2]"
+    ]
+  },
+  {
+    "title": "Post: Medical Laboratory Technician",
+    "company": "Uganda Heart Institute",
+    "location": "Kampala",
+    "remote": false,
+    "type": "Full-time",
+    "category": "Healthcare",
+    "exp": "Mid",
     "salaryScale": "UHI 5 MED 2",
-    "posts": 1,
-    "reportsTo": "Senior Radiographer",
-    "deadline": "2026-11-11",
-    "daysAgo": null,
-    "skills": ["Radiography", "X-ray", "Equipment maintenance"],
-    "summary": "Perform radiographic examinations to established clinical protocols, delivering safe and accurate diagnostic imaging.",
-    "responsibilities": [
-      "Receive patients and prepare X-ray equipment",
-      "Take X-ray images and prepare reports for the doctor or clinical officer",
-      "Maintain X-ray equipment"
-    ],
-    "requirements": [
-      "Diploma in Medical Radiology from a recognised institution",
-      "Registered with the Allied Health Professionals Council"
-    ]
-  },
-  {
-    "title": "Medical Laboratory Technician",
-    "company": "Uganda Heart Institute",
-    "location": "Mulago, Kampala",
-    "remote": false,
-    "type": "Full-time",
-    "category": "Healthcare",
-    "exp": "Entry",
     "salaryMin": null,
     "salaryMax": null,
-    "salaryScale": "UHI 5 MED 2",
-    "posts": 2,
-    "reportsTo": "Medical Laboratory Technologist",
-    "deadline": "2026-11-11",
-    "daysAgo": null,
+    "daysAgo": 0,
+    "applicationInstruction": "Eligible persons should address their applications featuring a cover letter, copies of the academic/professional certificates, and transcripts, certificates of registration and a valid practicing license, copies of the National Identity Card, and evidence of work experience where required to the Executive Director, Uganda Heart Institute, P.O. Box 37392, Kampala. Applications can be hand delivered in Uganda Heart Institute Headquarters, Mulago-Kampala. Online can be sent on the official email recruitment.go.ug. Applications both physical and online must be received not later than 5:00 pm on 11 November 2026[cite: 2].",
+    "applicationEmail": "recruitment.go.ug",
+    "applicationUrl": "https://www.uhi.go.ug",
     "skills": [
       "Laboratory investigations",
-      "Phlebotomy",
-      "Quality assurance",
-      "Records management"
+      "Phlebotomy"
     ],
-    "summary": "Run laboratory investigations and produce accurate, timely results to support diagnosis and treatment.",
+    "summary": "To conduct laboratory investigations and ensure accurate, timely and reliable laboratory results to support the diagnosis, treatment, and management of patients[cite: 2].",
     "responsibilities": [
-      "Perform laboratory investigations and submit reports",
-      "Carry out phlebotomy at the OPD and wards",
-      "Maintain laboratory equipment and inventory"
+      "Record and manage patient data and test results[cite: 2]",
+      "Records management & Phlebotomy at the OPD and wards[cite: 2]",
+      "Perform laboratory investigations, report towards wards and clinicians[cite: 2]",
+      "Procurement & reagents according to test procedures[cite: 2]",
+      "Service and maintain laboratory equipment to ensure good functional state[cite: 2]",
+      "Maintain an inventory of the laboratory equipment[cite: 2]",
+      "Manage inventory of blood and blood products[cite: 2]",
+      "Make reports and accountability of resources allocated[cite: 2]",
+      "Maintain the general cleanliness of the working environment[cite: 2]"
     ],
     "requirements": [
-      "Diploma in Medical Laboratory Technology or equivalent",
-      "Certificate of Good Laboratory Practice (GLP)",
-      "Registered with the Allied Health Professionals Council",
-      "At least 1 year in a reputable healthcare facility"
+      "A Diploma in Medical Laboratory Technology/Techniques or its equivalent from a recognized Institution[cite: 2]",
+      "A certificate of Good Practice[cite: 2]",
+      "Must be registered with Health Professionals Council with a valid practicing license[cite: 2]",
+      "Should have an experience of at least two years in a reputable healthcare facility[cite: 2]"
     ]
   },
   {
-    "title": "Senior Medical Research Officer",
+    "title": "Post: Senior Medical Research Officer",
     "company": "Uganda Heart Institute",
-    "location": "Mulago, Kampala",
+    "location": "Kampala",
     "remote": false,
     "type": "Full-time",
-    "category": "Research & Training",
+    "category": "Research",
     "exp": "Senior",
+    "salaryScale": "U19 1 MED",
     "salaryMin": null,
     "salaryMax": null,
-    "salaryScale": "UHI 3 MED 1",
-    "posts": 1,
-    "reportsTo": "Principal Medical Research and Training",
-    "deadline": "2026-11-11",
-    "daysAgo": null,
+    "daysAgo": 0,
+    "applicationInstruction": "Eligible persons should address their applications featuring a cover letter, copies of the academic/professional certificates, and transcripts, certificates of registration and a valid practicing license, copies of the National Identity Card, and evidence of work experience where required to the Executive Director, Uganda Heart Institute, P.O. Box 37392, Kampala. Applications can be hand delivered in Uganda Heart Institute Headquarters, Mulago-Kampala. Online can be sent on the official email recruitment.go.ug. Applications both physical and online must be received not later than 5:00 pm on 11 November 2026[cite: 2].",
+    "applicationEmail": "recruitment.go.ug",
+    "applicationUrl": "https://www.uhi.go.ug",
     "skills": [
       "Clinical research management",
-      "Grant management",
-      "Project planning"
+      "Grant management"
     ],
-    "summary": "Manage research commissioning and grant processes, keep research documentation accurate, and monitor adherence to clinical research standards.",
+    "summary": "Manage receiving and grant management processes to support the delivery and dissemination of research, ensure research documentation and contribute to the monitoring of adherence to quality assurance standards[cite: 2].",
     "responsibilities": [
-      "Support design, delivery and management of research commissions",
-      "Develop timelines and monitor progress and budgets",
-      "Manage data on organisation-wide systems"
+      "Support the design, delivery and management of research grants by working closely with the senior Researchers[cite: 2]",
+      "Work as a member of a team to design and continuously improve high quality processes for the research[cite: 2]",
+      "Contribute to disseminate research findings and support the development and delivery of research programmes, including developing timelines, planning and monitoring progress and budgets[cite: 2]",
+      "Identify and highlight risks and negative measures in the projects with the communications team to promote smooth flow of high quality internal and external communications around research[cite: 2]",
+      "Participate in the development of application and selection materials and processes for award holders[cite: 2]",
+      "Managing selection and assessment panels to ensure high-quality award holders and research providers including[cite: 2]",
+      "Organise, advisory group meetings including all practical arrangements, preparing supporting paper work and taking minutes[cite: 2]",
+      "Organise events, such as seminars, learning events and manage data in the organization wide and specific units and act as a source of information[cite: 2]",
+      "Identify areas for improvement and drive the development of existing knowledge and information systems for relevant research and project management[cite: 2]"
     ],
     "requirements": [
-      "MBChB or equivalent",
-      "Master's degree in a health science discipline",
-      "A relevant fellowship is an advantage",
-      "At least 6 years in clinical research management"
+      "An M. B., Ch. B. or its equivalent[cite: 2]",
+      "Master's Degree in a health science discipline (a PhD in a relevant discipline will be added advantage)[cite: 2]",
+      "A minimum of 6 years of experience in clinical research management[cite: 2]"
     ]
   },
   {
-    "title": "Epidemiologist",
+    "title": "Post: Epidemiologist",
     "company": "Uganda Heart Institute",
-    "location": "Mulago, Kampala",
+    "location": "Kampala",
     "remote": false,
     "type": "Full-time",
-    "category": "Research & Training",
+    "category": "Healthcare",
     "exp": "Mid",
+    "salaryScale": "UHI 4 MED-1",
     "salaryMin": null,
     "salaryMax": null,
-    "salaryScale": "UHI 4 MED-1",
-    "posts": 1,
-    "reportsTo": "Senior Epidemiologist",
-    "deadline": "2026-11-11",
-    "daysAgo": null,
+    "daysAgo": 0,
+    "applicationInstruction": "Eligible persons should address their applications featuring a cover letter, copies of the academic/professional certificates, and transcripts, certificates of registration and a valid practicing license, copies of the National Identity Card, and evidence of work experience where required to the Executive Director, Uganda Heart Institute, P.O. Box 37392, Kampala. Applications can be hand delivered in Uganda Heart Institute Headquarters, Mulago-Kampala. Online can be sent on the official email recruitment.go.ug. Applications both physical and online must be received not later than 5:00 pm on 11 November 2026[cite: 2].",
+    "applicationEmail": "recruitment.go.ug",
+    "applicationUrl": "https://www.uhi.go.ug",
     "skills": [
       "Epidemiology",
-      "Surveillance",
-      "Statistical analysis",
-      "Outbreak investigation"
+      "Disease surveillance"
     ],
-    "summary": "Investigate and analyse cardiac-related diseases and epidemics to support surveillance, detection and prevention.",
+    "summary": "To support the implementation of policies and plans on epidemic and disaster preparedness and control by carrying out investigative and analytical epidemiologic activities related to the surveillance, detection, and prevention of the conditions[cite: 2].",
     "responsibilities": [
-      "Conduct investigations and respond to disease outbreaks",
-      "Perform statistical analyses and disseminate findings",
-      "Design and implement surveillance systems"
+      "Investigate and respond to public health epidemics[cite: 2]",
+      "Conduct Investigations and research[cite: 2]",
+      "Participate in surveillance activities and disseminate epidemiologic findings[cite: 2]",
+      "Participate in the epidemiologic studies and urgent outbreak response[cite: 2]",
+      "Performs statistical analyses of investigations[cite: 2]",
+      "Participate in the design, management and evaluation of surveillance systems[cite: 2]",
+      "Supervise data collection entry analysis and interpretation of epidemic prone diseases[cite: 2]",
+      "Disseminate information and data[cite: 2]",
+      "Carries out on-job training of junior medical and nursing students[cite: 2]",
+      "Participates in outreach and community education[cite: 2]",
+      "Ensures strict adherence to ethical practice by self and the health team[cite: 2]",
+      "Conduct performance Analysis of subordinates[cite: 2]"
     ],
     "requirements": [
-      "MBChB or a Degree in Epidemiology or related field",
-      "Master's degree in epidemiology is an advantage",
-      "Two years of epidemiology experience in a public health organisation at national level or a multinational"
+      "A Bachelor's degree in Nursing or a related field from a recognized University[cite: 2]",
+      "Must be registered with the Uganda Nurses and Midwives Council[cite: 2]",
+      "Must possess a valid practicing License[cite: 2]"
     ]
   },
   {
-    "title": "Nursing Officer",
+    "title": "Post: Nursing Officer",
     "company": "Uganda Heart Institute",
-    "location": "Mulago, Kampala",
+    "location": "Kampala",
     "remote": false,
     "type": "Full-time",
-    "category": "Nursing",
-    "exp": "Entry",
+    "category": "Healthcare",
+    "exp": "Mid",
+    "salaryScale": "UHI 4 MED-2",
     "salaryMin": null,
     "salaryMax": null,
-    "salaryScale": "UHI 4 MED-2",
-    "posts": 44,
-    "reportsTo": "Nursing Officer – Cardiovascular",
-    "deadline": "2026-11-11",
-    "daysAgo": null,
+    "daysAgo": 0,
+    "applicationInstruction": "Eligible persons should address their applications featuring a cover letter, copies of the academic/professional certificates, and transcripts, certificates of registration and a valid practicing license, copies of the National Identity Card, and evidence of work experience where required to the Executive Director, Uganda Heart Institute, P.O. Box 37392, Kampala. Applications can be hand delivered in Uganda Heart Institute Headquarters, Mulago-Kampala. Online can be sent on the official email recruitment.go.ug. Applications both physical and online must be received not later than 5:00 pm on 11 November 2026[cite: 2].",
+    "applicationEmail": "recruitment.go.ug",
+    "applicationUrl": "https://www.uhi.go.ug",
     "skills": [
       "Cardiac nursing",
-      "Patient care",
-      "Clinical supervision",
-      "Health education"
+      "Patient monitoring"
     ],
-    "summary": "Provide safe, patient-centred cardiac nursing care, covering assessment, monitoring, treatment, education and continuity of care.",
+    "summary": "To provide safe, comprehensive and patient centered cardiac nursing care in individuals with cardiac conditions through assessment monitoring, treatment, health education, dissemination rehabilitation and continuity of care collaboration with the multidisciplinary healthcare[cite: 2].",
     "responsibilities": [
-      "Ensure quality nursing care through nursing protocols",
-      "Allocate duties and supervise nursing staff and students",
-      "Conduct performance appraisal of staff"
+      "Perform administrative duties[cite: 2]",
+      "Ensure that quality nursing care is achieved by implementing nursing protocols[cite: 2]",
+      "Ensure the smooth running of ward units by allocating duties[cite: 2]",
+      "Ensure that wards are adequately equipped with equipment, supplies and drugs and maintain safe custody[cite: 2]",
+      "Provide educational and counseling services to patients and patient[cite: 2]",
+      "Assist in preparing quarterly and annual reports on program performance and achievement[cite: 2]"
     ],
     "requirements": [
-      "Bachelor's degree in Nursing from a recognised university",
-      "Registered with the Uganda Nurses and Midwives Council",
-      "Valid practising licence"
+      "A Bachelor's degree in Medicine, Public Health Nursing Science, physiotherapy or a related field from a recognized University[cite: 2]",
+      "A master's degree in Public Health or related field[cite: 2]",
+      "At least three (3) years of work experience as a Cardiac Public Health Officer[cite: 2]"
     ]
   },
   {
-    "title": "Cardiac Critical Care Orderly",
+    "title": "Post: Cardiac Critical Care Orderlies",
     "company": "Uganda Heart Institute",
-    "location": "Mulago, Kampala",
-    "remote": false,
-    "type": "Full-time",
-    "category": "Nursing",
-    "exp": "Entry",
-    "salaryMin": null,
-    "salaryMax": null,
-    "salaryScale": "UHI 8 MED 2",
-    "posts": 3,
-    "reportsTo": "Nursing Officer",
-    "deadline": "2026-11-11",
-    "daysAgo": null,
-    "skills": [
-      "Patient mobility",
-      "Hygiene",
-      "Sample transport",
-      "Sterilisation support"
-    ],
-    "summary": "Support cardiac patients under nursing and medical supervision, with mobility, hygiene, transport and a clean care environment.",
-    "responsibilities": [
-      "Transport patients and samples for investigations",
-      "Maintain sterility and clean instruments",
-      "Keep wards and units in order"
-    ],
-    "requirements": [
-      "O-Level certificate",
-      "Training in a health-related course is an advantage"
-    ]
-  },
-  {
-    "title": "Theatre Attendant",
-    "company": "Uganda Heart Institute",
-    "location": "Mulago, Kampala",
-    "remote": false,
-    "type": "Full-time",
-    "category": "Nursing",
-    "exp": "Entry",
-    "salaryMin": null,
-    "salaryMax": null,
-    "salaryScale": "UHI 8 MED 2",
-    "posts": 2,
-    "reportsTo": "Theatre Cardiac Nursing Officer",
-    "deadline": "2026-11-11",
-    "daysAgo": null,
-    "skills": [
-      "Operating theatre",
-      "Infection control",
-      "CSSD",
-      "Inventory management"
-    ],
-    "summary": "Prepare and maintain sterile operating rooms, equipment and supplies, and support patients before and after surgery.",
-    "responsibilities": [
-      "Set up operating rooms and maintain sterility",
-      "Coordinate instrument flow with CSSD",
-      "Maintain equipment, inventory and records"
-    ],
-    "requirements": [
-      "O-Level certificate (UCE)",
-      "Certificate in a relevant health field"
-    ]
-  },
-  {
-    "title": "Senior Cardiac Public Health Officer",
-    "company": "Uganda Heart Institute",
-    "location": "Mulago, Kampala",
-    "remote": false,
-    "type": "Full-time",
-    "category": "Public Health",
-    "exp": "Senior",
-    "salaryMin": null,
-    "salaryMax": null,
-    "salaryScale": "UHI 3 MED-2",
-    "posts": 1,
-    "reportsTo": "Principal Cardiac Public Health Officer",
-    "deadline": "2026-11-11",
-    "daysAgo": null,
-    "skills": [
-      "Public health programmes",
-      "Health promotion",
-      "Program evaluation",
-      "Community engagement"
-    ],
-    "summary": "Plan and run cardiac public health programmes, covering prevention, awareness and evaluation of programme performance.",
-    "responsibilities": [
-      "Plan and implement cardiac health promotion and prevention programmes",
-      "Collect and analyse data to improve programmes",
-      "Prepare quarterly and annual programme reports"
-    ],
-    "requirements": [
-      "Bachelor's degree in Medicine, Public Health, Nursing Science, Physiotherapy, Nutrition or related field",
-      "Master's degree in Public Health or related field",
-      "At least 3 years as a Cardiac Public Health Officer"
-    ]
-  },
-  {
-    "title": "Nutritionist (Dietician)",
-    "company": "Uganda Heart Institute",
-    "location": "Mulago, Kampala",
+    "location": "Kampala",
     "remote": false,
     "type": "Full-time",
     "category": "Healthcare",
     "exp": "Entry",
+    "salaryScale": "UHI MED 2",
     "salaryMin": null,
     "salaryMax": null,
-    "salaryScale": "UHI 4 MED-2",
-    "posts": 1,
-    "reportsTo": "Senior Clinical Nutritionist",
-    "deadline": "2026-11-11",
-    "daysAgo": null,
+    "daysAgo": 0,
+    "applicationInstruction": "Eligible persons should address their applications featuring a cover letter, copies of the academic/professional certificates, and transcripts, certificates of registration and a valid practicing license, copies of the National Identity Card, and evidence of work experience where required to the Executive Director, Uganda Heart Institute, P.O. Box 37392, Kampala. Applications can be hand delivered in Uganda Heart Institute Headquarters, Mulago-Kampala. Online can be sent on the official email recruitment.go.ug. Applications both physical and online must be received not later than 5:00 pm on 11 November 2026[cite: 2].",
+    "applicationEmail": "recruitment.go.ug",
+    "applicationUrl": "https://www.uhi.go.ug",
     "skills": [
-      "Clinical nutrition",
-      "Dietary assessment",
-      "Patient counselling",
-      "CVD prevention"
+      "Supportive care",
+      "Patient mobility"
     ],
-    "summary": "Assess patients' nutritional needs against their medical conditions and medication, and advise on diet for cardiac care and prevention.",
+    "summary": "To provide supportive, safe, and compassionate care to cardiac patients, under the supervision of nursing and medical staff by assisting with patient mobility, hygiene, comfort, transportation and maintenance[cite: 2].",
     "responsibilities": [
-      "Evaluate nutritional needs and adjust dietary plans",
-      "Screen and assess patients for nutritional risk",
-      "Run outreach sessions on nutrition and CVD prevention"
+      "Keep wards in order[cite: 2]",
+      "Transport patients to investigation rooms[cite: 2]",
+      "Send under suspicion en[cite: 2]",
+      "Take samples to the laboratories[cite: 2]",
+      "Maintain sterility in the st[cite: 2]",
+      "Take and pick from and instrument sterilization[cite: 2]",
+      "Pack swabs[cite: 2]"
     ],
     "requirements": [
-      "BSc in Human Nutrition and Dietetics, Clinical Nutrition, Food Science and Nutrition, or related field, or a bachelor's in Food Science and Technology",
-      "One year of experience in a hospital or healthcare setting"
+      "O' Level certificate[cite: 2]",
+      "Training in any health related course and drage[cite: 2]"
     ]
   },
   {
-    "title": "Senior Assistant Secretary",
+    "title": "Post: Theatre Attendant",
     "company": "Uganda Heart Institute",
-    "location": "Mulago, Kampala",
+    "location": "Kampala",
     "remote": false,
     "type": "Full-time",
-    "category": "Administration",
-    "exp": "Senior",
-    "salaryMin": null,
-    "salaryMax": null,
-    "salaryScale": "UHI 3LWR",
-    "posts": 1,
-    "reportsTo": "Principal Assistant Secretary",
-    "deadline": "2026-11-11",
-    "daysAgo": null,
-    "skills": [
-      "Administration",
-      "Protocol",
-      "Minute-taking",
-      "Staff supervision"
-    ],
-    "summary": "Provide day-to-day administrative services and support the implementation of government policies across the Institute.",
-    "responsibilities": [
-      "Take minutes and provide administrative support",
-      "Manage protocol affairs and national functions",
-      "Maintain assets, facilities and utilities"
-    ],
-    "requirements": [
-      "Honours bachelor's degree in a relevant social science, management, law or commerce field",
-      "Administrative Officer's Law Course Certificate",
-      "Postgraduate diploma in Public Administration, Management or related field",
-      "At least 3 years at Assistant Secretary level or equivalent"
-    ]
-  },
-  {
-    "title": "Senior Personal Secretary",
-    "company": "Uganda Heart Institute",
-    "location": "Mulago, Kampala",
-    "remote": false,
-    "type": "Full-time",
-    "category": "Administration",
-    "exp": "Senior",
-    "salaryMin": null,
-    "salaryMax": null,
-    "salaryScale": "UHI 3LWR",
-    "posts": 1,
-    "reportsTo": "Principal Assistant Secretary",
-    "deadline": "2026-11-11",
-    "daysAgo": null,
-    "skills": [
-      "Executive support",
-      "Scheduling",
-      "Records management",
-      "Confidentiality"
-    ],
-    "summary": "Give high-level secretarial and office management support to the Chief Executive, handling sensitive matters with discretion.",
-    "responsibilities": [
-      "Draw up and monitor appointments and programmes",
-      "Organise meetings, take minutes and convey decisions",
-      "Manage records and supervise support staff"
-    ],
-    "requirements": [
-      "Honours bachelor's degree in Secretarial Studies or equivalent",
-      "At least 3 years as a Personal Secretary in government or a reputable organisation"
-    ]
-  },
-  {
-    "title": "Internal Auditor",
-    "company": "Uganda Heart Institute",
-    "location": "Mulago, Kampala",
-    "remote": false,
-    "type": "Full-time",
-    "category": "Finance",
-    "exp": "Mid",
-    "salaryMin": null,
-    "salaryMax": null,
-    "salaryScale": "UHI 4UP",
-    "posts": 1,
-    "reportsTo": "Senior Internal Auditor",
-    "deadline": "2026-11-11",
-    "daysAgo": null,
-    "skills": [
-      "Internal audit",
-      "Reconciliation",
-      "Payroll verification",
-      "Financial reporting"
-    ],
-    "summary": "Carry out routine internal audits against regulations, checking payments, records and reconciliations.",
-    "responsibilities": [
-      "Check payment requests and match invoices to purchase orders",
-      "Prepare bank and financial statement reconciliations",
-      "Verify payroll computations and deductions"
-    ],
-    "requirements": [
-      "Honours bachelor's degree in Finance and Accounting, or with a Accountancy or Audit option",
-      "Full professional qualification in Accountancy or Audit accredited by ICPAU"
-    ]
-  },
-  {
-    "title": "Laundry Officer",
-    "company": "Uganda Heart Institute",
-    "location": "Mulago, Kampala",
-    "remote": false,
-    "type": "Full-time",
-    "category": "Support Services",
+    "category": "Healthcare",
     "exp": "Entry",
+    "salaryScale": "UHI MED 2",
     "salaryMin": null,
     "salaryMax": null,
-    "salaryScale": "UHI 4 LWR",
-    "posts": 1,
-    "reportsTo": "Manager – Administration",
-    "deadline": "2026-11-11",
-    "daysAgo": null,
-    "skills": [
-      "Laundry operations",
-      "Infection control",
-      "Procurement",
-      "Staff supervision"
-    ],
-    "summary": "Coordinate laundry services for the Institute, keeping linen supplied and laundry practices up to standard.",
-    "responsibilities": [
-      "Supervise laundry workflow and plan activities",
-      "Take part in procurement of laundry consumables",
-      "Train laundry staff and maintain laundry registers"
-    ],
-    "requirements": [
-      "Bachelor's degree in any humanities field",
-      "Certificate in laundry practice or infection control",
-      "Hospital experience is an advantage"
-    ]
-  },
-  {
-    "title": "Assistant Inventory Management Officer",
-    "company": "Uganda Heart Institute",
-    "location": "Mulago, Kampala",
-    "remote": false,
-    "type": "Full-time",
-    "category": "Supply Chain",
-    "exp": "Entry",
-    "salaryMin": null,
-    "salaryMax": null,
-    "salaryScale": "UHI 5UP",
-    "posts": 1,
-    "reportsTo": "Inventory Management Officer",
-    "deadline": "2026-11-11",
-    "daysAgo": null,
-    "skills": ["Stores management", "Inventory", "Stock-taking", "Records"],
-    "summary": "Receive, store and issue medical supplies and equipment, keeping accurate records and timely distribution.",
-    "responsibilities": [
-      "Receive, store and issue stores under established procedures",
-      "Verify invoices against goods received notes",
-      "Post and maintain stores records and carry out stock-taking"
-    ],
-    "requirements": [
-      "Diploma in Stores/Supply Chain Management, Procurement or equivalent"
-    ]
-  },
-  {
-    "title": "Biomedical Technician",
-    "company": "Uganda Heart Institute",
-    "location": "Mulago, Kampala",
-    "remote": false,
-    "type": "Full-time",
-    "category": "Engineering & Maintenance",
-    "exp": "Entry",
-    "salaryMin": null,
-    "salaryMax": null,
-    "salaryScale": "UHI 5SC",
-    "posts": 1,
-    "reportsTo": "Senior Biomedical Technician",
-    "deadline": "2026-11-11",
-    "daysAgo": null,
-    "skills": [
-      "Medical equipment",
-      "Preventive maintenance",
-      "Repairs",
-      "End-user training"
-    ],
-    "summary": "Keep medical equipment inventoried, maintained and repaired, and train end users on it.",
-    "responsibilities": [
-      "Carry out preventive maintenance and repairs",
-      "Conduct end-user training and routine servicing",
-      "Plan and budget for repairs"
-    ],
-    "requirements": [
-      "Diploma in Biomedical Technology from a recognised institution"
-    ]
-  },
-  {
-    "title": "Legal Officer",
-    "company": "Uganda Heart Institute",
-    "location": "Mulago, Kampala",
-    "remote": false,
-    "type": "Full-time",
-    "category": "Legal",
-    "exp": "Entry",
-    "salaryMin": null,
-    "salaryMax": null,
-    "salaryScale": "UHI 4 LEG",
-    "posts": 1,
-    "reportsTo": "Senior Legal Officer",
-    "deadline": "2026-11-11",
-    "daysAgo": null,
-    "skills": [
-      "Ugandan law",
-      "Contract review",
-      "Legal research",
-      "Regulatory compliance"
-    ],
-    "summary": "Advise on legal matters, keep the Institute within the law, and review contracts and internal policies.",
-    "responsibilities": [
-      "Advise on legal matters and ensure contracts are sound",
-      "Ensure statutory compliance (URSB, URA, NSSF, UIA)",
-      "Prepare legal opinions and staff training on labour law and ethics"
-    ],
-    "requirements": [
-      "LLB from a recognised university",
-      "Diploma in Legal Practice from the Law Development Centre"
-    ]
-  },
-  {
-    "title": "Assistant Engineering Officer",
-    "company": "Uganda Heart Institute",
-    "location": "Mulago, Kampala",
-    "remote": false,
-    "type": "Full-time",
-    "category": "Engineering & Maintenance",
-    "exp": "Entry",
-    "salaryMin": null,
-    "salaryMax": null,
-    "salaryScale": "UHI 5SC",
-    "posts": 1,
-    "reportsTo": "Civil Engineer",
-    "deadline": "2026-11-11",
-    "daysAgo": null,
-    "skills": [
-      "Facilities maintenance",
-      "Troubleshooting",
-      "Safety inspection",
-      "Record keeping"
-    ],
-    "summary": "Maintain and repair hospital facilities and equipment to keep the infrastructure safe and running.",
-    "responsibilities": [
-      "Troubleshoot equipment malfunctions",
-      "Conduct safety inspections",
-      "Maintain accurate maintenance and repair records"
-    ],
-    "requirements": [
-      "Diploma in Civil Engineering from a recognised institution",
-      "Civil engineering experience is an advantage"
-    ]
-  },
-  {
-    "title": "Assistant Security Officer",
-    "company": "Uganda Heart Institute",
-    "location": "Mulago, Kampala",
-    "remote": false,
-    "type": "Full-time",
-    "category": "Security",
-    "exp": "Mid",
-    "salaryMin": null,
-    "salaryMax": null,
-    "salaryScale": "UHI 6LWR",
-    "posts": 1,
-    "reportsTo": "Senior Security Officer",
-    "deadline": "2026-11-11",
-    "daysAgo": null,
-    "skills": [
-      "Security operations",
-      "Access control",
-      "Incident response",
-      "Security reporting"
-    ],
-    "summary": "Support day-to-day security for patients, staff, property and assets, monitoring access and responding to incidents.",
-    "responsibilities": [
-      "Run day-to-day security matters at the hospital",
-      "Ensure safety of hospital property, vehicles and estates",
-      "Prepare security reports and manage allocated resources"
-    ],
-    "requirements": [
-      "Diploma in any field from a recognised institution",
-      "Police or security-discipline training",
-      "At least 3 years with a reputable organisation as security personnel"
-    ]
-  },
-  {
-    "title": "Receptionist",
-    "company": "Uganda Heart Institute",
-    "location": "Mulago, Kampala",
-    "remote": false,
-    "type": "Full-time",
-    "category": "Administration",
-    "exp": "Entry",
-    "salaryMin": null,
-    "salaryMax": null,
-    "salaryScale": "UHI 7 LWR",
-    "posts": 2,
-    "reportsTo": "Communication Officer",
-    "deadline": "2026-11-11",
-    "daysAgo": null,
-    "skills": [
-      "Front desk",
-      "Customer care",
-      "Call handling",
-      "Visitor management"
-    ],
-    "summary": "Be the first point of contact for patients and visitors, handling front-desk tasks and directing people to the right services.",
-    "responsibilities": [
-      "Manage the front desk and reception area",
-      "Handle incoming and outgoing calls and keep call records",
-      "Welcome, register and direct patients and visitors"
-    ],
-    "requirements": [
-      "Uganda Certificate of Education (UCE) with at least a credit in English",
-      "Certificate in customer care, public relations or related training"
-    ]
-  }
-]
+    "daysAgo": 0,
+    "applicationInstruction": "Eligible persons should address their applications featuring a cover letter, copies of the academic/professional certificates, and transcripts, certificates of registration and a valid practicing license, copies of the National Identity Card, and evidence of work experience where required to the Executive Director, Uganda Heart Institute, P.O. Box 37392, Kampala. Applications can be hand delivered in Uganda Heart Institute Headquarters, Mulago-Kampala. Online can be sent on the official email recruitment.go.ug. Applications both physical and online must be received not later than 5:00 pm on 11 November 2

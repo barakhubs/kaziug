@@ -58,3 +58,6 @@ $headingTag = $inPane ? 'h2' : 'h1';
     <?php endif; ?>
   </ul>
 <?php endif; ?>
+<?php if ($job->applicationInstructions !== null): ?>
+  <p class="apply-instructions"><?= e($job->applicationInstructions) ?></p>
+<?php endif; ?>

@@ -204,6 +204,7 @@ final class JobsController
             'expires_at' => $job->expiresAt?->format('Y-m-d') ?? '',
             'positions' => (string) $job->positions,
             'salary_scale' => $job->salaryScale ?? '',
+            'application_instructions' => $job->applicationInstructions ?? '',
         ];
     }
 }

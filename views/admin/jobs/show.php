@@ -47,6 +47,7 @@ $this->set('title', $job->title);
     <dl class="kv">
       <dt>Link</dt><dd><?php if ($job->applyUrl !== null): ?><a href="<?= e($job->applyUrl) ?>" target="_blank" rel="noopener noreferrer"><?= e($job->applyUrl) ?></a><?php else: ?>—<?php endif; ?></dd>
       <dt>Email</dt><dd><?= e($job->applyEmail ?? '—') ?></dd>
+      <dt>Instructions</dt><dd class="apply-instructions"><?= e($job->applicationInstructions ?? '—') ?></dd>
     </dl>
     <?php if ($job->applyUrl === null && $job->applyEmail === null): ?>
       <p class="field-error">No application details yet. <a href="/admin/jobs/<?= e($job->id) ?>/edit">Add them</a>.</p>

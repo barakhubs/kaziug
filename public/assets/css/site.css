@@ -460,3 +460,6 @@ a.btn-ghost { height: 40px; }
   .job-page-grid { grid-template-columns: 1fr; }
   .job-sidebar { position: static; }
 }
+
+/* Admin-written application steps keep their line breaks (text is escaped, never HTML). */
+.apply-instructions { white-space: pre-line; }

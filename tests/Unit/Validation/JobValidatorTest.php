@@ -156,6 +156,23 @@ final class JobValidatorTest extends TestCase
         $this->assertArrayHasKey('salary_scale', $errors);
     }
 
+    public function testApplicationInstructionsAreOptionalTidiedText(): void
+    {
+        [$input] = $this->validator->validate($this->form([]));
+        $this->assertNull($input?->applicationInstructions);
+
+        [$input] = $this->validator->validate($this->form(['application_instructions' => "  \r\n "]));
+        $this->assertNull($input?->applicationInstructions);
+
+        [$input] = $this->validator->validate($this->form([
+            'application_instructions' => "Attach your CV and academic documents.  \r\n\r\n\r\n\r\nDeliver hard copies to Mulago.\r\n",
+        ]));
+        $this->assertSame("Attach your CV and academic documents.\n\nDeliver hard copies to Mulago.", $input?->applicationInstructions);
+
+        [, $errors] = $this->validator->validate($this->form(['application_instructions' => str_repeat('a', 2001)]));
+        $this->assertArrayHasKey('application_instructions', $errors);
+    }
+
     public function testSalaryAmountAndScaleAreExclusive(): void
     {
         foreach (['salary_min', 'salary_max'] as $field) {

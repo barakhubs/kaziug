@@ -11,7 +11,7 @@ use RuntimeException;
 
 /**
  * Sample jobs from database/seeds/sample_jobs.json. Optional keys: salaryScale, posts
- * (number of positions) and deadline (Y-m-d).
+ * (number of positions), deadline (Y-m-d) and howToApply (application instructions).
  */
 final class SampleJobSource implements JobSourceInterface
 {
@@ -52,6 +52,7 @@ final class SampleJobSource implements JobSourceInterface
                 max(1, (int) ($job['posts'] ?? 1)),
                 isset($job['salaryScale']) && trim((string) $job['salaryScale']) !== '' ? trim((string) $job['salaryScale']) : null,
                 isset($job['deadline']) ? new DateTimeImmutable((string) $job['deadline']) : null,
+                isset($job['howToApply']) && trim((string) $job['howToApply']) !== '' ? trim((string) $job['howToApply']) : null,
             );
         }
     }

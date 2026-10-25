@@ -42,8 +42,10 @@ final class Job
         public readonly DateTimeImmutable $updatedAt,
         /** How many people the employer is hiring for this role. */
         public readonly int $positions = 1,
-        /** Public-sector salary scale such as "U4", shown instead of or next to amounts. */
+        /** Public-sector salary scale such as "U4"; a job has this or a salary amount, not both. */
         public readonly ?string $salaryScale = null,
+        /** Plain-text extra steps for applicants (documents to attach, where to deliver, etc.). */
+        public readonly ?string $applicationInstructions = null,
     ) {
     }
 

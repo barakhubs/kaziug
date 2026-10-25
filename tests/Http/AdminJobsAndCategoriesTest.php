@@ -126,6 +126,24 @@ final class AdminJobsAndCategoriesTest extends AdminHttpTestCase
         $this->assertStringContainsString('Give either a salary amount or a salary scale, not both.', $both->body());
     }
 
+    public function testApplicationInstructionsAreSavedEscapedAndShown(): void
+    {
+        $text = "Attach copies of your <b>certificates</b>.\nDeliver hard copies to the HR office.";
+        $this->post('/admin/jobs', $this->jobForm(['intent' => 'publish', 'application_instructions' => $text]));
+        $id = (int) $this->db->fetchValue('SELECT max(id) FROM jobs');
+        $slug = (string) $this->db->fetchValue('SELECT slug FROM jobs WHERE id = ?', [$id]);
+        $escaped = 'Attach copies of your &lt;b&gt;certificates&lt;/b&gt;.' . "\n" . 'Deliver hard copies to the HR office.';
+
+        $this->assertStringContainsString('<dd class="apply-instructions">' . $escaped . '</dd>', $this->get("/admin/jobs/{$id}")->body());
+        $this->assertStringContainsString('>' . $escaped . '</textarea>', $this->get("/admin/jobs/{$id}/edit")->body());
+        $page = $this->get("/jobs/{$slug}")->body();
+        $this->assertStringContainsString('<p class="apply-instructions">' . $escaped . '</p>', $page);
+        $this->assertStringNotContainsString('<b>certificates', $page);
+
+        $this->post("/admin/jobs/{$id}", $this->jobForm(['application_instructions' => '']));
+        $this->assertNull($this->db->fetchValue('SELECT application_instructions FROM jobs WHERE id = ?', [$id]));
+    }
+
     public function testDeadlineIsRequiredAndShownEverywhere(): void
     {
         $missing = $this->post('/admin/jobs', $this->jobForm(['expires_at' => '', 'intent' => 'publish']));

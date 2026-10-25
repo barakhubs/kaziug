@@ -127,6 +127,10 @@ $action = $job === null ? '/admin/jobs' : "/admin/jobs/{$job->id}";
             <?= $this->insert('partials/field_error', ['field' => 'apply_email']) ?>
           </label>
         </div>
+        <label class="<?= $err('application_instructions') ?>">Application instructions <span class="hint">(optional, plain text: documents to attach, where to deliver hard copies, etc.)</span>
+          <textarea name="application_instructions" rows="4" maxlength="2000"><?= e($v('application_instructions')) ?></textarea>
+          <?= $this->insert('partials/field_error', ['field' => 'application_instructions']) ?>
+        </label>
       </fieldset>
     </div>
 

@@ -55,6 +55,7 @@ final class JobValidator
             'expires_at' => 'required|datetime',
             'positions' => 'integer:1,' . self::MAX_POSITIONS,
             'salary_scale' => 'max:30',
+            'application_instructions' => 'max:2000',
         ]);
         $data = $result->data;
         $errors = $result->errors;
@@ -147,6 +148,7 @@ final class JobValidator
             $deadline,
             $positions,
             $salaryScale,
+            self::text($data['application_instructions']),
         ), []];
     }
 
@@ -159,6 +161,17 @@ final class JobValidator
             $email !== null => 'email',
             default => '',
         };
+    }
+
+    /** Multi-line text with normalised line endings and at most one blank line in a row. */
+    private static function text(mixed $value): ?string
+    {
+        if ($value === null) {
+            return null;
+        }
+        $text = trim((string) preg_replace(["/\r\n?/", '/[ \t]+$/m', "/\n{3,}/"], ["\n", '', "\n\n"], (string) $value));
+
+        return $text === '' ? null : $text;
     }
 
     /** @return list<string> */

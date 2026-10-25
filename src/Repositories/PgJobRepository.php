@@ -223,8 +223,8 @@ final class PgJobRepository implements JobWriteRepositoryInterface, JobReadRepos
         return (int) $this->db->fetchValue(
             'INSERT INTO jobs (title, slug, company, location, is_remote, job_type, experience_level, category_id,
                 salary_min, salary_max, currency, summary, responsibilities, requirements, skills, apply_url, apply_email,
-                expires_at, positions, salary_scale, status, published_at)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?::jsonb, ?::jsonb, ?::text[], ?, ?, ?, ?, ?, ?, ?)
+                expires_at, positions, salary_scale, application_instructions, status, published_at)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?::jsonb, ?::jsonb, ?::text[], ?, ?, ?, ?, ?, ?, ?, ?)
              RETURNING id',
             [
                 ...$this->fieldValues($input, $slug),
@@ -240,7 +240,7 @@ final class PgJobRepository implements JobWriteRepositoryInterface, JobReadRepos
             'UPDATE jobs SET title = ?, company = ?, location = ?, is_remote = ?, job_type = ?, experience_level = ?,
                 category_id = ?, salary_min = ?, salary_max = ?, currency = ?, summary = ?, responsibilities = ?::jsonb,
                 requirements = ?::jsonb, skills = ?::text[], apply_url = ?, apply_email = ?, expires_at = ?,
-                positions = ?, salary_scale = ?
+                positions = ?, salary_scale = ?, application_instructions = ?
              WHERE id = ? AND deleted_at IS NULL',
             [...$this->fieldValues($input, null), $id],
         );
@@ -312,6 +312,7 @@ final class PgJobRepository implements JobWriteRepositoryInterface, JobReadRepos
             JobRowMapper::toDb($input->expiresAt),
             $input->positions,
             $input->salaryScale,
+            $input->applicationInstructions,
         ];
         if ($slug !== null) {
             array_splice($values, 1, 0, [$slug]);
