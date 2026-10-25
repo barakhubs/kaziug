@@ -38,6 +38,7 @@ final class JobInput
         public readonly int $positions = 1,
         public readonly ?string $salaryScale = null,
         public readonly ?string $applicationInstructions = null,
+        public readonly ?string $reportsTo = null,
     ) {
     }
 
@@ -47,7 +48,7 @@ final class JobInput
             $job->title, $job->company, $job->location, $job->isRemote, $job->jobType, $job->experienceLevel,
             $job->categoryId, $job->salaryMin, $job->salaryMax, $job->currency, $job->summary,
             $job->responsibilities, $job->requirements, $job->skills, $job->applyUrl, $job->applyEmail, $job->expiresAt,
-            $job->positions, $job->salaryScale, $job->applicationInstructions,
+            $job->positions, $job->salaryScale, $job->applicationInstructions, $job->reportsTo,
         );
     }
 
@@ -57,7 +58,7 @@ final class JobInput
             $title, $this->company, $this->location, $this->isRemote, $this->jobType, $this->experienceLevel,
             $this->categoryId, $this->salaryMin, $this->salaryMax, $this->currency, $this->summary,
             $this->responsibilities, $this->requirements, $this->skills, $this->applyUrl, $this->applyEmail, $this->expiresAt,
-            $this->positions, $this->salaryScale, $this->applicationInstructions,
+            $this->positions, $this->salaryScale, $this->applicationInstructions, $this->reportsTo,
         );
     }
 }

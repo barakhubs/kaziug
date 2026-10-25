@@ -104,7 +104,7 @@ final class InMemoryJobRepository implements JobWriteRepositoryInterface
             $in->categoryId, 'Category', 'category', $in->salaryMin, $in->salaryMax, $in->currency, $in->summary,
             $in->responsibilities, $in->requirements, $in->skills, $in->applyUrl, $in->applyEmail, $status,
             $publishedAt, $in->expiresAt, $deletedAt, $now, $now, $in->positions, $in->salaryScale,
-            $in->applicationInstructions,
+            $in->applicationInstructions, $in->reportsTo,
         );
     }
 }

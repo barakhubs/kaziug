@@ -463,3 +463,4 @@ a.btn-ghost { height: 40px; }
 
 /* Admin-written application steps keep their line breaks (text is escaped, never HTML). */
 .apply-instructions { white-space: pre-line; }
+.reports-to { margin: 0.25rem 0 0.75rem; }

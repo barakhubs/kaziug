@@ -11,7 +11,7 @@ use RuntimeException;
 
 /**
  * Sample jobs from database/seeds/sample_jobs.json. Optional keys: salaryScale, posts
- * (number of positions), deadline (Y-m-d), applicationInstruction, applicationUrl and applicationEmail.
+ * (number of positions), deadline (Y-m-d), applicationInstruction, applicationUrl, applicationEmail and reportsTo.
  */
 final class SampleJobSource implements JobSourceInterface
 {
@@ -56,6 +56,7 @@ final class SampleJobSource implements JobSourceInterface
                 filter_var(self::text($job['applicationUrl'] ?? null), FILTER_VALIDATE_URL) ?: null,
                 // A malformed address is dropped rather than published.
                 filter_var(self::text($job['applicationEmail'] ?? null), FILTER_VALIDATE_EMAIL) ?: null,
+                self::text($job['reportsTo'] ?? null),
             );
         }
     }

@@ -19,7 +19,7 @@ final class JobRowMapper
         j.category_id, c.name AS category_name, c.slug AS category_slug, j.salary_min, j.salary_max, j.currency,
         j.summary, j.responsibilities, j.requirements, j.skills, j.apply_url, j.apply_email, j.status,
         j.published_at, j.expires_at, j.deleted_at, j.created_at, j.updated_at, j.positions, j.salary_scale,
-        j.application_instructions';
+        j.application_instructions, j.reports_to';
 
     public const FROM = 'jobs j JOIN job_categories c ON c.id = j.category_id';
 
@@ -56,6 +56,7 @@ final class JobRowMapper
             (int) ($row['positions'] ?? 1),
             isset($row['salary_scale']) ? (string) $row['salary_scale'] : null,
             isset($row['application_instructions']) ? (string) $row['application_instructions'] : null,
+            isset($row['reports_to']) ? (string) $row['reports_to'] : null,
         );
     }
 

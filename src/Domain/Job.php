@@ -46,6 +46,8 @@ final class Job
         public readonly ?string $salaryScale = null,
         /** Plain-text extra steps for applicants (documents to attach, where to deliver, etc.). */
         public readonly ?string $applicationInstructions = null,
+        /** The post this role reports to, e.g. "Consultant – Adult Cardiology". */
+        public readonly ?string $reportsTo = null,
     ) {
     }
 

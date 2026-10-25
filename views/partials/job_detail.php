@@ -31,6 +31,9 @@ $headingTag = $inPane ? 'h2' : 'h1';
   <?= e($job->jobType->label()) ?> · <?= e($job->experienceLevel->label()) ?> level ·
   <a href="/categories/<?= e($job->categorySlug) ?>"><?= e($job->categoryName) ?></a> · <?= e(Format::posted($job->publishedAt)) ?>
 </p>
+<?php if ($job->reportsTo !== null): ?>
+  <p class="reports-to"><strong>Reports to:</strong> <?= e($job->reportsTo) ?></p>
+<?php endif; ?>
 <h3>About the role</h3>
 <p><?= e($job->summary) ?></p>
 <?php if ($job->responsibilities !== []): ?>

@@ -40,6 +40,7 @@ final class JobImportRecord
         public readonly ?string $applicationInstructions = null,
         public readonly ?string $applyUrl = null,
         public readonly ?string $applyEmail = null,
+        public readonly ?string $reportsTo = null,
     ) {
     }
 }

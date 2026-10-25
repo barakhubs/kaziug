@@ -50,6 +50,7 @@ final class JobImporter
                     $record->positions,
                     $record->salaryScale,
                     $record->applicationInstructions,
+                    $record->reportsTo,
                 );
                 $publishedAt = new DateTimeImmutable("-{$record->publishedDaysAgo} days");
                 $id = $this->jobs->insert($input, $slug, JobStatus::Published, $publishedAt);

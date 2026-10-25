@@ -56,6 +56,7 @@ final class JobValidator
             'positions' => 'integer:1,' . self::MAX_POSITIONS,
             'salary_scale' => 'max:30',
             'application_instructions' => 'max:2000',
+            'reports_to' => 'max:150',
         ]);
         $data = $result->data;
         $errors = $result->errors;
@@ -149,6 +150,7 @@ final class JobValidator
             $positions,
             $salaryScale,
             self::text($data['application_instructions']),
+            $data['reports_to'] === null ? null : (string) preg_replace('/\s+/', ' ', (string) $data['reports_to']),
         ), []];
     }
 

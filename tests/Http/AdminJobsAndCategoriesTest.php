@@ -144,6 +144,26 @@ final class AdminJobsAndCategoriesTest extends AdminHttpTestCase
         $this->assertNull($this->db->fetchValue('SELECT application_instructions FROM jobs WHERE id = ?', [$id]));
     }
 
+    public function testReportsToIsOptionalAndShown(): void
+    {
+        $this->post('/admin/jobs', $this->jobForm(['intent' => 'publish', 'reports_to' => '  Consultant –   Adult <Cardiology> ']));
+        $id = (int) $this->db->fetchValue('SELECT max(id) FROM jobs');
+        $slug = (string) $this->db->fetchValue('SELECT slug FROM jobs WHERE id = ?', [$id]);
+        $this->assertSame('Consultant – Adult <Cardiology>', $this->db->fetchValue('SELECT reports_to FROM jobs WHERE id = ?', [$id]));
+
+        $escaped = 'Consultant – Adult &lt;Cardiology&gt;';
+        $this->assertStringContainsString('<dt>Reports to</dt><dd>' . $escaped . '</dd>', $this->get("/admin/jobs/{$id}")->body());
+        $this->assertStringContainsString('name="reports_to" value="' . $escaped . '"', $this->get("/admin/jobs/{$id}/edit")->body());
+        $this->assertStringContainsString('<strong>Reports to:</strong> ' . $escaped, $this->get("/jobs/{$slug}")->body());
+
+        $tooLong = $this->post("/admin/jobs/{$id}", $this->jobForm(['reports_to' => str_repeat('a', 151)]));
+        $this->assertStatus(422, $tooLong);
+
+        $this->post("/admin/jobs/{$id}", $this->jobForm(['reports_to' => '']));
+        $this->assertNull($this->db->fetchValue('SELECT reports_to FROM jobs WHERE id = ?', [$id]));
+        $this->assertStringNotContainsString('Reports to:', $this->get("/jobs/{$slug}")->body());
+    }
+
     public function testDeadlineIsRequiredAndShownEverywhere(): void
     {
         $missing = $this->post('/admin/jobs', $this->jobForm(['expires_at' => '', 'intent' => 'publish']));

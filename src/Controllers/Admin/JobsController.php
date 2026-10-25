@@ -205,6 +205,7 @@ final class JobsController
             'positions' => (string) $job->positions,
             'salary_scale' => $job->salaryScale ?? '',
             'application_instructions' => $job->applicationInstructions ?? '',
+            'reports_to' => $job->reportsTo ?? '',
         ];
     }
 }

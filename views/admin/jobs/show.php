@@ -27,6 +27,7 @@ $this->set('title', $job->title);
       <dt>Category</dt><dd><?= e($job->categoryName) ?></dd>
       <dt>Job type</dt><dd><?= e($job->jobType->label()) ?></dd>
       <dt>Experience</dt><dd><?= e($job->experienceLevel->label()) ?></dd>
+      <dt>Reports to</dt><dd><?= e($job->reportsTo ?? '—') ?></dd>
       <dt>Salary</dt><dd><?= e(Format::jobSalary($job)) ?></dd>
       <dt>Positions</dt><dd><?= e(number_format($job->positions)) ?></dd>
       <dt>Posted</dt><dd><?= e($job->publishedAt !== null ? Format::dateTime($job->publishedAt) : 'Not published yet') ?></dd>
