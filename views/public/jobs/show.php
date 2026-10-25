@@ -41,7 +41,7 @@ $this->start('head');
               <li>
                 <a class="related-title" href="/jobs/<?= e($other->slug) ?>"><?= e($other->title) ?></a>
                 <span class="related-meta"><?= e($other->company) ?> · <?= e($other->location) ?><?= $other->isRemote ? ' · Remote' : '' ?></span>
-                <span class="related-salary"><?= e(Format::salary($other->salaryMin, $other->salaryMax, $other->currency)) ?></span>
+                <span class="related-salary"><?= e(Format::jobSalary($other)) ?></span>
                 <?php if ($other->expiresAt !== null): $dl = Format::deadline($other->expiresAt); ?>
                   <span class="deadline-pill <?= e($dl['state']) ?>"><?= e($dl['text']) ?></span>
                 <?php endif; ?>

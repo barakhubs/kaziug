@@ -19,6 +19,7 @@ final class JobValidator
 {
     /** How candidates apply: through a link (application page / more info), by email, or both. */
     public const APPLY_METHODS = ['link', 'email', 'both'];
+    public const MAX_POSITIONS = 500;
     private const MAX_LIST_ITEMS = 30;
     private const MAX_SKILLS = 20;
 
@@ -52,6 +53,8 @@ final class JobValidator
             'apply_url' => 'url',
             'apply_email' => 'email',
             'expires_at' => 'required|datetime',
+            'positions' => 'integer:1,' . self::MAX_POSITIONS,
+            'salary_scale' => 'max:30',
         ]);
         $data = $result->data;
         $errors = $result->errors;
@@ -87,6 +90,21 @@ final class JobValidator
         }
         $applyUrl = $needsLink ? $data['apply_url'] : null;
         $applyEmail = $needsEmail && $data['apply_email'] !== null ? strtolower((string) $data['apply_email']) : null;
+
+        $positions = isset($errors['positions']) ? 1 : (IntegerRule::toInt($data['positions']) ?? 1);
+        if (isset($errors['positions'])) {
+            $errors['positions'] = 'Enter a number of positions from 1 to ' . self::MAX_POSITIONS . '.';
+        }
+
+        // Public-service scales look like "U4", "U5 Upper" or "M3": letters, digits, spaces, - and /.
+        $salaryScale = $data['salary_scale'] === null ? null : (string) preg_replace('/\s+/', ' ', (string) $data['salary_scale']);
+        if ($salaryScale !== null && !isset($errors['salary_scale']) && preg_match('#^[A-Za-z0-9][A-Za-z0-9 ./\-]*$#', $salaryScale) !== 1) {
+            $errors['salary_scale'] = 'Use letters, numbers, spaces, “-” or “/”, e.g. U4 or U5 Upper.';
+        }
+        // A job is paid either an advertised amount or a public-service scale, never both.
+        if ($salaryScale !== null && ($data['salary_min'] !== null || $data['salary_max'] !== null)) {
+            $errors['salary_scale'] ??= 'Give either a salary amount or a salary scale, not both.';
+        }
 
         $currency = strtoupper((string) ($data['currency'] ?? '')) ?: 'UGX';
         if (preg_match('/^[A-Z]{3}$/', $currency) !== 1) {
@@ -127,6 +145,8 @@ final class JobValidator
             $applyUrl,
             $applyEmail,
             $deadline,
+            $positions,
+            $salaryScale,
         ), []];
     }
 

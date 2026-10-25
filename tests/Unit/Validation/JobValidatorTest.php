@@ -5,12 +5,17 @@ declare(strict_types=1);
 namespace Tests\Unit\Validation;
 
 use App\Core\Format;
+use App\Domain\Job;
+use App\Domain\JobInput;
+use App\Domain\JobStatus;
 use App\Domain\JobType;
 use App\Domain\Slug;
 use App\Validation\JobValidator;
 use App\Validation\Validator;
 use DateTimeImmutable;
+use LogicException;
 use PHPUnit\Framework\TestCase;
+use Tests\Support\Fakes\InMemoryJobRepository;
 
 final class JobValidatorTest extends TestCase
 {
@@ -119,6 +124,66 @@ final class JobValidatorTest extends TestCase
         $this->assertSame('Posted today', Format::posted(new DateTimeImmutable('2026-10-20 01:00'), $now));
         $this->assertSame('Posted 1 day ago', Format::posted(new DateTimeImmutable('2026-10-19 23:00'), $now));
         $this->assertSame('Posted 6 days ago', Format::posted(new DateTimeImmutable('2026-10-14'), $now));
+    }
+
+    public function testPositionsDefaultToOneAndAreBounded(): void
+    {
+        [$input] = $this->validator->validate($this->form([]));
+        $this->assertSame(1, $input?->positions);
+
+        [$input] = $this->validator->validate($this->form(['positions' => '12']));
+        $this->assertSame(12, $input?->positions);
+
+        foreach (['0', '501', 'many'] as $bad) {
+            [, $errors] = $this->validator->validate($this->form(['positions' => $bad]));
+            $this->assertSame('Enter a number of positions from 1 to 500.', $errors['positions'] ?? null, $bad);
+        }
+    }
+
+    public function testSalaryScaleIsOptionalShortAndPlain(): void
+    {
+        [$input, $errors] = $this->validator->validate($this->form(['salary_scale' => '  U5   Upper ']));
+        $this->assertSame([], $errors);
+        $this->assertSame('U5 Upper', $input?->salaryScale);
+        $this->assertNull($input?->salaryMin, 'a scale needs no amount');
+
+        [$input] = $this->validator->validate($this->form(['salary_scale' => '']));
+        $this->assertNull($input?->salaryScale);
+
+        [, $errors] = $this->validator->validate($this->form(['salary_scale' => '<b>U4</b>']));
+        $this->assertArrayHasKey('salary_scale', $errors);
+        [, $errors] = $this->validator->validate($this->form(['salary_scale' => str_repeat('U', 31)]));
+        $this->assertArrayHasKey('salary_scale', $errors);
+    }
+
+    public function testSalaryAmountAndScaleAreExclusive(): void
+    {
+        foreach (['salary_min', 'salary_max'] as $field) {
+            [$input, $errors] = $this->validator->validate($this->form(['salary_scale' => 'U4', $field => '2000000']));
+            $this->assertNull($input);
+            $this->assertSame('Give either a salary amount or a salary scale, not both.', $errors['salary_scale'] ?? null, $field);
+        }
+    }
+
+    public function testJobSalaryReadsAmountOrScale(): void
+    {
+        [$scale] = $this->validator->validate($this->form(['salary_scale' => 'U4']));
+        [$amount] = $this->validator->validate($this->form(['salary_min' => '2000000']));
+        [$neither] = $this->validator->validate($this->form([]));
+
+        $this->assertSame('Salary scale U4', Format::jobSalary($this->job($scale)));
+        $this->assertSame('UGX 2M / month', Format::jobSalary($this->job($amount)));
+        $this->assertSame('Salary not disclosed', Format::jobSalary($this->job($neither)));
+        $this->assertSame('', Format::positions(1));
+        $this->assertSame('3 positions', Format::positions(3));
+    }
+
+    private function job(?JobInput $input): Job
+    {
+        $repo = new InMemoryJobRepository();
+        $id = $repo->insert($input ?? throw new LogicException('invalid form'), 'slug', JobStatus::Draft, null);
+
+        return $repo->jobs[$id];
     }
 
     /**

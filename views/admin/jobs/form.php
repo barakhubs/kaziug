@@ -83,6 +83,14 @@ $action = $job === null ? '/admin/jobs' : "/admin/jobs/{$job->id}";
         <input name="currency" value="<?= e($v('currency') ?: 'UGX') ?>" maxlength="3" class="short">
         <?= $this->insert('partials/field_error', ['field' => 'currency']) ?>
       </label>
+      <label class="<?= $err('salary_scale') ?>">Salary scale <span class="hint">(government jobs, e.g. U4; use this or a salary amount, not both)</span>
+        <input name="salary_scale" value="<?= e($v('salary_scale')) ?>" maxlength="30" class="short">
+        <?= $this->insert('partials/field_error', ['field' => 'salary_scale']) ?>
+      </label>
+      <label class="<?= $err('positions') ?>">Number of positions
+        <input type="number" name="positions" value="<?= e($v('positions') ?: '1') ?>" min="1" max="<?= e(\App\Validation\JobValidator::MAX_POSITIONS) ?>" class="short">
+        <?= $this->insert('partials/field_error', ['field' => 'positions']) ?>
+      </label>
       <label class="check"><input type="checkbox" name="is_remote" value="1"<?= $v('is_remote') ? ' checked' : '' ?>> Remote-friendly</label>
       <label class="full<?= $err('skills') ?>">Skills (comma separated)
         <input name="skills" value="<?= e($v('skills')) ?>">

@@ -35,6 +35,20 @@ final class Format
         return self::money($min, $currency) . $range . ' / month';
     }
 
+    /** A job's pay as candidates see it: an amount or a public-service salary scale. */
+    public static function jobSalary(\App\Domain\Job $job): string
+    {
+        return $job->salaryScale !== null
+            ? 'Salary scale ' . $job->salaryScale
+            : self::salary($job->salaryMin, $job->salaryMax, $job->currency);
+    }
+
+    /** "3 positions", or '' for the usual single opening. */
+    public static function positions(int $positions): string
+    {
+        return $positions > 1 ? number_format($positions) . ' positions' : '';
+    }
+
     /**
      * How an application deadline reads to a job seeker, by calendar day in the app timezone.
      * @return array{text: string, state: 'closed'|'today'|'soon'|'open'} state drives the styling
@@ -95,14 +109,18 @@ final class Format
     {
         $where = $job->location . ', Uganda' . ($job->isRemote ? ' (remote-friendly)' : '');
 
+        $pay = $job->hasSalaryAmount() || $job->salaryScale !== null ? self::jobSalary($job) : 'not disclosed';
+        $openings = $job->positions > 1 ? ' ' . self::positions($job->positions) . ' available.' : '';
+
         return sprintf(
-            '%s %s-level %s role at %s in %s. Salary: %s.',
+            '%s %s-level %s role at %s in %s. Salary: %s.%s',
             $job->jobType->label(),
             strtolower($job->experienceLevel->label()),
             $job->categoryName,
             $job->company,
             $where,
-            $job->salaryMin === null && $job->salaryMax === null ? 'not disclosed' : self::salary($job->salaryMin, $job->salaryMax, $job->currency),
+            $pay,
+            $openings,
         );
     }
 

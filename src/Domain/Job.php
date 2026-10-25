@@ -40,7 +40,16 @@ final class Job
         public readonly ?DateTimeImmutable $deletedAt,
         public readonly DateTimeImmutable $createdAt,
         public readonly DateTimeImmutable $updatedAt,
+        /** How many people the employer is hiring for this role. */
+        public readonly int $positions = 1,
+        /** Public-sector salary scale such as "U4", shown instead of or next to amounts. */
+        public readonly ?string $salaryScale = null,
     ) {
+    }
+
+    public function hasSalaryAmount(): bool
+    {
+        return $this->salaryMin !== null || $this->salaryMax !== null;
     }
 
     public function isExpired(?DateTimeImmutable $now = null): bool

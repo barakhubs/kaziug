@@ -177,7 +177,7 @@ final class JobsController
     /** @return array<string, mixed> */
     private static function defaults(): array
     {
-        return ['job_type' => 'full-time', 'experience_level' => 'entry', 'currency' => 'UGX', 'apply_method' => 'link'];
+        return ['job_type' => 'full-time', 'experience_level' => 'entry', 'currency' => 'UGX', 'apply_method' => 'link', 'positions' => '1'];
     }
 
     /** @return array<string, mixed> */
@@ -202,6 +202,8 @@ final class JobsController
             'apply_url' => $job->applyUrl ?? '',
             'apply_email' => $job->applyEmail ?? '',
             'expires_at' => $job->expiresAt?->format('Y-m-d') ?? '',
+            'positions' => (string) $job->positions,
+            'salary_scale' => $job->salaryScale ?? '',
         ];
     }
 }

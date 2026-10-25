@@ -6,9 +6,13 @@ namespace App\Services\Import;
 
 use App\Domain\ExperienceLevel;
 use App\Domain\JobType;
+use DateTimeImmutable;
 use RuntimeException;
 
-/** The 14 sample jobs from the original prototype (database/seeds/sample_jobs.json). */
+/**
+ * Sample jobs from database/seeds/sample_jobs.json. Optional keys: salaryScale, posts
+ * (number of positions) and deadline (Y-m-d).
+ */
 final class SampleJobSource implements JobSourceInterface
 {
     public function __construct(private readonly string $file)
@@ -45,6 +49,9 @@ final class SampleJobSource implements JobSourceInterface
                 (int) ($job['daysAgo'] ?? 0),
                 // Three weeks to apply from the posting date, but at least two more days.
                 max(2, 21 - (int) ($job['daysAgo'] ?? 0)),
+                max(1, (int) ($job['posts'] ?? 1)),
+                isset($job['salaryScale']) && trim((string) $job['salaryScale']) !== '' ? trim((string) $job['salaryScale']) : null,
+                isset($job['deadline']) ? new DateTimeImmutable((string) $job['deadline']) : null,
             );
         }
     }

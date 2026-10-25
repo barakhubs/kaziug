@@ -1,409 +1,856 @@
 [
   {
-    "title": "Frontend Developer (React)",
-    "company": "Savanna Tech Labs",
-    "location": "Kampala",
-    "remote": true,
-    "type": "Full-time",
-    "category": "Technology",
-    "exp": "Mid",
-    "salaryMin": 3500000,
-    "salaryMax": 5000000,
-    "daysAgo": 0,
-    "skills": [
-      "React",
-      "JavaScript",
-      "CSS",
-      "REST APIs"
-    ],
-    "summary": "Build fast, accessible interfaces for fintech and logistics products used across East Africa.",
-    "responsibilities": [
-      "Build and maintain React components and a shared design system",
-      "Integrate with backend REST APIs alongside the engineering team",
-      "Optimise pages for slow mobile networks"
-    ],
-    "requirements": [
-      "2+ years of React or a similar component framework",
-      "Solid HTML, CSS and modern JavaScript",
-      "Comfortable working in a remote, asynchronous team"
-    ]
-  },
-  {
-    "title": "Senior Accountant",
-    "company": "Nile Crest Ltd",
-    "location": "Kampala",
+    "title": "Associate Consultant – Adult Cardiology",
+    "company": "Uganda Heart Institute",
+    "location": "Mulago, Kampala",
     "remote": false,
     "type": "Full-time",
-    "category": "Finance",
+    "category": "Healthcare",
     "exp": "Senior",
-    "salaryMin": 4800000,
-    "salaryMax": 6200000,
-    "daysAgo": 1,
+    "salaryMin": null,
+    "salaryMax": null,
+    "salaryScale": "UHI 2 MED-1",
+    "posts": 4,
+    "reportsTo": "Consultant – Adult Cardiology",
+    "deadline": "2026-11-11",
+    "daysAgo": null,
     "skills": [
-      "IFRS",
-      "QuickBooks",
-      "Financial reporting",
-      "VAT & PAYE"
+      "Adult cardiology",
+      "Patient management",
+      "Supervision",
+      "Ward rounds"
     ],
-    "summary": "Lead month-end close, statutory reporting and tax compliance for a mid-sized trading group.",
+    "summary": "Provide comprehensive specialist care to adult patients with cardiovascular conditions, from diagnosis through follow-up.",
     "responsibilities": [
-      "Run month-end and year-end close processes",
-      "Prepare management accounts and board packs",
-      "Manage URA filings and external audit support"
+      "Diagnose and treat adult cardiovascular conditions",
+      "Supervise medical officers, interns and trainees",
+      "Prepare departmental workplans, budgets and reports"
     ],
     "requirements": [
-      "ACCA or CPA (Uganda) qualification, or equivalent",
-      "5+ years in a finance role, ideally in trading or manufacturing",
-      "Advanced Excel skills"
+      "MBChB and a Master of Medicine (Internal Medicine) or equivalent",
+      "Fellowship or Masters in Cardiology",
+      "Registered with UMDPC with a valid practising licence",
+      "At least 3 years at Medical Officer level"
     ]
   },
   {
-    "title": "Registered Nurse",
-    "company": "Mukono Health Partners",
-    "location": "Mukono",
+    "title": "Medical Officer",
+    "company": "Uganda Heart Institute",
+    "location": "Mulago, Kampala",
     "remote": false,
     "type": "Full-time",
     "category": "Healthcare",
     "exp": "Entry",
-    "salaryMin": 1200000,
-    "salaryMax": 1600000,
-    "daysAgo": 2,
+    "salaryMin": null,
+    "salaryMax": null,
+    "salaryScale": "UHI 4 MED-1",
+    "posts": 5,
+    "reportsTo": "Associate Consultant – Adult Cardiology",
+    "deadline": "2026-11-11",
+    "daysAgo": null,
     "skills": [
-      "Patient care",
-      "Triage",
-      "Vital signs",
-      "Record keeping"
+      "Clinical care",
+      "Patient records",
+      "Investigations",
+      "Clerking"
     ],
-    "summary": "Provide inpatient and outpatient nursing care at a community health facility serving Mukono district.",
+    "summary": "Participate in the management of adult cardiovascular patients, with a fellowship pathway in cardiology during service.",
     "responsibilities": [
-      "Deliver patient care across general wards",
-      "Support maternal and child health clinics",
-      "Maintain accurate patient records"
+      "Receive, clerk, admit and discharge patients",
+      "Develop patient treatment plans and carry out investigations",
+      "Supervise medical interns and trainees"
     ],
     "requirements": [
-      "Diploma or degree in nursing, with a valid UNMC registration",
-      "Compassionate, calm under pressure",
-      "Willing to work rotating shifts"
+      "MBChB and an MSc in Medicine (Internal Medicine) or equivalent",
+      "Registered with UMDPC with a valid practising licence"
     ]
   },
   {
-    "title": "Sales Executive",
-    "company": "Pearl Logistics",
-    "location": "Entebbe",
+    "title": "Associate Consultant – Paediatric Cardiology",
+    "company": "Uganda Heart Institute",
+    "location": "Mulago, Kampala",
     "remote": false,
     "type": "Full-time",
-    "category": "Sales & Marketing",
-    "exp": "Entry",
-    "salaryMin": 1000000,
-    "salaryMax": 2000000,
-    "daysAgo": 3,
-    "skills": [
-      "B2B sales",
-      "Negotiation",
-      "CRM",
-      "Customer relations"
-    ],
-    "summary": "Grow freight and warehousing accounts across Entebbe and Kampala. Base salary plus commission.",
-    "responsibilities": [
-      "Prospect and close new B2B freight accounts",
-      "Maintain client relationships and renewals",
-      "Report pipeline activity weekly"
-    ],
-    "requirements": [
-      "Diploma in business, sales or marketing",
-      "Proven track record in B2B sales is an advantage",
-      "Own transport or boda access is a plus"
-    ]
-  },
-  {
-    "title": "Agronomist",
-    "company": "Rift Valley Agro",
-    "location": "Mbarara",
-    "remote": false,
-    "type": "Full-time",
-    "category": "Agriculture",
-    "exp": "Mid",
-    "salaryMin": 2000000,
-    "salaryMax": 2800000,
-    "daysAgo": 4,
-    "skills": [
-      "Crop science",
-      "Extension services",
-      "Farmer training",
-      "Data collection"
-    ],
-    "summary": "Support smallholder farmers in the western region with crop advisory, training and field monitoring.",
-    "responsibilities": [
-      "Run field visits and farmer training sessions",
-      "Collect and report crop performance data",
-      "Advise on pest and soil management"
-    ],
-    "requirements": [
-      "Bachelor's degree in agriculture or agronomy",
-      "2+ years in extension or field work",
-      "Fluent in Runyankole or Rukiga is a strong advantage"
-    ]
-  },
-  {
-    "title": "Graphic Designer (Part-time)",
-    "company": "Bugolobi Digital",
-    "location": "Kampala",
-    "remote": true,
-    "type": "Part-time",
-    "category": "Design",
-    "exp": "Entry",
-    "salaryMin": 800000,
-    "salaryMax": 1200000,
-    "daysAgo": 5,
-    "skills": [
-      "Figma",
-      "Illustrator",
-      "Brand identity",
-      "Social media design"
-    ],
-    "summary": "Create social graphics, pitch visuals and brand assets for a small agency serving clients across Uganda.",
-    "responsibilities": [
-      "Design social media posts and campaign assets",
-      "Maintain brand guidelines for client accounts",
-      "Prepare print-ready files for events and signage"
-    ],
-    "requirements": [
-      "Strong portfolio of brand and digital work",
-      "Proficiency in Figma and Adobe Illustrator",
-      "Able to meet tight turnaround times"
-    ]
-  },
-  {
-    "title": "Front Office Supervisor",
-    "company": "Lake Victoria Hotels",
-    "location": "Entebbe",
-    "remote": false,
-    "type": "Full-time",
-    "category": "Hospitality",
-    "exp": "Mid",
-    "salaryMin": 1800000,
-    "salaryMax": 2200000,
-    "daysAgo": 6,
-    "skills": [
-      "Guest relations",
-      "Reservations",
-      "Opera PMS",
-      "Team leadership"
-    ],
-    "summary": "Lead the front desk team at a 120-room lakeside hotel, ensuring smooth check-ins and guest satisfaction.",
-    "responsibilities": [
-      "Supervise daily front office operations",
-      "Handle guest complaints and escalations",
-      "Train and roster reception staff"
-    ],
-    "requirements": [
-      "Diploma in hospitality or tourism management",
-      "2+ years in hotel front office",
-      "Strong spoken English and customer focus"
-    ]
-  },
-  {
-    "title": "Mathematics Teacher (Secondary)",
-    "company": "Jinja Heights Academy",
-    "location": "Jinja",
-    "remote": false,
-    "type": "Full-time",
-    "category": "Education",
-    "exp": "Entry",
-    "salaryMin": 900000,
-    "salaryMax": 1300000,
-    "daysAgo": 7,
-    "skills": [
-      "Lesson planning",
-      "UNEB curriculum",
-      "Mathematics",
-      "Classroom management"
-    ],
-    "summary": "Teach O-Level and A-Level mathematics to a motivated group of students in a boarding school.",
-    "responsibilities": [
-      "Plan and deliver lessons aligned to the UNEB syllabus",
-      "Set and mark assessments",
-      "Support exam preparation and extracurricular clubs"
-    ],
-    "requirements": [
-      "Bachelor's degree in education with mathematics",
-      "Teaching certificate or diploma in education",
-      "Patient and organised"
-    ]
-  },
-  {
-    "title": "Data Analyst",
-    "company": "Kampala Insights",
-    "location": "Kampala",
-    "remote": true,
-    "type": "Full-time",
-    "category": "Technology",
-    "exp": "Mid",
-    "salaryMin": 3000000,
-    "salaryMax": 4500000,
-    "daysAgo": 8,
-    "skills": [
-      "SQL",
-      "Excel",
-      "Power BI",
-      "Python"
-    ],
-    "summary": "Turn operational and survey data into dashboards that help NGO and private-sector clients make decisions.",
-    "responsibilities": [
-      "Write SQL queries and build Power BI dashboards",
-      "Clean and validate data from field surveys",
-      "Present findings to non-technical stakeholders"
-    ],
-    "requirements": [
-      "2+ years of analytics experience",
-      "Strong SQL and spreadsheet skills",
-      "Clear written and verbal communication"
-    ]
-  },
-  {
-    "title": "Backend Engineer (PHP / Laravel)",
-    "company": "Gulu Digital Works",
-    "location": "Gulu",
-    "remote": true,
-    "type": "Full-time",
-    "category": "Technology",
-    "exp": "Mid",
-    "salaryMin": 2500000,
-    "salaryMax": 4000000,
-    "daysAgo": 9,
-    "skills": [
-      "PHP",
-      "Laravel",
-      "MySQL",
-      "REST APIs",
-      "Git"
-    ],
-    "summary": "Build and maintain APIs for government-facing digital services that run on low-bandwidth networks.",
-    "responsibilities": [
-      "Design and build Laravel APIs and background jobs",
-      "Optimise database queries and caching",
-      "Write tests and review teammates' code"
-    ],
-    "requirements": [
-      "2+ years of PHP with Laravel",
-      "Experience with MySQL or PostgreSQL",
-      "Familiarity with Git and code reviews"
-    ]
-  },
-  {
-    "title": "Customer Support Agent (Contract)",
-    "company": "Savanna Tech Labs",
-    "location": "Kampala",
-    "remote": false,
-    "type": "Contract",
-    "category": "Customer Service",
-    "exp": "Entry",
-    "salaryMin": 900000,
-    "salaryMax": 1100000,
-    "daysAgo": 10,
-    "skills": [
-      "Customer support",
-      "Mobile money",
-      "Ticketing tools",
-      "English & Luganda"
-    ],
-    "summary": "Handle customer queries for a mobile payments product. Six-month contract with a possibility of renewal.",
-    "responsibilities": [
-      "Respond to customer calls, chats and emails",
-      "Resolve mobile money transaction issues",
-      "Log and escalate tickets accurately"
-    ],
-    "requirements": [
-      "Excellent written and spoken English; Luganda is a plus",
-      "Comfortable using ticketing or CRM software",
-      "Available for shift work"
-    ]
-  },
-  {
-    "title": "Procurement Officer",
-    "company": "Kasese Mining Services",
-    "location": "Kasese",
-    "remote": false,
-    "type": "Full-time",
-    "category": "Operations",
+    "category": "Healthcare",
     "exp": "Senior",
-    "salaryMin": 4000000,
-    "salaryMax": 6000000,
-    "daysAgo": 12,
-    "skills": [
-      "Procurement",
-      "Supplier management",
-      "Contract negotiation",
-      "PPDA rules"
-    ],
-    "summary": "Manage supplier sourcing and purchase contracts for a site with heavy equipment and consumables needs.",
+    "salaryMin": null,
+    "salaryMax": null,
+    "salaryScale": "UHI 2 MED-1",
+    "posts": 3,
+    "reportsTo": "Consultant – Paediatric Cardiology",
+    "deadline": "2026-11-11",
+    "daysAgo": null,
+    "skills": ["Paediatric cardiology", "Patient management", "Supervision"],
+    "summary": "Provide specialist care for children with cardiovascular conditions, from accurate diagnosis through ongoing follow-up.",
     "responsibilities": [
-      "Source suppliers and negotiate purchase contracts",
-      "Ensure compliance with PPDA procurement rules",
-      "Track delivery performance and costs"
+      "Diagnose and treat paediatric cardiovascular conditions",
+      "Train health professionals in paediatric cardiology",
+      "Supervise medical officers, interns and trainees"
     ],
     "requirements": [
-      "Degree in supply chain, business or a related field",
-      "5+ years in procurement, ideally in mining or construction",
-      "Knowledge of PPDA regulations"
+      "MBChB and a Master of Medicine in Paediatrics and Child Health or equivalent",
+      "Fellowship or Masters in Paediatric Cardiology",
+      "At least 3 years at Medical Officer level"
     ]
   },
   {
-    "title": "Digital Marketing Intern",
-    "company": "Kampala Startup Hub",
-    "location": "Kampala",
-    "remote": true,
-    "type": "Internship",
-    "category": "Sales & Marketing",
+    "title": "Associate Consultant – Adult Cardiovascular Surgery",
+    "company": "Uganda Heart Institute",
+    "location": "Mulago, Kampala",
+    "remote": false,
+    "type": "Full-time",
+    "category": "Healthcare",
+    "exp": "Senior",
+    "salaryMin": null,
+    "salaryMax": null,
+    "salaryScale": "UHI 2 MED-1",
+    "posts": 2,
+    "reportsTo": "Consultant – Adult Cardiac Surgery",
+    "deadline": "2026-11-11",
+    "daysAgo": null,
+    "skills": ["Cardiac surgery", "Perioperative care", "Surgical management"],
+    "summary": "Provide specialist surgical care for adults needing cardiovascular intervention, from assessment through postoperative follow-up.",
+    "responsibilities": [
+      "Diagnose conditions and conduct cardiovascular surgeries",
+      "Supervise medical officers, interns and trainees",
+      "Evaluate subordinates and identify growth opportunities"
+    ],
+    "requirements": [
+      "MBChB and a Master of Science in Surgery or equivalent",
+      "Completed fellowship in cardiovascular surgery",
+      "Registered with UMDPC with a valid practising licence",
+      "At least 3 years at Medical Officer level"
+    ]
+  },
+  {
+    "title": "Associate Consultant – Paediatric Cardiac Surgery",
+    "company": "Uganda Heart Institute",
+    "location": "Mulago, Kampala",
+    "remote": false,
+    "type": "Full-time",
+    "category": "Healthcare",
+    "exp": "Senior",
+    "salaryMin": null,
+    "salaryMax": null,
+    "salaryScale": "UHI 2 MED-1",
+    "posts": 2,
+    "reportsTo": "Consultant – Paediatric Cardiac Surgery",
+    "deadline": "2026-11-11",
+    "daysAgo": null,
+    "skills": ["Paediatric cardiac surgery", "Surgical management"],
+    "summary": "Diagnose and manage paediatric patients requiring cardiac surgery, aiming for timely treatment and good outcomes.",
+    "responsibilities": [
+      "Diagnose and treat paediatric cardiovascular conditions and conduct surgeries",
+      "Supervise medical officers, interns and trainees",
+      "Plan equipment and drug procurement for the department"
+    ],
+    "requirements": [
+      "MBChB and a Master of Medicine in General Surgery or equivalent",
+      "Fellowship in cardiovascular surgery",
+      "Registered with UMDPC with a valid practising licence",
+      "At least 3 years as a Medical Officer"
+    ]
+  },
+  {
+    "title": "Associate Consultant – Cardiac Critical Care",
+    "company": "Uganda Heart Institute",
+    "location": "Mulago, Kampala",
+    "remote": false,
+    "type": "Full-time",
+    "category": "Healthcare",
+    "exp": "Senior",
+    "salaryMin": null,
+    "salaryMax": null,
+    "salaryScale": "UHI 2 MED-1",
+    "posts": 4,
+    "reportsTo": "Consultant – Cardiac Critical Care",
+    "deadline": "2026-11-11",
+    "daysAgo": null,
+    "skills": [
+      "Critical care",
+      "Cardiac intensive care",
+      "Operational research",
+      "Clinical supervision"
+    ],
+    "summary": "Provide specialist care for cardiac critical care patients and lead training, research and clinical standards in the unit.",
+    "responsibilities": [
+      "Diagnose and manage cardiac conditions and complications",
+      "Plan and conduct operational research",
+      "Supervise and train medical officers and other health professionals"
+    ],
+    "requirements": [
+      "MBChB and a Master of Medicine (Anaesthesia, Surgery or Internal Medicine) or equivalent",
+      "Fellowship in cardiac intensive care (at least two years)",
+      "Interest in research",
+      "At least 3 years as a General Practitioner"
+    ]
+  },
+  {
+    "title": "Associate Consultant – Cardiac Anaesthesia",
+    "company": "Uganda Heart Institute",
+    "location": "Mulago, Kampala",
+    "remote": false,
+    "type": "Full-time",
+    "category": "Healthcare",
+    "exp": "Senior",
+    "salaryMin": null,
+    "salaryMax": null,
+    "salaryScale": "UHI 2 MED-1",
+    "posts": 2,
+    "reportsTo": "Consultant – Adult Cardiac Anaesthesia",
+    "deadline": "2026-11-11",
+    "daysAgo": null,
+    "skills": ["Cardiac anaesthesia", "Perioperative care", "Patient safety"],
+    "summary": "Provide perioperative anaesthetic care for patients undergoing cardiac procedures, from preoperative assessment to postoperative care.",
+    "responsibilities": [
+      "Manage intraoperative anaesthesia and postoperative care",
+      "Conduct ward rounds and supervise medical officers and interns",
+      "Plan equipment and drug needs for the department"
+    ],
+    "requirements": [
+      "MBChB and a Master of Medicine in Anaesthesia or equivalent",
+      "Fellowship or equivalent in cardiac anaesthesia",
+      "Registered with UMDPC with a valid practising licence",
+      "At least 3 years as a General Anaesthesiologist"
+    ]
+  },
+  {
+    "title": "Associate Consultant – Radiologist",
+    "company": "Uganda Heart Institute",
+    "location": "Mulago, Kampala",
+    "remote": false,
+    "type": "Full-time",
+    "category": "Imaging & Diagnostics",
+    "exp": "Senior",
+    "salaryMin": null,
+    "salaryMax": null,
+    "salaryScale": "UHI 2 MED-1",
+    "posts": 1,
+    "reportsTo": "Consultant – Radiologist",
+    "deadline": "2026-11-11",
+    "daysAgo": null,
+    "skills": [
+      "Diagnostic imaging",
+      "Cardiovascular imaging",
+      "Radiology reporting"
+    ],
+    "summary": "Interpret and report diagnostic imaging, focused on cardiovascular conditions, to support diagnosis and treatment planning.",
+    "responsibilities": [
+      "Interpret and report imaging studies",
+      "Lead case discussions and train intern doctors",
+      "Plan and conduct operational research"
+    ],
+    "requirements": [
+      "MBChB and a Master of Science in Radiology or equivalent",
+      "Registered with UMDPC with a valid practising licence",
+      "Research evidence is an advantage",
+      "Served as a Medical Officer for at least 3 years"
+    ]
+  },
+  {
+    "title": "Radiographer",
+    "company": "Uganda Heart Institute",
+    "location": "Mulago, Kampala",
+    "remote": false,
+    "type": "Full-time",
+    "category": "Imaging & Diagnostics",
     "exp": "Entry",
     "salaryMin": null,
     "salaryMax": null,
-    "daysAgo": 14,
-    "skills": [
-      "Social media",
-      "Canva",
-      "Content writing",
-      "Google Analytics"
-    ],
-    "summary": "Three-month internship supporting campaigns for early-stage startups in the Kampala ecosystem.",
+    "salaryScale": "UHI 5 MED 2",
+    "posts": 1,
+    "reportsTo": "Senior Radiographer",
+    "deadline": "2026-11-11",
+    "daysAgo": null,
+    "skills": ["Radiography", "X-ray", "Equipment maintenance"],
+    "summary": "Perform radiographic examinations to established clinical protocols, delivering safe and accurate diagnostic imaging.",
     "responsibilities": [
-      "Plan and schedule social media content",
-      "Help run email and campaign reporting",
-      "Support community events"
+      "Receive patients and prepare X-ray equipment",
+      "Take X-ray images and prepare reports for the doctor or clinical officer",
+      "Maintain X-ray equipment"
     ],
     "requirements": [
-      "Currently enrolled in a degree or recently graduated",
-      "Interest in digital marketing and startups",
-      "Basic familiarity with Canva and social platforms"
+      "Diploma in Medical Radiology from a recognised institution",
+      "Registered with the Allied Health Professionals Council"
     ]
   },
   {
-    "title": "Operations Manager",
-    "company": "Pearl Logistics",
-    "location": "Kampala",
+    "title": "Medical Laboratory Technician",
+    "company": "Uganda Heart Institute",
+    "location": "Mulago, Kampala",
     "remote": false,
     "type": "Full-time",
-    "category": "Operations",
-    "exp": "Senior",
-    "salaryMin": 6000000,
-    "salaryMax": 8000000,
-    "daysAgo": 15,
+    "category": "Healthcare",
+    "exp": "Entry",
+    "salaryMin": null,
+    "salaryMax": null,
+    "salaryScale": "UHI 5 MED 2",
+    "posts": 2,
+    "reportsTo": "Medical Laboratory Technologist",
+    "deadline": "2026-11-11",
+    "daysAgo": null,
     "skills": [
-      "Fleet management",
-      "Logistics",
-      "KPIs",
-      "Team leadership"
+      "Laboratory investigations",
+      "Phlebotomy",
+      "Quality assurance",
+      "Records management"
     ],
-    "summary": "Oversee daily dispatch, fleet utilisation and warehouse operations across three hubs.",
+    "summary": "Run laboratory investigations and produce accurate, timely results to support diagnosis and treatment.",
     "responsibilities": [
-      "Own daily dispatch and route planning",
-      "Improve fleet utilisation and cost per trip",
-      "Lead supervisors across three depots"
+      "Perform laboratory investigations and submit reports",
+      "Carry out phlebotomy at the OPD and wards",
+      "Maintain laboratory equipment and inventory"
     ],
     "requirements": [
-      "7+ years in logistics or operations management",
-      "Track record of hitting delivery KPIs",
-      "Strong analytical and people-management skills"
+      "Diploma in Medical Laboratory Technology or equivalent",
+      "Certificate of Good Laboratory Practice (GLP)",
+      "Registered with the Allied Health Professionals Council",
+      "At least 1 year in a reputable healthcare facility"
+    ]
+  },
+  {
+    "title": "Senior Medical Research Officer",
+    "company": "Uganda Heart Institute",
+    "location": "Mulago, Kampala",
+    "remote": false,
+    "type": "Full-time",
+    "category": "Research & Training",
+    "exp": "Senior",
+    "salaryMin": null,
+    "salaryMax": null,
+    "salaryScale": "UHI 3 MED 1",
+    "posts": 1,
+    "reportsTo": "Principal Medical Research and Training",
+    "deadline": "2026-11-11",
+    "daysAgo": null,
+    "skills": [
+      "Clinical research management",
+      "Grant management",
+      "Project planning"
+    ],
+    "summary": "Manage research commissioning and grant processes, keep research documentation accurate, and monitor adherence to clinical research standards.",
+    "responsibilities": [
+      "Support design, delivery and management of research commissions",
+      "Develop timelines and monitor progress and budgets",
+      "Manage data on organisation-wide systems"
+    ],
+    "requirements": [
+      "MBChB or equivalent",
+      "Master's degree in a health science discipline",
+      "A relevant fellowship is an advantage",
+      "At least 6 years in clinical research management"
+    ]
+  },
+  {
+    "title": "Epidemiologist",
+    "company": "Uganda Heart Institute",
+    "location": "Mulago, Kampala",
+    "remote": false,
+    "type": "Full-time",
+    "category": "Research & Training",
+    "exp": "Mid",
+    "salaryMin": null,
+    "salaryMax": null,
+    "salaryScale": "UHI 4 MED-1",
+    "posts": 1,
+    "reportsTo": "Senior Epidemiologist",
+    "deadline": "2026-11-11",
+    "daysAgo": null,
+    "skills": [
+      "Epidemiology",
+      "Surveillance",
+      "Statistical analysis",
+      "Outbreak investigation"
+    ],
+    "summary": "Investigate and analyse cardiac-related diseases and epidemics to support surveillance, detection and prevention.",
+    "responsibilities": [
+      "Conduct investigations and respond to disease outbreaks",
+      "Perform statistical analyses and disseminate findings",
+      "Design and implement surveillance systems"
+    ],
+    "requirements": [
+      "MBChB or a Degree in Epidemiology or related field",
+      "Master's degree in epidemiology is an advantage",
+      "Two years of epidemiology experience in a public health organisation at national level or a multinational"
+    ]
+  },
+  {
+    "title": "Nursing Officer",
+    "company": "Uganda Heart Institute",
+    "location": "Mulago, Kampala",
+    "remote": false,
+    "type": "Full-time",
+    "category": "Nursing",
+    "exp": "Entry",
+    "salaryMin": null,
+    "salaryMax": null,
+    "salaryScale": "UHI 4 MED-2",
+    "posts": 44,
+    "reportsTo": "Nursing Officer – Cardiovascular",
+    "deadline": "2026-11-11",
+    "daysAgo": null,
+    "skills": [
+      "Cardiac nursing",
+      "Patient care",
+      "Clinical supervision",
+      "Health education"
+    ],
+    "summary": "Provide safe, patient-centred cardiac nursing care, covering assessment, monitoring, treatment, education and continuity of care.",
+    "responsibilities": [
+      "Ensure quality nursing care through nursing protocols",
+      "Allocate duties and supervise nursing staff and students",
+      "Conduct performance appraisal of staff"
+    ],
+    "requirements": [
+      "Bachelor's degree in Nursing from a recognised university",
+      "Registered with the Uganda Nurses and Midwives Council",
+      "Valid practising licence"
+    ]
+  },
+  {
+    "title": "Cardiac Critical Care Orderly",
+    "company": "Uganda Heart Institute",
+    "location": "Mulago, Kampala",
+    "remote": false,
+    "type": "Full-time",
+    "category": "Nursing",
+    "exp": "Entry",
+    "salaryMin": null,
+    "salaryMax": null,
+    "salaryScale": "UHI 8 MED 2",
+    "posts": 3,
+    "reportsTo": "Nursing Officer",
+    "deadline": "2026-11-11",
+    "daysAgo": null,
+    "skills": [
+      "Patient mobility",
+      "Hygiene",
+      "Sample transport",
+      "Sterilisation support"
+    ],
+    "summary": "Support cardiac patients under nursing and medical supervision, with mobility, hygiene, transport and a clean care environment.",
+    "responsibilities": [
+      "Transport patients and samples for investigations",
+      "Maintain sterility and clean instruments",
+      "Keep wards and units in order"
+    ],
+    "requirements": [
+      "O-Level certificate",
+      "Training in a health-related course is an advantage"
+    ]
+  },
+  {
+    "title": "Theatre Attendant",
+    "company": "Uganda Heart Institute",
+    "location": "Mulago, Kampala",
+    "remote": false,
+    "type": "Full-time",
+    "category": "Nursing",
+    "exp": "Entry",
+    "salaryMin": null,
+    "salaryMax": null,
+    "salaryScale": "UHI 8 MED 2",
+    "posts": 2,
+    "reportsTo": "Theatre Cardiac Nursing Officer",
+    "deadline": "2026-11-11",
+    "daysAgo": null,
+    "skills": [
+      "Operating theatre",
+      "Infection control",
+      "CSSD",
+      "Inventory management"
+    ],
+    "summary": "Prepare and maintain sterile operating rooms, equipment and supplies, and support patients before and after surgery.",
+    "responsibilities": [
+      "Set up operating rooms and maintain sterility",
+      "Coordinate instrument flow with CSSD",
+      "Maintain equipment, inventory and records"
+    ],
+    "requirements": [
+      "O-Level certificate (UCE)",
+      "Certificate in a relevant health field"
+    ]
+  },
+  {
+    "title": "Senior Cardiac Public Health Officer",
+    "company": "Uganda Heart Institute",
+    "location": "Mulago, Kampala",
+    "remote": false,
+    "type": "Full-time",
+    "category": "Public Health",
+    "exp": "Senior",
+    "salaryMin": null,
+    "salaryMax": null,
+    "salaryScale": "UHI 3 MED-2",
+    "posts": 1,
+    "reportsTo": "Principal Cardiac Public Health Officer",
+    "deadline": "2026-11-11",
+    "daysAgo": null,
+    "skills": [
+      "Public health programmes",
+      "Health promotion",
+      "Program evaluation",
+      "Community engagement"
+    ],
+    "summary": "Plan and run cardiac public health programmes, covering prevention, awareness and evaluation of programme performance.",
+    "responsibilities": [
+      "Plan and implement cardiac health promotion and prevention programmes",
+      "Collect and analyse data to improve programmes",
+      "Prepare quarterly and annual programme reports"
+    ],
+    "requirements": [
+      "Bachelor's degree in Medicine, Public Health, Nursing Science, Physiotherapy, Nutrition or related field",
+      "Master's degree in Public Health or related field",
+      "At least 3 years as a Cardiac Public Health Officer"
+    ]
+  },
+  {
+    "title": "Nutritionist (Dietician)",
+    "company": "Uganda Heart Institute",
+    "location": "Mulago, Kampala",
+    "remote": false,
+    "type": "Full-time",
+    "category": "Healthcare",
+    "exp": "Entry",
+    "salaryMin": null,
+    "salaryMax": null,
+    "salaryScale": "UHI 4 MED-2",
+    "posts": 1,
+    "reportsTo": "Senior Clinical Nutritionist",
+    "deadline": "2026-11-11",
+    "daysAgo": null,
+    "skills": [
+      "Clinical nutrition",
+      "Dietary assessment",
+      "Patient counselling",
+      "CVD prevention"
+    ],
+    "summary": "Assess patients' nutritional needs against their medical conditions and medication, and advise on diet for cardiac care and prevention.",
+    "responsibilities": [
+      "Evaluate nutritional needs and adjust dietary plans",
+      "Screen and assess patients for nutritional risk",
+      "Run outreach sessions on nutrition and CVD prevention"
+    ],
+    "requirements": [
+      "BSc in Human Nutrition and Dietetics, Clinical Nutrition, Food Science and Nutrition, or related field, or a bachelor's in Food Science and Technology",
+      "One year of experience in a hospital or healthcare setting"
+    ]
+  },
+  {
+    "title": "Senior Assistant Secretary",
+    "company": "Uganda Heart Institute",
+    "location": "Mulago, Kampala",
+    "remote": false,
+    "type": "Full-time",
+    "category": "Administration",
+    "exp": "Senior",
+    "salaryMin": null,
+    "salaryMax": null,
+    "salaryScale": "UHI 3LWR",
+    "posts": 1,
+    "reportsTo": "Principal Assistant Secretary",
+    "deadline": "2026-11-11",
+    "daysAgo": null,
+    "skills": [
+      "Administration",
+      "Protocol",
+      "Minute-taking",
+      "Staff supervision"
+    ],
+    "summary": "Provide day-to-day administrative services and support the implementation of government policies across the Institute.",
+    "responsibilities": [
+      "Take minutes and provide administrative support",
+      "Manage protocol affairs and national functions",
+      "Maintain assets, facilities and utilities"
+    ],
+    "requirements": [
+      "Honours bachelor's degree in a relevant social science, management, law or commerce field",
+      "Administrative Officer's Law Course Certificate",
+      "Postgraduate diploma in Public Administration, Management or related field",
+      "At least 3 years at Assistant Secretary level or equivalent"
+    ]
+  },
+  {
+    "title": "Senior Personal Secretary",
+    "company": "Uganda Heart Institute",
+    "location": "Mulago, Kampala",
+    "remote": false,
+    "type": "Full-time",
+    "category": "Administration",
+    "exp": "Senior",
+    "salaryMin": null,
+    "salaryMax": null,
+    "salaryScale": "UHI 3LWR",
+    "posts": 1,
+    "reportsTo": "Principal Assistant Secretary",
+    "deadline": "2026-11-11",
+    "daysAgo": null,
+    "skills": [
+      "Executive support",
+      "Scheduling",
+      "Records management",
+      "Confidentiality"
+    ],
+    "summary": "Give high-level secretarial and office management support to the Chief Executive, handling sensitive matters with discretion.",
+    "responsibilities": [
+      "Draw up and monitor appointments and programmes",
+      "Organise meetings, take minutes and convey decisions",
+      "Manage records and supervise support staff"
+    ],
+    "requirements": [
+      "Honours bachelor's degree in Secretarial Studies or equivalent",
+      "At least 3 years as a Personal Secretary in government or a reputable organisation"
+    ]
+  },
+  {
+    "title": "Internal Auditor",
+    "company": "Uganda Heart Institute",
+    "location": "Mulago, Kampala",
+    "remote": false,
+    "type": "Full-time",
+    "category": "Finance",
+    "exp": "Mid",
+    "salaryMin": null,
+    "salaryMax": null,
+    "salaryScale": "UHI 4UP",
+    "posts": 1,
+    "reportsTo": "Senior Internal Auditor",
+    "deadline": "2026-11-11",
+    "daysAgo": null,
+    "skills": [
+      "Internal audit",
+      "Reconciliation",
+      "Payroll verification",
+      "Financial reporting"
+    ],
+    "summary": "Carry out routine internal audits against regulations, checking payments, records and reconciliations.",
+    "responsibilities": [
+      "Check payment requests and match invoices to purchase orders",
+      "Prepare bank and financial statement reconciliations",
+      "Verify payroll computations and deductions"
+    ],
+    "requirements": [
+      "Honours bachelor's degree in Finance and Accounting, or with a Accountancy or Audit option",
+      "Full professional qualification in Accountancy or Audit accredited by ICPAU"
+    ]
+  },
+  {
+    "title": "Laundry Officer",
+    "company": "Uganda Heart Institute",
+    "location": "Mulago, Kampala",
+    "remote": false,
+    "type": "Full-time",
+    "category": "Support Services",
+    "exp": "Entry",
+    "salaryMin": null,
+    "salaryMax": null,
+    "salaryScale": "UHI 4 LWR",
+    "posts": 1,
+    "reportsTo": "Manager – Administration",
+    "deadline": "2026-11-11",
+    "daysAgo": null,
+    "skills": [
+      "Laundry operations",
+      "Infection control",
+      "Procurement",
+      "Staff supervision"
+    ],
+    "summary": "Coordinate laundry services for the Institute, keeping linen supplied and laundry practices up to standard.",
+    "responsibilities": [
+      "Supervise laundry workflow and plan activities",
+      "Take part in procurement of laundry consumables",
+      "Train laundry staff and maintain laundry registers"
+    ],
+    "requirements": [
+      "Bachelor's degree in any humanities field",
+      "Certificate in laundry practice or infection control",
+      "Hospital experience is an advantage"
+    ]
+  },
+  {
+    "title": "Assistant Inventory Management Officer",
+    "company": "Uganda Heart Institute",
+    "location": "Mulago, Kampala",
+    "remote": false,
+    "type": "Full-time",
+    "category": "Supply Chain",
+    "exp": "Entry",
+    "salaryMin": null,
+    "salaryMax": null,
+    "salaryScale": "UHI 5UP",
+    "posts": 1,
+    "reportsTo": "Inventory Management Officer",
+    "deadline": "2026-11-11",
+    "daysAgo": null,
+    "skills": ["Stores management", "Inventory", "Stock-taking", "Records"],
+    "summary": "Receive, store and issue medical supplies and equipment, keeping accurate records and timely distribution.",
+    "responsibilities": [
+      "Receive, store and issue stores under established procedures",
+      "Verify invoices against goods received notes",
+      "Post and maintain stores records and carry out stock-taking"
+    ],
+    "requirements": [
+      "Diploma in Stores/Supply Chain Management, Procurement or equivalent"
+    ]
+  },
+  {
+    "title": "Biomedical Technician",
+    "company": "Uganda Heart Institute",
+    "location": "Mulago, Kampala",
+    "remote": false,
+    "type": "Full-time",
+    "category": "Engineering & Maintenance",
+    "exp": "Entry",
+    "salaryMin": null,
+    "salaryMax": null,
+    "salaryScale": "UHI 5SC",
+    "posts": 1,
+    "reportsTo": "Senior Biomedical Technician",
+    "deadline": "2026-11-11",
+    "daysAgo": null,
+    "skills": [
+      "Medical equipment",
+      "Preventive maintenance",
+      "Repairs",
+      "End-user training"
+    ],
+    "summary": "Keep medical equipment inventoried, maintained and repaired, and train end users on it.",
+    "responsibilities": [
+      "Carry out preventive maintenance and repairs",
+      "Conduct end-user training and routine servicing",
+      "Plan and budget for repairs"
+    ],
+    "requirements": [
+      "Diploma in Biomedical Technology from a recognised institution"
+    ]
+  },
+  {
+    "title": "Legal Officer",
+    "company": "Uganda Heart Institute",
+    "location": "Mulago, Kampala",
+    "remote": false,
+    "type": "Full-time",
+    "category": "Legal",
+    "exp": "Entry",
+    "salaryMin": null,
+    "salaryMax": null,
+    "salaryScale": "UHI 4 LEG",
+    "posts": 1,
+    "reportsTo": "Senior Legal Officer",
+    "deadline": "2026-11-11",
+    "daysAgo": null,
+    "skills": [
+      "Ugandan law",
+      "Contract review",
+      "Legal research",
+      "Regulatory compliance"
+    ],
+    "summary": "Advise on legal matters, keep the Institute within the law, and review contracts and internal policies.",
+    "responsibilities": [
+      "Advise on legal matters and ensure contracts are sound",
+      "Ensure statutory compliance (URSB, URA, NSSF, UIA)",
+      "Prepare legal opinions and staff training on labour law and ethics"
+    ],
+    "requirements": [
+      "LLB from a recognised university",
+      "Diploma in Legal Practice from the Law Development Centre"
+    ]
+  },
+  {
+    "title": "Assistant Engineering Officer",
+    "company": "Uganda Heart Institute",
+    "location": "Mulago, Kampala",
+    "remote": false,
+    "type": "Full-time",
+    "category": "Engineering & Maintenance",
+    "exp": "Entry",
+    "salaryMin": null,
+    "salaryMax": null,
+    "salaryScale": "UHI 5SC",
+    "posts": 1,
+    "reportsTo": "Civil Engineer",
+    "deadline": "2026-11-11",
+    "daysAgo": null,
+    "skills": [
+      "Facilities maintenance",
+      "Troubleshooting",
+      "Safety inspection",
+      "Record keeping"
+    ],
+    "summary": "Maintain and repair hospital facilities and equipment to keep the infrastructure safe and running.",
+    "responsibilities": [
+      "Troubleshoot equipment malfunctions",
+      "Conduct safety inspections",
+      "Maintain accurate maintenance and repair records"
+    ],
+    "requirements": [
+      "Diploma in Civil Engineering from a recognised institution",
+      "Civil engineering experience is an advantage"
+    ]
+  },
+  {
+    "title": "Assistant Security Officer",
+    "company": "Uganda Heart Institute",
+    "location": "Mulago, Kampala",
+    "remote": false,
+    "type": "Full-time",
+    "category": "Security",
+    "exp": "Mid",
+    "salaryMin": null,
+    "salaryMax": null,
+    "salaryScale": "UHI 6LWR",
+    "posts": 1,
+    "reportsTo": "Senior Security Officer",
+    "deadline": "2026-11-11",
+    "daysAgo": null,
+    "skills": [
+      "Security operations",
+      "Access control",
+      "Incident response",
+      "Security reporting"
+    ],
+    "summary": "Support day-to-day security for patients, staff, property and assets, monitoring access and responding to incidents.",
+    "responsibilities": [
+      "Run day-to-day security matters at the hospital",
+      "Ensure safety of hospital property, vehicles and estates",
+      "Prepare security reports and manage allocated resources"
+    ],
+    "requirements": [
+      "Diploma in any field from a recognised institution",
+      "Police or security-discipline training",
+      "At least 3 years with a reputable organisation as security personnel"
+    ]
+  },
+  {
+    "title": "Receptionist",
+    "company": "Uganda Heart Institute",
+    "location": "Mulago, Kampala",
+    "remote": false,
+    "type": "Full-time",
+    "category": "Administration",
+    "exp": "Entry",
+    "salaryMin": null,
+    "salaryMax": null,
+    "salaryScale": "UHI 7 LWR",
+    "posts": 2,
+    "reportsTo": "Communication Officer",
+    "deadline": "2026-11-11",
+    "daysAgo": null,
+    "skills": [
+      "Front desk",
+      "Customer care",
+      "Call handling",
+      "Visitor management"
+    ],
+    "summary": "Be the first point of contact for patients and visitors, handling front-desk tasks and directing people to the right services.",
+    "responsibilities": [
+      "Manage the front desk and reception area",
+      "Handle incoming and outgoing calls and keep call records",
+      "Welcome, register and direct patients and visitors"
+    ],
+    "requirements": [
+      "Uganda Certificate of Education (UCE) with at least a credit in English",
+      "Certificate in customer care, public relations or related training"
     ]
   }
 ]

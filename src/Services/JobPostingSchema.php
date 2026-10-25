@@ -40,6 +40,7 @@ final class JobPostingSchema
                 'address' => ['@type' => 'PostalAddress', 'addressLocality' => $job->location, 'addressCountry' => 'UG'],
             ],
             'url' => $this->config->string('app.url') . '/jobs/' . $job->slug,
+            'totalJobOpenings' => $job->positions,
         ];
         if ($job->skills !== []) {
             $data['skills'] = implode(', ', $job->skills);
@@ -74,6 +75,10 @@ final class JobPostingSchema
     private function description(Job $job): string
     {
         $html = '<p>' . e($job->summary) . '</p>';
+        // schema.org has no field for a public-service scale, so it goes in the text.
+        if ($job->salaryScale !== null) {
+            $html .= '<p><strong>Salary scale:</strong> ' . e($job->salaryScale) . '</p>';
+        }
         foreach (['Responsibilities' => $job->responsibilities, 'Requirements' => $job->requirements] as $heading => $items) {
             if ($items !== []) {
                 $html .= '<p><strong>' . $heading . '</strong></p><ul>'

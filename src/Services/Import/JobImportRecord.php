@@ -6,6 +6,7 @@ namespace App\Services\Import;
 
 use App\Domain\ExperienceLevel;
 use App\Domain\JobType;
+use DateTimeImmutable;
 
 /** One job as delivered by a JobSourceInterface, before it has a category id or slug. */
 final class JobImportRecord
@@ -32,6 +33,10 @@ final class JobImportRecord
         public readonly int $publishedDaysAgo,
         /** Days from today until applications close (end of that day). */
         public readonly int $deadlineInDays = 30,
+        public readonly int $positions = 1,
+        public readonly ?string $salaryScale = null,
+        /** A fixed closing day from the advert; when set it wins over $deadlineInDays. */
+        public readonly ?DateTimeImmutable $deadline = null,
     ) {
     }
 }

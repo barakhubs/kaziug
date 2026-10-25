@@ -35,7 +35,9 @@ abstract class DatabaseTestCase extends TestCase
         $this->mail = new RecordingTransportFactory();
         $this->container->instance(TransportFactoryInterface::class, $this->mail);
 
-        $config = $this->container->get(Config::class);
+        // Tests seed from a fixed fixture so editing the real sample jobs never breaks them.
+        $config = $this->container->get(Config::class)->with('paths.seeds', dirname(__DIR__) . '/fixtures/seeds');
+        $this->container->instance(Config::class, $config);
         if ($config->string('app.env') !== 'testing' || !str_ends_with($config->string('db.database'), '_test')) {
             throw new RuntimeException('Refusing to run database tests outside a *_test database.');
         }

@@ -12,9 +12,9 @@ use App\Core\Format;
     </div>
     <button class="save js-only" type="button" data-save="<?= e($job->id) ?>" aria-pressed="false" aria-label="Save <?= e($job->title) ?>" hidden>☆</button>
   </div>
-  <p class="salary"><?= e(Format::salary($job->salaryMin, $job->salaryMax, $job->currency)) ?></p>
+  <p class="salary"><?= e(Format::jobSalary($job)) ?></p>
   <p class="snippet"><?= e($job->summary) ?></p>
-  <div class="tags"><span><?= e($job->jobType->label()) ?></span><span><?= e($job->experienceLevel->label()) ?> level</span><span><?= e($job->categoryName) ?></span></div>
+  <div class="tags"><span><?= e($job->jobType->label()) ?></span><span><?= e($job->experienceLevel->label()) ?> level</span><span><?= e($job->categoryName) ?></span><?php if ($job->positions > 1): ?><span class="tag-positions"><?= e(Format::positions($job->positions)) ?></span><?php endif; ?></div>
   <p class="posted">
     <?= e(Format::posted($job->publishedAt)) ?>
     <?php if ($job->expiresAt !== null): $dl = Format::deadline($job->expiresAt); ?>

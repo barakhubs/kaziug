@@ -98,6 +98,34 @@ final class AdminJobsAndCategoriesTest extends AdminHttpTestCase
         $this->assertStringContainsString('mailto:hr@insights.example', $public);
     }
 
+    public function testGovernmentJobWithSalaryScaleAndPositions(): void
+    {
+        $this->post('/admin/jobs', $this->jobForm([
+            'intent' => 'publish', 'salary_min' => '', 'salary_max' => '', 'salary_scale' => 'U4', 'positions' => '3',
+        ]));
+        $id = (int) $this->db->fetchValue('SELECT max(id) FROM jobs');
+        $slug = (string) $this->db->fetchValue('SELECT slug FROM jobs WHERE id = ?', [$id]);
+
+        $admin = $this->get("/admin/jobs/{$id}")->body();
+        $this->assertStringContainsString('<dt>Salary</dt><dd>Salary scale U4</dd>', $admin);
+        $this->assertStringContainsString('<dt>Positions</dt><dd>3</dd>', $admin);
+        $this->assertStringContainsString('name="salary_scale" value="U4"', $this->get("/admin/jobs/{$id}/edit")->body());
+
+        $this->assertStringContainsString('3 positions', $this->get('/')->body());
+        $page = $this->get("/jobs/{$slug}")->body();
+        $this->assertStringContainsString('Salary scale U4', $page);
+        $this->assertStringContainsString('Salary: Salary scale U4. 3 positions available.', $page);
+        preg_match('#<script type="application/ld\+json">(\{"@context":"https://schema.org/","@type":"JobPosting".+?)</script>#s', $page, $m);
+        $schema = json_decode($m[1] ?? '{}', true);
+        $this->assertSame(3, $schema['totalJobOpenings'] ?? null);
+        $this->assertArrayNotHasKey('baseSalary', $schema);
+        $this->assertStringContainsString('Salary scale:</strong> U4', (string) ($schema['description'] ?? ''));
+
+        $both = $this->post("/admin/jobs/{$id}", $this->jobForm(['salary_scale' => 'U4']));
+        $this->assertStatus(422, $both);
+        $this->assertStringContainsString('Give either a salary amount or a salary scale, not both.', $both->body());
+    }
+
     public function testDeadlineIsRequiredAndShownEverywhere(): void
     {
         $missing = $this->post('/admin/jobs', $this->jobForm(['expires_at' => '', 'intent' => 'publish']));
