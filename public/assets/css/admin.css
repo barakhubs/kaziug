@@ -81,6 +81,8 @@ input:focus, select:focus, textarea:focus, button:focus-visible {
 .side {
   background: var(--brand-dark); color: #e6f2ef; padding: 20px 14px;
   display: flex; flex-direction: column; gap: 22px;
+  /* Stays in view while the page scrolls, and scrolls on its own when the nav is taller than the window. */
+  position: sticky; top: 0; height: 100vh; overflow-y: auto; overscroll-behavior: contain;
 }
 .side-brand { display: grid; gap: 6px; justify-items: start; padding: 0 4px; color: #fff; text-decoration: none; }
 .side-brand small {
@@ -176,7 +178,7 @@ textarea { resize: vertical; }
 
 @media (max-width: 800px) {
   .app { grid-template-columns: 1fr; }
-  .side { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 10px; padding: 12px; }
+  .side { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 10px; padding: 12px; position: static; height: auto; overflow: visible; }
   .side-nav { display: flex; gap: 4px; flex-wrap: wrap; }
   .logout { margin-top: 0; margin-left: auto; }
   .side-brand small { display: none; }
