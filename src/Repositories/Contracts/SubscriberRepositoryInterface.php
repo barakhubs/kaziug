@@ -42,6 +42,13 @@ interface SubscriberRepositoryInterface
     /** @return array<string, int> */
     public function countByStatus(): array;
 
+    /**
+     * Sign-ups through the website (imports excluded), confirmations of those, and unsubscribes,
+     * each counted by when it happened, between $from (inclusive) and $to (exclusive).
+     * @return array{signups: int, confirmations: int, unsubscribes: int}
+     */
+    public function activityBetween(\DateTimeImmutable $from, \DateTimeImmutable $to): array;
+
     /** @return iterable<Subscriber> */
     public function each(?string $status): iterable;
 

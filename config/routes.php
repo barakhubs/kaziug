@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Controllers\Admin\AccountController;
+use App\Controllers\Admin\AnalyticsController;
 use App\Controllers\Admin\AuditLogController;
 use App\Controllers\Admin\AuthController;
 use App\Controllers\Admin\CategoriesController;
@@ -15,6 +16,7 @@ use App\Controllers\Admin\SocialProfilesController;
 use App\Controllers\Admin\SubscribersController;
 use App\Controllers\Public\SubscriptionController;
 use App\Controllers\Public\AboutController;
+use App\Controllers\Public\ApplyController;
 use App\Controllers\Public\LegalPageController;
 use App\Controllers\Public\CategoryController;
 use App\Controllers\Public\CityController;
@@ -28,6 +30,7 @@ use App\Controllers\Public\SavedJobsController;
 use App\Core\Http\Router;
 use App\Middleware\Authenticate;
 use App\Middleware\IdleTimeout;
+use App\Middleware\RecordPageView;
 use App\Middleware\SharePublicData;
 
 /*
@@ -37,19 +40,22 @@ use App\Middleware\SharePublicData;
 return static function (Router $r): void {
     // --- Public pages ---------------------------------------------------------------------
     $r->group('', [SharePublicData::class], function (Router $r): void {
-        $r->get('/', [JobListController::class, 'index']);
-        $r->get('/jobs/{slug:[a-z0-9-]+}', [JobShowController::class, 'show']);
-        $r->get('/categories/{slug:[a-z0-9-]+}', [CategoryController::class, 'show']);
-        $r->get('/jobs-in/{slug:[a-z0-9-]+}', [CityController::class, 'show']);
-        $r->get('/saved', [SavedJobsController::class, 'index']);
+        // Page views are counted here only: the subscription pages below have tokens in their URLs.
+        $r->group('', [RecordPageView::class], function (Router $r): void {
+            $r->get('/', [JobListController::class, 'index']);
+            $r->get('/jobs/{slug:[a-z0-9-]+}', [JobShowController::class, 'show']);
+            $r->get('/categories/{slug:[a-z0-9-]+}', [CategoryController::class, 'show']);
+            $r->get('/jobs-in/{slug:[a-z0-9-]+}', [CityController::class, 'show']);
+            $r->get('/saved', [SavedJobsController::class, 'index']);
 
-        $r->get('/about', [AboutController::class, 'show']);
-        $r->get('/privacy', [LegalPageController::class, 'privacy']);
-        $r->get('/terms', [LegalPageController::class, 'terms']);
-        $r->get('/cookies', [LegalPageController::class, 'cookies']);
-        $r->get('/contact', [ContactController::class, 'showContact']);
+            $r->get('/about', [AboutController::class, 'show']);
+            $r->get('/privacy', [LegalPageController::class, 'privacy']);
+            $r->get('/terms', [LegalPageController::class, 'terms']);
+            $r->get('/cookies', [LegalPageController::class, 'cookies']);
+            $r->get('/contact', [ContactController::class, 'showContact']);
+            $r->get('/cv-help', [ContactController::class, 'showCvHelp']);
+        });
         $r->post('/contact', [ContactController::class, 'sendContact']);
-        $r->get('/cv-help', [ContactController::class, 'showCvHelp']);
         $r->post('/cv-help', [ContactController::class, 'sendCvHelp']);
 
         $r->post('/subscribe', [SubscriptionController::class, 'subscribe']);
@@ -60,6 +66,7 @@ return static function (Router $r): void {
     });
 
     // --- Public machine endpoints -----------------------------------------------------------
+    $r->get('/jobs/{slug:[a-z0-9-]+}/apply/{channel:link|email}', [ApplyController::class, 'redirect']);
     $r->get('/health', [HealthController::class, 'show']);
     $r->get('/robots.txt', [SiteFilesController::class, 'robots']);
     $r->get('/favicon.ico', [SiteFilesController::class, 'favicon']);
@@ -132,6 +139,9 @@ return static function (Router $r): void {
 
         $r->get('/settings', [SiteSettingsController::class, 'show']);
         $r->post('/settings', [SiteSettingsController::class, 'update']);
+
+        $r->get('/analytics', [AnalyticsController::class, 'index']);
+        $r->get('/analytics/export.csv', [AnalyticsController::class, 'export']);
 
         $r->get('/audit', [AuditLogController::class, 'index']);
 

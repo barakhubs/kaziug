@@ -13,12 +13,15 @@ final class DashboardController
 {
     public function __construct(
         private readonly DashboardServiceInterface $dashboard,
+        private readonly AnalyticsPresenter $analytics,
         private readonly Responder $responder,
     ) {
     }
 
     public function index(Request $request): Response
     {
-        return $this->responder->view('admin/dashboard', $this->dashboard->summary());
+        $summary = $this->dashboard->summary();
+
+        return $this->responder->view('admin/dashboard', [...$summary, 'analyticsTiles' => $this->analytics->tiles($summary['analytics'])]);
     }
 }

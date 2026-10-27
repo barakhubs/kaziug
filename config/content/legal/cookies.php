@@ -5,13 +5,14 @@ declare(strict_types=1);
 /*
  * Cookie Policy shown at /cookies. It lists the cookies the site really sets (see
  * src/Middleware/CsrfCookie.php and StartSession.php, and localStorage in public/assets/js/site.js).
- * If you add analytics, ads or any other tracking, this policy must change and visitors must be
- * asked for consent first. Placeholders: {site} {url} {contact} {address}. Plain text only.
+ * The first-party analytics (src/Services/AnalyticsRecorder.php) stores nothing on the device, so it
+ * needs no cookie consent. If you add cookie- or storage-based analytics, ads or any other tracking,
+ * this policy must change and visitors must be asked for consent first. Placeholders: {site} {url} {contact} {address}. Plain text only.
  */
 return [
     'title' => 'Cookie Policy',
-    'updated' => '2026-10-23',
-    'summary' => '{site} uses only a small number of strictly necessary cookies, to keep forms secure and to show messages after you submit a form. We do not use analytics, advertising or tracking cookies, so we do not need to ask for your consent to cookies.',
+    'updated' => '2026-10-27',
+    'summary' => '{site} uses only a small number of strictly necessary cookies, to keep forms secure and to show messages after you submit a form. We do not use analytics, advertising or tracking cookies, so we do not need to ask for your consent to cookies. We count visits to the website without cookies, as explained below.',
     'sections' => [
         [
             'heading' => 'What cookies are',
@@ -45,7 +46,7 @@ return [
         [
             'heading' => 'What we do not use',
             'items' => [
-                'No analytics or statistics cookies.',
+                'No analytics or statistics cookies. We count page views and apply clicks on our own server, without cookies, local storage or anything else stored on your device, and without keeping your IP address (see our Privacy Policy). If your browser sends Do Not Track or Global Privacy Control, we do not count your visits at all.',
                 'No advertising, retargeting or social media tracking cookies or pixels.',
                 'No third-party cookies: our fonts and icons are hosted on our own server.',
             ],

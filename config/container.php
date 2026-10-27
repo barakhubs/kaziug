@@ -92,6 +92,18 @@ use App\Services\Contracts\ThrottleInterface;
 use App\Services\DatabaseHealthCheck;
 use App\Services\PasswordHasher;
 use App\Services\Throttle;
+use App\Repositories\Contracts\AnalyticsRepositoryInterface;
+use App\Repositories\Contracts\VisitorSaltRepositoryInterface;
+use App\Repositories\PgAnalyticsRepository;
+use App\Repositories\PgVisitorSaltRepository;
+use App\Services\AnalyticsExportService;
+use App\Services\AnalyticsRecorder;
+use App\Services\AnalyticsReportService;
+use App\Services\AnalyticsRollup;
+use App\Services\Contracts\AnalyticsExportServiceInterface;
+use App\Services\Contracts\AnalyticsRecorderInterface;
+use App\Services\Contracts\AnalyticsReportServiceInterface;
+use App\Services\Contracts\AnalyticsRollupInterface;
 
 /*
  * The single place where abstractions are mapped to implementations (Dependency Inversion).
@@ -149,6 +161,8 @@ return static function (Container $c, Config $config): void {
     $c->bind(NewsletterRepositoryInterface::class, PgNewsletterRepository::class);
     $c->bind(DeliveryRepositoryInterface::class, PgDeliveryRepository::class);
     $c->bind(LockInterface::class, PgAdvisoryLock::class);
+    $c->bind(AnalyticsRepositoryInterface::class, PgAnalyticsRepository::class);
+    $c->bind(VisitorSaltRepositoryInterface::class, PgVisitorSaltRepository::class);
 
     // --- Mail ---------------------------------------------------------------------------
     $c->bind(TransportFactoryInterface::class, PhpMailerTransportFactory::class);
@@ -175,4 +189,8 @@ return static function (Container $c, Config $config): void {
     $c->bind(NewsletterServiceInterface::class, NewsletterService::class);
     $c->bind(DashboardServiceInterface::class, DashboardService::class);
     $c->bind(ContactServiceInterface::class, ContactService::class);
+    $c->bind(AnalyticsRecorderInterface::class, AnalyticsRecorder::class);
+    $c->bind(AnalyticsRollupInterface::class, AnalyticsRollup::class);
+    $c->bind(AnalyticsReportServiceInterface::class, AnalyticsReportService::class);
+    $c->bind(AnalyticsExportServiceInterface::class, AnalyticsExportService::class);
 };

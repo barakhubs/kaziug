@@ -18,6 +18,9 @@ abstract class HttpTestCase extends DatabaseTestCase
     /** @var array<string, string> */
     protected array $cookies = [];
 
+    /** @var array<string, string> request headers (lower-case names) sent with every request */
+    protected array $headers = [];
+
     /** @param array<string, mixed> $query */
     protected function get(string $path, array $query = []): Response
     {
@@ -27,7 +30,7 @@ abstract class HttpTestCase extends DatabaseTestCase
             $query = [...$fromUrl, ...$query];
         }
 
-        return $this->send(new Request('GET', Request::normalisePath($parts[0]), $query, [], [], [], $this->cookies, $this->server()));
+        return $this->send(new Request('GET', Request::normalisePath($parts[0]), $query, [], [], $this->headers, $this->cookies, $this->server()));
     }
 
     /**
@@ -41,7 +44,7 @@ abstract class HttpTestCase extends DatabaseTestCase
             $data[Csrf::FIELD] = $this->csrfToken();
         }
 
-        return $this->send(new Request('POST', Request::normalisePath($path), [], $data, $files, [], $this->cookies, $this->server()));
+        return $this->send(new Request('POST', Request::normalisePath($path), [], $data, $files, $this->headers, $this->cookies, $this->server()));
     }
 
     protected function csrfToken(): string

@@ -8,7 +8,7 @@ server-rendered PHP templates and a little vanilla JavaScript for progressive en
 job pages with JSON-LD `JobPosting` and "how to apply" details, category pages, saved jobs (in the
 browser), a double-opt-in newsletter, a Contact page and a paid CV help page (form + WhatsApp).
 
-**Back office (`/admin`):** dashboard, jobs (status workflow, history, bulk actions, details page),
+**Back office (`/admin`):** dashboard, analytics (cookieless visitor, job view, apply-click and search statistics), jobs (status workflow, history, bulk actions, details page),
 categories, newsletters (preview, test, send now or schedule, delivery tracking), subscribers (CSV
 import/export), Settings with tabs (General: site details, logo, WhatsApp number, CV price,
 maintenance mode · Social profiles · Email/SMTP), account and audit log. Lists are sortable,
@@ -81,6 +81,7 @@ Open <http://localhost:8000> for the site and <http://localhost:8000/admin> for 
 | `php bin/console seed` | Loads sample data. Never runs automatically; refuses in production without `--force`. `--only=jobs` or `--only=social` |
 | `php bin/console admin:create` | Creates the single admin (refuses if one exists) |
 | `php bin/console newsletter:work` | Sends one batch of queued newsletter emails. `--loop` runs a batch every minute; `--max-runs=N` stops after N |
+| `php bin/console analytics:rollup` | Updates the daily analytics totals and deletes raw analytics events older than a year. The analytics pages do the same on demand; schedule it nightly so retention is enforced even when nobody looks |
 | `php bin/console config:check` | Checks PHP version and extensions, required env vars, APP_KEY, database version, pending migrations and storage permissions. Exits non-zero on any failure |
 | `vendor/bin/phpunit` | Runs the test suite (needs the `kaziug_test` database from Docker) |
 
@@ -201,6 +202,9 @@ is `public/`, all configuration comes from environment variables, the app writes
    Cloud restarts it if it exits. Background processes run on **every replica**; that is safe
    (see section 5) but only one replica sends at a time. If the environment hibernates / scales to
    zero, keep the worker cluster awake so scheduled newsletters go out on time.
+   Also schedule `php bin/console analytics:rollup` once a day (a scheduled command, or a cron
+   entry such as `15 2 * * * cd /path/to/kaziug && php bin/console analytics:rollup`). It is safe
+   on several replicas: it takes an advisory lock and skips if another run holds it.
 7. **First deploy:** open the environment's **Commands** tab and run `php bin/console admin:create`.
    If the command runner can't answer prompts, pipe the three answers (email, password, password)
    instead. The password will then sit in that command's history, so change it from **Account**
@@ -356,6 +360,7 @@ Admin (all behind auth except login): `/admin/login`, `/admin/logout`, `/admin` 
 | Saved jobs | Stay in `localStorage` (same key as the prototype); `/saved?ids=` renders whichever are still visible. |
 | Subscriber CSV import | Imported rows become **active** only after the admin confirms that everyone in the file already consented (the import is audited). |
 | Confirmation emails | Sent synchronously when someone subscribes (they're one-off and transactional, not newsletters); on SMTP failure the subscriber stays pending and can submit again. |
+| Analytics | **First-party and cookieless**, no third-party script. `RecordPageView` (on public pages whose URLs hold no tokens, so not the subscription pages) and `/jobs/{slug}/apply/{link\|email}` (a redirect to the job’s stored link or `mailto:`, never to a URL from the request) write `analytics_events`. No IP or user agent is stored: the visitor id is an HMAC of IP + user agent with a random **daily salt** that is deleted when the day ends, so visitors are unique per day only. Not counted: bots (user agent), `DNT: 1` / `Sec-GPC: 1`, the signed-in admin, non-200 responses. Searches are counted on their first results page only. Raw events are kept **1 year**, then only `analytics_daily` totals remain (rebuilt by `AnalyticsRollup` on each analytics page load and by `analytics:rollup`). Newsletter emails have no open or click tracking. Privacy and Cookie policies describe all of this. |
 | Logo storage | In Postgres (`site_assets`), because Laravel Cloud's disk is reset on deploy. |
 | Sessions | In Postgres, for the same reason and to support several replicas. |
 

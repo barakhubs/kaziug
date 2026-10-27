@@ -87,3 +87,42 @@
     sync();
   });
 })();
+
+(() => {
+  'use strict';
+
+  // Analytics charts: a crosshair and tooltip that snap to the nearest day. The same numbers are
+  // in the "Daily figures as a table" view, so nothing depends on this.
+  document.querySelectorAll('[data-chart]').forEach((figure) => {
+    const svg = figure.querySelector('svg');
+    const tip = figure.querySelector('.chart-tip');
+    const crosshair = svg.querySelector('.chart-crosshair');
+    const dot = svg.querySelector('.chart-dot');
+    const points = [...svg.querySelectorAll('.chart-point')].map((el) => ({
+      x: Number(el.getAttribute('cx')), y: Number(el.getAttribute('cy')), label: el.dataset.label, value: el.dataset.value,
+    }));
+    if (points.length === 0) return;
+    const viewWidth = svg.viewBox.baseVal.width;
+    const viewHeight = svg.viewBox.baseVal.height;
+
+    const hide = () => { tip.hidden = true; crosshair.setAttribute('hidden', ''); dot.setAttribute('hidden', ''); };
+    svg.addEventListener('pointermove', (event) => {
+      const box = svg.getBoundingClientRect();
+      const x = ((event.clientX - box.left) / box.width) * viewWidth;
+      const point = points.reduce((best, p) => (Math.abs(p.x - x) < Math.abs(best.x - x) ? p : best));
+      crosshair.setAttribute('x1', point.x);
+      crosshair.setAttribute('x2', point.x);
+      crosshair.removeAttribute('hidden');
+      dot.setAttribute('cx', point.x);
+      dot.setAttribute('cy', point.y);
+      dot.removeAttribute('hidden');
+      tip.querySelector('strong').textContent = point.value;
+      tip.querySelector('span').textContent = point.label;
+      tip.hidden = false;
+      const left = (point.x / viewWidth) * box.width;
+      tip.style.left = `${Math.min(Math.max(left, 60), box.width - 60)}px`;
+      tip.style.top = `${(point.y / viewHeight) * box.height}px`;
+    });
+    svg.addEventListener('pointerleave', hide);
+  });
+})();

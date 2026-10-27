@@ -15,7 +15,8 @@ interface DashboardServiceInterface
      *   latestCounts: ?\App\Domain\DeliveryCounts,
      *   categories: list<\App\Domain\Category>,
      *   recentAudit: list<array<string, mixed>>,
-     *   mailConfigured: bool
+     *   mailConfigured: bool,
+     *   analytics: array{totals: \App\Domain\AnalyticsMetrics, previous: \App\Domain\AnalyticsMetrics, jobViews: int, previousJobViews: int}
      * }
      */
     public function summary(): array;

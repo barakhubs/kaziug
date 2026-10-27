@@ -125,6 +125,25 @@ final class PgSubscriberRepository implements SubscriberRepositoryInterface
         return $counts;
     }
 
+    public function activityBetween(\DateTimeImmutable $from, \DateTimeImmutable $to): array
+    {
+        // Imported rows have no consent_ip: they joined outside the site and were never asked to confirm.
+        $row = $this->db->fetchOne(
+            'WITH r AS (SELECT CAST(:from AS timestamptz) AS a, CAST(:to AS timestamptz) AS b)
+             SELECT count(*) FILTER (WHERE consent_ip IS NOT NULL AND created_at >= r.a AND created_at < r.b) AS signups,
+                    count(*) FILTER (WHERE consent_ip IS NOT NULL AND confirmed_at >= r.a AND confirmed_at < r.b) AS confirmations,
+                    count(*) FILTER (WHERE unsubscribed_at >= r.a AND unsubscribed_at < r.b) AS unsubscribes
+             FROM subscribers, r',
+            ['from' => $from->format(DATE_ATOM), 'to' => $to->format(DATE_ATOM)],
+        ) ?? [];
+
+        return [
+            'signups' => (int) ($row['signups'] ?? 0),
+            'confirmations' => (int) ($row['confirmations'] ?? 0),
+            'unsubscribes' => (int) ($row['unsubscribes'] ?? 0),
+        ];
+    }
+
     public function each(?string $status): iterable
     {
         // Keyset pagination keeps memory flat for large exports.

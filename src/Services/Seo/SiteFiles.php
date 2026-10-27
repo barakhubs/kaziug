@@ -23,7 +23,7 @@ final class SiteFiles
         'GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'PerplexityBot', 'Perplexity-User', 'ClaudeBot',
         'Claude-SearchBot', 'Claude-User', 'Google-Extended', 'Applebot-Extended', 'CCBot', 'Bingbot',
     ];
-    private const PRIVATE_PATHS = ['/admin', '/saved', '/subscribe', '/unsubscribe'];
+    private const PRIVATE_PATHS = ['/admin', '/saved', '/subscribe', '/unsubscribe', '/jobs/*/apply/'];
     private const FEED_SIZE = 50;
 
     public function __construct(

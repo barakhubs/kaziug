@@ -7,11 +7,13 @@ namespace App\Controllers\Admin;
 use App\Core\Http\Request;
 use App\Core\Http\Responder;
 use App\Core\Http\Response;
+use App\Domain\DateRange;
 use App\Domain\DomainException;
 use App\Domain\Job;
 use App\Domain\JobStatus;
 use App\Domain\TableQuery;
 use App\Repositories\Contracts\JobWriteRepositoryInterface;
+use App\Services\Contracts\AnalyticsReportServiceInterface;
 use App\Services\Contracts\CategoryServiceInterface;
 use App\Services\Contracts\JobServiceInterface;
 use App\Validation\JobValidator;
@@ -20,11 +22,15 @@ final class JobsController
 {
     use AdminContext;
 
+    private const STATS_DAYS = 30;
+
     public function __construct(
         private readonly JobServiceInterface $jobs,
         private readonly CategoryServiceInterface $categories,
         private readonly JobValidator $validator,
         private readonly Responder $responder,
+        private readonly AnalyticsReportServiceInterface $analytics,
+        private readonly AnalyticsPresenter $presenter,
     ) {
     }
 
@@ -52,7 +58,15 @@ final class JobsController
     {
         $job = $this->jobs->get($this->id($request));
 
-        return $this->responder->view('admin/jobs/show', ['job' => $job, 'history' => $this->jobs->history($job->id)]);
+        $stats = $this->analytics->forJob($job->id, DateRange::lastDays(self::STATS_DAYS));
+
+        return $this->responder->view('admin/jobs/show', [
+            'job' => $job,
+            'history' => $this->jobs->history($job->id),
+            'stats' => $stats['totals'],
+            'statsDays' => self::STATS_DAYS,
+            'statsChart' => $this->presenter->chart('Views per day', $stats['series'], 'pageviews', 150, 300),
+        ]);
     }
 
     public function create(Request $request): Response

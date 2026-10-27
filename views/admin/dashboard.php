@@ -6,6 +6,7 @@
 /** @var list<\App\Domain\Category> $categories */
 /** @var list<array<string, mixed>> $recentAudit */
 /** @var bool $mailConfigured */
+/** @var list<array{label: string, value: string, delta: array{text: string, dir: string}|null, hint: string}> $analyticsTiles */
 /** @var \App\Domain\SiteSettings $site */
 use App\Core\Format;
 
@@ -45,6 +46,19 @@ $max = max([1, ...array_map(static fn ($c) => $c->jobCount, $withJobs)]);
     <div class="stat"><span>Last newsletter</span><strong class="stat-text">None yet</strong></div>
   <?php endif; ?>
 </div>
+
+<section class="dash-analytics">
+  <div class="section-head"><h2>Last 7 days</h2><a class="link-reset" href="/admin/analytics?range=7">Full analytics →</a></div>
+  <div class="stats">
+    <?php foreach ($analyticsTiles as $tile): ?>
+      <div class="stat" title="<?= e($tile['hint']) ?>">
+        <span><?= e($tile['label']) ?></span>
+        <strong><?= e($tile['value']) ?></strong>
+        <?php if ($tile['delta'] !== null): ?><span class="delta <?= e($tile['delta']['dir']) ?>"><?= e($tile['delta']['text']) ?> <span class="muted">vs previous 7 days</span></span><?php endif; ?>
+      </div>
+    <?php endforeach; ?>
+  </div>
+</section>
 
 <div class="dash-grid">
   <section class="panel">

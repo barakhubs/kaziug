@@ -1,6 +1,10 @@
 <?php
 /** @var \App\Domain\Job $job */
 /** @var list<array<string, mixed>> $history */
+/** @var \App\Domain\AnalyticsMetrics $stats */
+/** @var int $statsDays */
+/** @var \App\Controllers\Admin\LineChart $statsChart */
+use App\Controllers\Admin\AnalyticsPresenter;
 use App\Core\Format;
 
 $this->layout('layouts/admin');
@@ -78,6 +82,15 @@ $this->set('title', $job->title);
     <?php else: ?>
       <p class="hint">Archived jobs can't change status.</p>
     <?php endif; ?>
+
+    <div class="panel-head section-gap"><h2>Last <?= e($statsDays) ?> days</h2><a href="/admin/analytics">Analytics →</a></div>
+    <dl class="job-stats">
+      <div><dt>Views</dt><dd><?= e(number_format($stats->pageviews)) ?></dd></div>
+      <div><dt>Apply clicks</dt><dd><?= e(number_format($stats->applies)) ?></dd></div>
+      <div><dt>Visitors</dt><dd><?= e(number_format($stats->visitors)) ?></dd></div>
+      <div><dt>Apply rate</dt><dd><?= e(AnalyticsPresenter::percent($stats->applyRate())) ?></dd></div>
+    </dl>
+    <?= $this->insert('partials/line_chart', ['chart' => $statsChart, 'id' => 'job-views-chart']) ?>
 
     <h2 class="section-gap">History</h2>
     <ol class="timeline">

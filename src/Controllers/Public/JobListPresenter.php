@@ -9,6 +9,8 @@ use App\Domain\Category;
 use App\Domain\Job;
 use App\Domain\JobSearchCriteria;
 use App\Domain\NotFoundException;
+use App\Domain\PageContext;
+use App\Domain\PageType;
 use App\Services\Contracts\CategoryServiceInterface;
 use App\Services\Contracts\JobSearchServiceInterface;
 use App\Services\Contracts\SettingsReaderInterface;
@@ -36,16 +38,18 @@ final class JobListPresenter
     {
         $criteria = JobSearchCriteria::fromQuery($request->queryAll(), $category?->slug, $city['name'] ?? null);
         $result = $this->search->search($criteria, $this->settings->site()->jobsPerPage);
+        $selected = $this->selected($request, $result->items);
+        // Before the page number is clamped: asking for page 2 is paging through a search, not a new one.
+        $request->setAttribute(PageContext::ATTRIBUTE, $this->pageContext($request, $criteria, $result->pagination->total, $selected, $category, $city));
         $criteria = $criteria->withPage($result->pagination->page);
-        $cities = $this->search->cities();
 
         return [
             'criteria' => $criteria,
             'result' => $result,
-            'selected' => $this->selected($request, $result->items),
+            'selected' => $selected,
             'categories' => $this->categories->active(),
             'locations' => $this->search->locations(),
-            'cities' => $cities,
+            'cities' => $this->search->cities(),
             'category' => $category,
             'city' => $city,
             'includeCategory' => $category === null,
@@ -79,6 +83,39 @@ final class JobListPresenter
         }
 
         return [$this->structuredData->organization(), $this->structuredData->website()];
+    }
+
+    /**
+     * For analytics: which list this is, the job opened in the detail pane (only when the visitor
+     * picked it, not the default first result), and the search, counted on its first page only.
+     * @param array{name: string, slug: string, count: int}|null $city
+     */
+    private function pageContext(Request $request, JobSearchCriteria $criteria, int $total, ?Job $selected, ?Category $category, ?array $city): PageContext
+    {
+        $picked = is_string($request->query('job')) && $selected !== null ? $selected : null;
+        $filters = array_keys(array_filter([
+            'location' => $city === null && $criteria->location !== '',
+            'category' => $category === null && $criteria->categorySlug !== null,
+            'type' => $criteria->types !== [],
+            'experience' => $criteria->experience !== null,
+            'posted' => $criteria->postedWithinDays !== null,
+            'remote' => $criteria->remoteOnly,
+            'salary' => $criteria->salaryMin !== null || $criteria->salaryMax !== null,
+        ]));
+        $isSearch = ($criteria->q !== '' || $filters !== []) && $criteria->page === 1;
+
+        return new PageContext(
+            match (true) {
+                $category !== null => PageType::Category,
+                $city !== null => PageType::City,
+                default => PageType::Home,
+            },
+            $picked?->id,
+            $category?->id ?? $picked?->categoryId,
+            $isSearch && $criteria->q !== '' ? mb_strtolower($criteria->q) : null,
+            $isSearch ? $filters : [],
+            $isSearch ? $total : null,
+        );
     }
 
     /** The job in the detail pane: ?job=<slug> if visible, otherwise the first result. */

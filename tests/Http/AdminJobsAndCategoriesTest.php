@@ -93,9 +93,11 @@ final class AdminJobsAndCategoriesTest extends AdminHttpTestCase
         $this->assertStringContainsString('Build dashboards', $body);
         $this->assertStringContainsString('Created as published', $body);
 
-        $public = $this->get('/jobs/' . $this->db->fetchValue('SELECT slug FROM jobs'))->body();
+        $slug = (string) $this->db->fetchValue('SELECT slug FROM jobs');
+        $public = $this->get('/jobs/' . $slug)->body();
         $this->assertStringContainsString('Apply / more info', $public);
-        $this->assertStringContainsString('mailto:hr@insights.example', $public);
+        $this->assertStringContainsString("/jobs/{$slug}/apply/email", $public);
+        $this->assertStringContainsString('hr@insights.example', $public);
     }
 
     public function testGovernmentJobWithSalaryScaleAndPositions(): void

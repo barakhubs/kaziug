@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 return [
     'title' => 'Privacy Policy',
-    'updated' => '2026-10-23',
+    'updated' => '2026-10-27',
     'summary' => 'This policy explains what personal data {site} collects, why, how long we keep it, who we share it with and the rights you have under the Data Protection and Privacy Act, 2019 of Uganda. In short: we collect very little, we never sell your data, and you can ask us to see, correct or delete it at any time.',
     'sections' => [
         [
@@ -28,10 +28,11 @@ return [
                 'Contact and CV help forms: your name, email address, phone or WhatsApp number if you give it, and your message. These are sent to us by email and are not stored in the website’s database.',
                 'CV help service: the CV and other details you send us by email or WhatsApp so we can work on your CV.',
                 'Messages you send us directly by email or WhatsApp.',
+                'Website usage statistics: which pages and jobs are viewed, which application links or email addresses are clicked, the words typed into the job search and the filters used, the website or campaign link that brought you to us (only the site name, never the full address), and whether you use a phone, tablet or computer. We do not use cookies for this and we do not store your IP address or browser details: they are combined with a random code that changes every day into an anonymous visitor number, and the code is deleted at the end of the day, so we cannot recognise you on a later day or work out who you are. Visits are not counted at all if your browser sends a Do Not Track or Global Privacy Control signal.',
                 'Security information: when a form is submitted we briefly record the IP address it came from, to stop spam and abuse (for example, limiting how many messages can be sent from one address). Our hosting provider also keeps standard technical logs of requests to the website, which include IP addresses.',
             ],
             'after' => [
-                'We do not use analytics, advertising or tracking tools, and we do not use tracking pixels. Our fonts and icons are hosted on our own server, so simply viewing our pages does not send your data to other companies.',
+                'We do not use third-party analytics, advertising or tracking tools, cookies or tracking pixels, and our job alert emails do not track whether you open them or click their links. Our fonts and icons are hosted on our own server, so simply viewing our pages does not send your data to other companies.',
                 'Jobs you save are stored only in your own browser on your device. We cannot see them unless you open the Saved jobs page, which sends us the list of saved job numbers so we can show those jobs.',
                 'You do not need an account to use {site}, and we do not collect information to apply for jobs: when you apply, you do so directly with the employer.',
             ],
@@ -41,6 +42,7 @@ return [
             'items' => [
                 'To send you job alerts, only after you have agreed and confirmed your email address. Our legal basis is your consent, which you can withdraw at any time with the unsubscribe link in every email.',
                 'To answer your messages and to provide the CV help service you ask for. Our legal basis is that you asked us to, and, for the CV service, our agreement with you.',
+                'To understand how the website is used, for example which jobs people look at and apply for and what they search for but cannot find, so we can improve it and show employers how their adverts perform (only as totals, never about individual visitors). Our legal basis is our legitimate interest in running and improving the service; because the statistics are anonymous and you can switch them off with Do Not Track or Global Privacy Control, this has very little impact on you.',
                 'To keep the website secure and protect it from spam, fraud and abuse. Our legal basis is our legitimate interest, and our duty, in keeping personal data and the service secure.',
                 'To meet our legal obligations, for example if a court or authority lawfully requires information.',
             ],
@@ -75,6 +77,7 @@ return [
                 'Contact and CV help messages: only as long as we need them to deal with your request and any follow-up, after which we delete them.',
                 'CV files you send us: until the CV work is finished, after which we delete them unless you ask us to keep them for future updates.',
                 'Security records of IP addresses used to limit spam: deleted automatically within 2 days.',
+                'Website usage statistics: the anonymous record of each page view is deleted automatically after 1 year; after that we keep only daily totals (for example “120 views of this job on 3 March”), which say nothing about any visitor. The daily code used to make visitor numbers is deleted at the end of each day.',
             ],
         ],
         [

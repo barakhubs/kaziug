@@ -7,6 +7,7 @@ namespace App\Controllers\Public;
 use App\Core\Http\Request;
 use App\Core\Http\Responder;
 use App\Core\Http\Response;
+use App\Domain\PageContext;
 use App\Domain\Slug;
 use App\Services\Contracts\JobSearchServiceInterface;
 use App\Services\JobPostingSchema;
@@ -27,6 +28,7 @@ final class JobShowController
     public function show(Request $request): Response
     {
         $job = $this->search->findBySlug((string) $request->attribute('slug'));
+        $request->setAttribute(PageContext::ATTRIBUTE, PageContext::job($job));
 
         return $this->responder->view('public/jobs/show', [
             'job' => $job,

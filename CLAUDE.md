@@ -25,7 +25,7 @@ Full-stack job board for Uganda with a single-admin back office. Read this file 
 - `src/Validation`, `src/Middleware` (auth, CSRF, rate limit, security headers).
 - `views/public`, `views/admin`, plus shared partials. Templates escape output through the shared helper. No logic beyond display.
 - `database/migrations` (numbered, transactional SQL), `database/seeds`.
-- `bin/console`: migrate, seed, admin:create, newsletter:work, config:check.
+- `bin/console`: migrate, seed, admin:create, newsletter:work, analytics:rollup, config:check.
 - `storage/logs`, `storage/uploads` (outside the web root). `tests/` for PHPUnit.
 
 ## SOLID rules
@@ -59,6 +59,7 @@ Full-stack job board for Uganda with a single-admin back office. Read this file 
 - Search uses PostgreSQL full-text search over the tsvector column.
 - Every newsletter email includes a working unsubscribe link and the physical address from site settings.
 - Job pages include meta tags and JSON-LD JobPosting markup.
+- Analytics is first-party and cookieless: no third-party scripts, no email open/click tracking. Never store IP addresses, user agents or full referrer URLs in `analytics_events`. Raw events are kept 1 year (`AnalyticsRollup::RETENTION_DAYS`), daily totals after that. Update the Privacy and Cookie policies before collecting anything new.
 
 ## Back office rules
 - Status changes follow: draft → published → closed → archived. Archiving does not delete. Show the status history.
@@ -77,6 +78,7 @@ php bin/console seed                  # sample data, only when requested
 php bin/console admin:create
 php -S localhost:8000 -t public public/index.php   # local server (router script needed for paths with dots)
 php bin/console newsletter:work       # one batch; --loop runs every minute (Laravel Cloud background process)
+php bin/console analytics:rollup      # daily analytics totals + 1-year raw-event purge (schedule nightly; also runs on analytics page loads)
 vendor/bin/phpunit
 ```
 

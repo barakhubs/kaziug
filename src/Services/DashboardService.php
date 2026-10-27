@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Domain\DateRange;
+use App\Services\Contracts\AnalyticsReportServiceInterface;
 use App\Services\Contracts\AuditServiceInterface;
 use App\Services\Contracts\CategoryServiceInterface;
 use App\Services\Contracts\DashboardServiceInterface;
@@ -14,6 +16,8 @@ use App\Services\Contracts\SubscriberAdminServiceInterface;
 
 final class DashboardService implements DashboardServiceInterface
 {
+    public const ANALYTICS_DAYS = 7;
+
     public function __construct(
         private readonly JobServiceInterface $jobs,
         private readonly SubscriberAdminServiceInterface $subscribers,
@@ -21,6 +25,7 @@ final class DashboardService implements DashboardServiceInterface
         private readonly CategoryServiceInterface $categories,
         private readonly AuditServiceInterface $audit,
         private readonly SmtpSettingsServiceInterface $smtp,
+        private readonly AnalyticsReportServiceInterface $analytics,
     ) {
     }
 
@@ -36,6 +41,7 @@ final class DashboardService implements DashboardServiceInterface
             'categories' => $this->categories->all(),
             'recentAudit' => $this->audit->recent(10),
             'mailConfigured' => $this->smtp->settings()->isConfigured(),
+            'analytics' => $this->analytics->summary(DateRange::lastDays(self::ANALYTICS_DAYS)),
         ];
     }
 }

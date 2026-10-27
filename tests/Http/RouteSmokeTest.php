@@ -40,6 +40,7 @@ final class RouteSmokeTest extends AdminHttpTestCase
                 '/jobs-in/' => 'kampala',
             ],
             'token' => str_repeat('k', 43),
+            'channel' => 'link',
         ];
 
         $paths = [];
@@ -74,7 +75,7 @@ final class RouteSmokeTest extends AdminHttpTestCase
             $status = $this->get($path)->status();
             $this->assertLessThan(500, $status, "{$path} as admin");
             if ($path !== '/subscribe/confirm/' . str_repeat('k', 43)) {
-                $this->assertContains($status, [200, 301, 303, 404], "{$path} as admin returned {$status}");
+                $this->assertContains($status, [200, 301, 302, 303, 404], "{$path} as admin returned {$status}");
             }
         }
 
