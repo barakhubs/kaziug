@@ -120,4 +120,26 @@ final class ContactPagesTest extends HttpTestCase
         $this->assertSame('120000', $this->db->fetchValue("SELECT value FROM settings WHERE `key` = 'cv_service_price'"));
         $this->assertStringContainsString('value="+256772123456"', $this->get('/admin/settings')->body());
     }
+
+    public function testWhatsappChannelButtonFollowsTheSetting(): void
+    {
+        $channel = 'https://whatsapp.com/channel/0029VbEFW1E002TGE4pQ5Z0U';
+        $this->assertStringNotContainsString('class="wa-float"', $this->get('/')->body(), 'hidden until a link is set');
+
+        $this->container->get(\App\Services\Contracts\AdminAccountServiceInterface::class)
+            ->createAdmin('admin@kazi.ug', 'a long test passphrase', \App\Domain\Actor::console());
+        $this->post('/admin/login', ['email' => 'admin@kazi.ug', 'password' => 'a long test passphrase']);
+        $base = ['site_name' => 'KaziUG', 'jobs_per_page' => '8'];
+
+        foreach (['https://evil.example/channel/0029VbEFW1E002', 'http://whatsapp.com/channel/0029VbEFW1E002', 'https://whatsapp.com/channel/x"onclick'] as $bad) {
+            $this->assertStatus(422, $this->post('/admin/settings', [...$base, 'whatsapp_channel_url' => $bad]), $bad);
+        }
+        $this->assertRedirect('/admin/settings', $this->post('/admin/settings', [...$base, 'whatsapp_channel_url' => " {$channel}/ "]));
+        $this->assertSame(json_encode($channel, JSON_UNESCAPED_SLASHES), $this->db->fetchValue("SELECT value FROM settings WHERE `key` = 'whatsapp_channel_url'"));
+
+        $this->assertStringNotContainsString('class="wa-float"', $this->get('/admin/settings')->body(), 'never in the back office');
+        foreach (['/', '/contact', '/cv-help'] as $path) {
+            $this->assertStringContainsString('<a class="wa-float" href="' . $channel . '" target="_blank" rel="noopener"', $this->get($path)->body(), $path);
+        }
+    }
 }

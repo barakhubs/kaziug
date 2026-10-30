@@ -17,6 +17,7 @@ final class SiteSettings
         'maintenance_mode' => false,
         'whatsapp_number' => '',
         'cv_service_price' => 100000,
+        'whatsapp_channel_url' => '',
     ];
 
     public function __construct(
@@ -31,6 +32,7 @@ final class SiteSettings
         public readonly ?string $logoVersion,
         public readonly string $whatsappNumber = '',
         public readonly int $cvServicePrice = 100000,
+        public readonly string $whatsappChannelUrl = '',
     ) {
     }
 
@@ -51,6 +53,7 @@ final class SiteSettings
             $logoVersion,
             preg_replace('/\D/', '', (string) $v['whatsapp_number']) ?? '',
             max(0, (int) $v['cv_service_price']),
+            (string) $v['whatsapp_channel_url'],
         );
     }
 
@@ -87,6 +90,12 @@ final class SiteSettings
         return 'https://wa.me/' . $this->whatsappNumber . ($message !== '' ? '?text=' . rawurlencode($message) : '');
     }
 
+    /** Whether to show the floating "Join our WhatsApp channel" button. */
+    public function hasWhatsappChannel(): bool
+    {
+        return $this->whatsappChannelUrl !== '';
+    }
+
     /** "+256 772 123456" style display of the stored digits. */
     public function whatsappDisplay(): string
     {
@@ -115,6 +124,7 @@ final class SiteSettings
             'maintenance_mode' => $this->maintenanceMode,
             'whatsapp_number' => $this->whatsappNumber,
             'cv_service_price' => $this->cvServicePrice,
+            'whatsapp_channel_url' => $this->whatsappChannelUrl,
         ];
     }
 }

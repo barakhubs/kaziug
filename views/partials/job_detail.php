@@ -24,6 +24,7 @@ $headingTag = $inPane ? 'h2' : 'h1';
     <a class="<?= $job->applyUrl !== null ? 'btn-ghost' : 'btn-primary' ?>" href="/jobs/<?= e($job->slug) ?>/apply/email" rel="nofollow">Apply by email</a>
   <?php endif; ?>
   <button class="btn-ghost js-only" type="button" data-save="<?= e($job->id) ?>" aria-pressed="false" hidden>☆ Save job</button>
+  <button class="btn-ghost js-only" type="button" data-share-url="<?= e(($appUrl ?? '') . '/jobs/' . $job->slug) ?>" data-share-title="<?= e($job->title . ' at ' . $job->company) ?>" hidden><?= $this->insert('partials/icon_share') ?> Share</button>
   <?php if ($inPane): ?>
     <a class="btn-ghost" href="/jobs/<?= e($job->slug) ?>">Open full page</a>
   <?php endif; ?>

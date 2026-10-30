@@ -78,8 +78,54 @@
     toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
   }
 
+  /* ---------- Share / copy link ---------- */
+  // Phones get the system share sheet (WhatsApp, SMS…); everything else copies the link.
+  const TOUCH = window.matchMedia('(pointer: coarse)');
+
+  async function copyText(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      // Clipboard API needs HTTPS and permission; fall back to a temporary text field.
+      const field = document.createElement('textarea');
+      field.value = text;
+      field.setAttribute('readonly', '');
+      field.style.position = 'fixed';
+      field.style.opacity = '0';
+      document.body.append(field);
+      field.select();
+      const ok = document.execCommand('copy');
+      field.remove();
+      return ok;
+    }
+  }
+
+  async function shareJob(button) {
+    const url = button.dataset.shareUrl;
+    const title = button.dataset.shareTitle || document.title;
+    if (TOUCH.matches && navigator.share) {
+      try {
+        await navigator.share({ title, url });
+        return;
+      } catch (error) {
+        if (error && error.name === 'AbortError') return;
+      }
+    }
+    toast(await copyText(url) ? 'Link copied' : url);
+  }
+
+  document.querySelectorAll('[data-share-url]').forEach((button) => { button.hidden = false; });
+
   /* ---------- Wiring ---------- */
   document.addEventListener('click', (event) => {
+    const shareButton = event.target.closest('[data-share-url]');
+    if (shareButton) {
+      event.preventDefault();
+      shareJob(shareButton);
+      return;
+    }
+
     const saveButton = event.target.closest('[data-save]');
     if (saveButton) {
       event.preventDefault();

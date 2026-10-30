@@ -54,5 +54,8 @@ $fullTitle = isset($pageTitle) && $pageTitle !== '' ? $pageTitle . ' · ' . $sit
   <?= $content ?>
 
   <?= $this->insert('partials/public_footer') ?>
+  <?php if ($site->hasWhatsappChannel()): ?>
+    <a class="wa-float" href="<?= e($site->whatsappChannelUrl) ?>" target="_blank" rel="noopener" aria-label="Join our WhatsApp channel"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i><span>Join our channel</span></a>
+  <?php endif; ?>
 </body>
 </html>

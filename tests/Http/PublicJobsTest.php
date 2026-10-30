@@ -160,6 +160,17 @@ final class PublicJobsTest extends HttpTestCase
         $this->assertStringContainsString('haven’t saved any jobs', $this->get('/saved')->body());
     }
 
+    public function testCardsAndJobPageOfferShareWithTheFullJobUrl(): void
+    {
+        $slug = $this->slug('Agronomist');
+        $share = 'data-share-url="http://localhost/jobs/' . $slug . '" data-share-title="Agronomist at ';
+
+        $list = $this->get('/')->body();
+        $this->assertSame($this->cards($list), substr_count($list, 'class="share js-only"'), 'one share button per card');
+        $this->assertStringContainsString($share, $list);
+        $this->assertStringContainsString($share, $this->get("/jobs/{$slug}")->body());
+    }
+
     public function testDetailPaneShowsRequestedJob(): void
     {
         $body = $this->get('/', ['job' => $this->slug('Agronomist')])->body();

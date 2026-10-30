@@ -3,6 +3,8 @@
 /** @var bool $active */
 /** @var string $paneUrl */
 use App\Core\Format;
+
+$shareUrl = ($appUrl ?? '') . '/jobs/' . $job->slug;
 ?>
 <li class="card<?= $active ? ' active' : '' ?>" data-pane-url="<?= e($paneUrl) ?>">
   <div class="card-top">
@@ -10,7 +12,10 @@ use App\Core\Format;
       <h3 class="title"><a href="/jobs/<?= e($job->slug) ?>"><?= e($job->title) ?></a></h3>
       <p class="company"><?= e($job->company) ?> · <?= e($job->location) ?><?= $job->isRemote ? ' · Remote' : '' ?></p>
     </div>
-    <button class="save js-only" type="button" data-save="<?= e($job->id) ?>" aria-pressed="false" aria-label="Save <?= e($job->title) ?>" hidden>☆</button>
+    <div class="card-actions">
+      <button class="share js-only" type="button" data-share-url="<?= e($shareUrl) ?>" data-share-title="<?= e($job->title . ' at ' . $job->company) ?>" aria-label="Share <?= e($job->title) ?>" title="Share or copy link" hidden><?= $this->insert('partials/icon_share') ?></button>
+      <button class="save js-only" type="button" data-save="<?= e($job->id) ?>" aria-pressed="false" aria-label="Save <?= e($job->title) ?>" hidden>☆</button>
+    </div>
   </div>
   <p class="salary"><?= e(Format::jobSalary($job)) ?></p>
   <p class="snippet"><?= e($job->summary) ?></p>

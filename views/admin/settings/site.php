@@ -44,6 +44,10 @@ $err = static fn (string $key): string => isset($errors[$key]) ? 'has-error' : '
       <input type="tel" name="whatsapp_number" value="<?= e($v('whatsapp_number') !== '' && ctype_digit((string) $v('whatsapp_number')) ? '+' . $v('whatsapp_number') : $v('whatsapp_number')) ?>" placeholder="+256 772 123456">
       <?= $this->insert('partials/field_error', ['field' => 'whatsapp_number']) ?>
     </label>
+    <label class="<?= $err('whatsapp_channel_url') ?>">WhatsApp channel link <span class="hint">(shows a floating “Join our channel” button on every public page; leave empty to hide it)</span>
+      <input type="url" name="whatsapp_channel_url" value="<?= e($v('whatsapp_channel_url')) ?>" placeholder="https://whatsapp.com/channel/0029Va…" maxlength="200">
+      <?= $this->insert('partials/field_error', ['field' => 'whatsapp_channel_url']) ?>
+    </label>
     <label class="<?= $err('cv_service_price') ?>">CV service price (UGX)
       <input name="cv_service_price" inputmode="numeric" value="<?= e($v('cv_service_price')) ?>" class="short">
       <?= $this->insert('partials/field_error', ['field' => 'cv_service_price']) ?>

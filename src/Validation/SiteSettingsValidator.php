@@ -29,6 +29,7 @@ final class SiteSettingsValidator
             'maintenance_mode' => 'boolean',
             'whatsapp_number' => 'max:30',
             'cv_service_price' => 'integer:0,100000000',
+            'whatsapp_channel_url' => 'max:200',
         ]);
         $errors = $result->errors;
         $data = $result->data;
@@ -37,6 +38,12 @@ final class SiteSettingsValidator
         $whatsapp = preg_replace('/[\s\-().]/', '', (string) ($data['whatsapp_number'] ?? '')) ?? '';
         if ($whatsapp !== '' && !isset($errors['whatsapp_number']) && preg_match('/^\+?[1-9]\d{7,14}$/', $whatsapp) !== 1) {
             $errors['whatsapp_number'] = 'Use the international format with the country code, e.g. +256 772 123456.';
+        }
+        // Only WhatsApp channel links: the button opens it straight from every public page.
+        $channel = trim((string) ($data['whatsapp_channel_url'] ?? ''));
+        if ($channel !== '' && !isset($errors['whatsapp_channel_url'])
+            && preg_match('#^https://(www\.)?whatsapp\.com/channel/[A-Za-z0-9]{10,64}/?$#', $channel) !== 1) {
+            $errors['whatsapp_channel_url'] = 'Paste the channel link from WhatsApp, e.g. https://whatsapp.com/channel/0029Va…';
         }
         if ($errors !== []) {
             return [[], $errors];
@@ -53,6 +60,7 @@ final class SiteSettingsValidator
             'maintenance_mode' => (bool) $data['maintenance_mode'],
             'whatsapp_number' => ltrim($whatsapp, '+'),
             'cv_service_price' => $data['cv_service_price'] === null ? 100000 : (int) IntegerRule::toInt($data['cv_service_price']),
+            'whatsapp_channel_url' => rtrim($channel, '/'),
         ], []];
     }
 }
