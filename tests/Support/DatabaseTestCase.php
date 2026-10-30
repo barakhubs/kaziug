@@ -56,10 +56,16 @@ abstract class DatabaseTestCase extends TestCase
             "SELECT table_name AS t FROM information_schema.tables
              WHERE table_schema = DATABASE() AND table_type = 'BASE TABLE' AND table_name <> 'schema_migrations'",
         ), 't');
-        // TRUNCATE resets AUTO_INCREMENT; foreign keys must be off because MySQL has no TRUNCATE ... CASCADE.
+        // Only tables holding rows are emptied. DELETE plus an AUTO_INCREMENT reset is much faster than
+        // TRUNCATE, which recreates the table. Foreign keys are off so the order of tables does not matter.
+        $used = array_column($this->db->fetchAll(implode(' UNION ALL ', array_map(
+            static fn (string $t): string => "SELECT '{$t}' AS t FROM DUAL WHERE EXISTS (SELECT 1 FROM `{$t}`)",
+            $tables,
+        ))), 't');
         $this->db->unprepared('SET FOREIGN_KEY_CHECKS = 0');
-        foreach ($tables as $table) {
-            $this->db->unprepared("TRUNCATE TABLE `{$table}`");
+        foreach ($used as $table) {
+            $this->db->unprepared("DELETE FROM `{$table}`");
+            $this->db->unprepared("ALTER TABLE `{$table}` AUTO_INCREMENT = 1");
         }
         $this->db->unprepared('SET FOREIGN_KEY_CHECKS = 1');
 

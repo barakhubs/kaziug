@@ -1,0 +1,13 @@
+# Safety net for hosts where the domain's document root is this folder instead of public/.
+# Every request is served from public/, so .env, src/, vendor/ and storage/ are never reachable.
+# Pointing the document root at public/ is still the recommended setup (README section 6).
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+    Require all denied
+</IfModule>

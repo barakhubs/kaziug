@@ -80,7 +80,10 @@ final class MysqlAnalyticsRepository implements AnalyticsRepositoryInterface
         $branches = [];
         $params = [$day->format('Y-m-d')];
         foreach (self::ROLLUP as $dimension => [$key, $join, $where]) {
-            $branches[] = "SELECT '{$dimension}' AS dimension, {$key} AS `key`, e.type, e.visitor_hash, e.result_count
+            // One explicit collation for every branch: MariaDB refuses a UNION of a column, a CAST and a
+            // JSON_TABLE value whose collations differ.
+            $branches[] = "SELECT '{$dimension}' AS dimension, CONVERT({$key} USING utf8mb4) COLLATE utf8mb4_unicode_ci AS `key`,
+                                  e.type, e.visitor_hash, e.result_count
                            FROM analytics_events e{$join}
                            WHERE e.occurred_at >= ? AND e.occurred_at < ? AND {$where}";
             array_push($params, DbTime::toDb($start), DbTime::toDb($end));

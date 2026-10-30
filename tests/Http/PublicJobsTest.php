@@ -81,8 +81,12 @@ final class PublicJobsTest extends HttpTestCase
         $this->assertSame('Backend Engineer (PHP / Laravel)', $this->firstTitle('/?q=apis'));
 
         $this->assertSame(1, $this->cards($this->get('/', ['q' => 'quickbook'])->body()), 'skills are searchable');
+        $this->assertSame('Registered Nurse', $this->firstTitle('/?q=nursing'), 'other word forms match');
         $this->assertSame(0, $this->cards($this->get('/', ['q' => 'astronaut'])->body()));
         $this->assertSame(8, $this->cards($this->get('/', ['q' => 'the'])->body()), 'stop-words alone do not filter');
+        // Two letters is below the FULLTEXT minimum; the fallback matches word starts ("Power BI"), not "mobile".
+        $this->assertSame(1, $this->cards($this->get('/', ['q' => 'bi'])->body()), 'short words still search');
+        $this->assertSame('Data Analyst', $this->firstTitle('/?q=bi+dashboards'));
         $this->assertStatus(200, $this->get('/', ['q' => "'); DROP TABLE jobs; --"]));
         $this->assertSame(14, (int) $this->db->fetchValue('SELECT count(*) FROM jobs'));
     }

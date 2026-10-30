@@ -37,13 +37,29 @@ final class FullTextQuery
                 continue;
             }
             if (mb_strlen($word) >= self::MIN_TOKEN) {
-                $indexed[] = '+' . $word . '*';
+                $indexed[] = '+' . self::stem($word) . '*';
             } else {
                 $short[] = '\\b' . $word;
             }
         }
         $this->against = $indexed === [] ? null : implode(' ', $indexed);
         $this->shortWordPatterns = $short;
+    }
+
+    /**
+     * Strips one common English suffix so the prefix search finds other forms of the word, standing in
+     * for the stemming PostgreSQL did: "nurse" -> "nurs*" finds "Nursing", "developer" -> "develop*".
+     * The stem keeps at least 4 letters so short words are not cut down to noise.
+     */
+    public static function stem(string $word): string
+    {
+        foreach (['ing', 'ers', 'er', 'ed', 'es', 's', 'e'] as $suffix) {
+            if (str_ends_with($word, $suffix) && mb_strlen($word) - strlen($suffix) >= 4) {
+                return substr($word, 0, -strlen($suffix));
+            }
+        }
+
+        return $word;
     }
 
     /**

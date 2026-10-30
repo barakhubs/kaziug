@@ -210,7 +210,7 @@ final class SeoTest extends HttpTestCase
     public function testDeadlineBoxCountsDaysInsteadOfRepeatingTheDate(): void
     {
         $deadline = (new \DateTimeImmutable('+18 days'))->setTime(23, 59, 59);
-        $this->db->execute("UPDATE jobs SET expires_at = ? WHERE title LIKE 'Frontend%'", [$deadline->format(DATE_ATOM)]);
+        $this->db->execute("UPDATE jobs SET expires_at = ? WHERE title LIKE 'Frontend%'", [\App\Core\Database\DbTime::toDb($deadline)]);
         $slug = (string) $this->db->fetchValue("SELECT slug FROM jobs WHERE title LIKE 'Frontend%'");
 
         $box = $this->get("/jobs/{$slug}")->body();

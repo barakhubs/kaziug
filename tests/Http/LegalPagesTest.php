@@ -83,7 +83,7 @@ final class LegalPagesTest extends HttpTestCase
         $this->assertSame(1, $removed);
         $this->assertSame(
             ['contact:ip:10.0.0.2', 'contact:ip:10.0.0.3'],
-            array_column($this->db->fetchAll('SELECT key FROM login_attempts ORDER BY key'), 'key'),
+            array_column($this->db->fetchAll('SELECT `key` FROM login_attempts ORDER BY `key`'), 'key'),
             'still-locked and recent records are kept',
         );
     }

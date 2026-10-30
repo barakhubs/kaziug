@@ -10,9 +10,9 @@ Full-stack job board for Uganda with a single-admin back office. Read this file 
 
 ## Stack (fixed, do not change without asking)
 - PHP 8.2+, vanilla, no web framework (no Laravel, Symfony framework, Slim, etc.).
-- PostgreSQL 15+ through PDO (pgsql). Always use prepared statements.
+- MySQL 8.0+ / MariaDB 10.6+ through PDO (mysql). Always use prepared statements. SQL must run on both (tests pass on MySQL 8.0 and MariaDB 10.6).
 - Composer only for autoloading and these libraries: phpmailer/phpmailer, vlucas/phpdotenv, phpunit/phpunit (dev). Ask before adding any other package.
-- Hosting: Laravel Cloud. Web root is `public/`. All config comes from environment variables.
+- Hosting: cPanel shared hosting (Apache). Web root is `public/` (`public/.htaccess` routes to the front controller; the root `.htaccess` forwards into `public/` if the document root can't be changed). All config comes from `.env`.
 - Server-rendered PHP templates. Vanilla JS only, for progressive enhancement.
 - Newsletters are sent by the app itself through the admin-configured SMTP. No external email service.
 
@@ -24,7 +24,7 @@ Full-stack job board for Uganda with a single-admin back office. Read this file 
 - `src/Repositories`: all SQL, one repository per aggregate, each implementing an interface.
 - `src/Validation`, `src/Middleware` (auth, CSRF, rate limit, security headers).
 - `views/public`, `views/admin`, plus shared partials. Templates escape output through the shared helper. No logic beyond display.
-- `database/migrations` (numbered, transactional SQL), `database/seeds`.
+- `database/migrations` (numbered MySQL SQL, run one statement at a time), `database/seeds`.
 - `bin/console`: migrate, seed, admin:create, newsletter:work, analytics:rollup, config:check.
 - `storage/logs`, `storage/uploads` (outside the web root). `tests/` for PHPUnit.
 
@@ -48,15 +48,17 @@ Full-stack job board for Uganda with a single-admin back office. Read this file 
 
 ## Database conventions
 - Table and column names: snake_case, plural table names.
-- Every migration is transactional and has a matching rollback note at the top.
+- Every migration has a matching rollback note at the top. MySQL commits DDL immediately, so migrations are not transactional: the Migrator runs each statement separately and records the file only after all succeed. Keep migrations small and re-runnable where possible.
 - Soft-delete jobs with `deleted_at`. Other deletions are hard deletes unless the table has audit requirements.
 - Status values are enforced with CHECK constraints. Job statuses: draft, published, closed, archived. Job status changes are recorded in `job_status_history`.
 - Add an index for every foreign key and every column used in a WHERE or ORDER BY on a large table.
-- Store timestamps as `timestamptz`.
+- Store timestamps as `DATETIME(6)` in UTC (the connection uses time_zone '+00:00'). Convert at the boundary with `Core/Database/DbTime` (`toDb()`/`fromDb()`); never bind `DATE_ATOM` strings, MariaDB rejects offsets.
+- Lists are `JSON` columns; booleans are `TINYINT(1)` (compare with `= 1`); quote the reserved column name `` `key` ``.
+- No `RETURNING`: use `Database::insert()` (returns the AUTO_INCREMENT id) and re-read the row.
 
 ## Public site rules
 - Only published jobs that have not expired appear publicly.
-- Search uses PostgreSQL full-text search over the tsvector column.
+- Search uses InnoDB FULLTEXT (boolean mode) over `jobs.search_text`, built by `Repositories/FullTextQuery` (prefixes, light stemming, stopwords dropped, REGEXP fallback for words under 3 letters).
 - Every newsletter email includes a working unsubscribe link and the physical address from site settings.
 - Job pages include meta tags and JSON-LD JobPosting markup.
 - Analytics is first-party and cookieless: no third-party scripts, no email open/click tracking. Never store IP addresses, user agents or full referrer URLs in `analytics_events`. Raw events are kept 1 year (`AnalyticsRollup::RETENTION_DAYS`), daily totals after that. Update the Privacy and Cookie policies before collecting anything new.
@@ -69,7 +71,7 @@ Full-stack job board for Uganda with a single-admin back office. Read this file 
 
 ## Commands
 ```
-docker compose up -d                  # Postgres 16 on 5442 (kaziug + kaziug_test) and Mailpit (SMTP 1025, UI 8025)
+docker compose up -d                  # MySQL 8.0 on 3316 (kaziug + kaziug_test) and Mailpit (SMTP 1025, UI 8025)
 composer install
 cp .env.example .env                  # then fill in values
 php bin/console config:check
@@ -77,7 +79,7 @@ php bin/console migrate
 php bin/console seed                  # sample data, only when requested
 php bin/console admin:create
 php -S localhost:8000 -t public public/index.php   # local server (router script needed for paths with dots)
-php bin/console newsletter:work       # one batch; --loop runs every minute (Laravel Cloud background process)
+php bin/console newsletter:work       # one batch; run by cPanel cron every minute (--loop only on a VPS)
 php bin/console analytics:rollup      # daily analytics totals + 1-year raw-event purge (schedule nightly; also runs on analytics page loads)
 vendor/bin/phpunit
 ```
@@ -111,5 +113,7 @@ If a command here does not exist yet, create it and update this section.
 - Putting business logic in controllers, views or migrations.
 - Exposing SMTP passwords, tokens or stack traces in any response.
 ## Local environment notes
-- On this machine the `php` on PATH is Herd Lite (static build, no pdo_pgsql/sodium). Use the full Herd binary: `~/.config/herd/bin/php83/php.exe` (and `~/.config/herd/bin/composer.phar` through it).
+- On this machine the `php` on PATH is Herd Lite (static build, no pdo_mysql/sodium). Use the full Herd binary: `~/.config/herd/bin/php83/php.exe` (and `~/.config/herd/bin/composer.phar` through it).
 - Tests use the `kaziug_test` database (`DB_TEST_DATABASE`); phpunit.xml forces `APP_ENV=testing`, and the test base class refuses any database not ending in `_test`.
+- To run the suite on MariaDB too: `docker run -d --rm --name kz-maria-test -p 3317:3306 -e MARIADB_ROOT_PASSWORD=x -e MARIADB_DATABASE=kaziug_test -e MARIADB_USER=kaziug -e MARIADB_PASSWORD=kaziug mariadb:10.6`, then `DB_PORT=3317 vendor/bin/phpunit`.
+- The old PostgreSQL data is still in the Docker volume `ugjobs_db-data` (not used by compose any more).

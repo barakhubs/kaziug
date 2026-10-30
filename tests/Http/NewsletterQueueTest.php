@@ -222,14 +222,14 @@ final class NewsletterQueueTest extends DatabaseTestCase
         $this->service->sendNow($id, $this->actor);
 
         // Another connection holds the worker lock.
-        $other = new \App\Core\Database\Database($this->container->get(Config::class)->get('db'));
-        $other->fetchValue("SELECT pg_advisory_lock(hashtext('newsletter-worker'))");
+        $other = new \App\Repositories\MysqlNamedLock(new \App\Core\Database\Database($this->container->get(Config::class)->get('db')));
+        $this->assertTrue($other->tryAcquire('newsletter-worker'));
 
         try {
             $this->assertTrue($this->worker()->run()['locked']);
             $this->assertSame([], $this->mail->sent);
         } finally {
-            $other->fetchValue("SELECT pg_advisory_unlock(hashtext('newsletter-worker'))");
+            $other->release('newsletter-worker');
         }
         $this->assertSame(3, $this->worker()->run()['sent']);
     }

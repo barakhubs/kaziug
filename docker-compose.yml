@@ -2,7 +2,8 @@
 services:
   db:
     image: mysql:8.0
-    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    # Dev-only speed-ups: no binary log, and commits flushed to disk once a second instead of each time.
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--skip-log-bin", "--innodb-flush-log-at-trx-commit=2"]
     environment:
       MYSQL_DATABASE: kaziug
       MYSQL_USER: kaziug
