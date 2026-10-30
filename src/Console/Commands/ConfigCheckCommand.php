@@ -17,7 +17,7 @@ use Throwable;
  */
 final class ConfigCheckCommand implements CommandInterface
 {
-    private const EXTENSIONS = ['pdo_pgsql', 'sodium', 'dom', 'fileinfo', 'mbstring', 'json'];
+    private const EXTENSIONS = ['pdo_mysql', 'sodium', 'dom', 'fileinfo', 'mbstring', 'json'];
 
     public function __construct(
         private readonly Config $config,
@@ -65,8 +65,10 @@ final class ConfigCheckCommand implements CommandInterface
         $check(is_dir($storage . '/logs') && is_writable($storage . '/logs'), 'storage/logs is writable');
 
         try {
-            $version = (string) $this->db->fetchValue('SHOW server_version');
-            $check((int) $version >= 15, "database reachable (PostgreSQL {$version}, 15+ required)");
+            $version = (string) $this->db->fetchValue('SELECT VERSION()');
+            $mariaDb = stripos($version, 'mariadb') !== false;
+            $supported = version_compare(strtok($version, '-') ?: '0', $mariaDb ? '10.6' : '8.0', '>=');
+            $check($supported, "database reachable ({$version}; MySQL 8.0+ or MariaDB 10.6+ required)");
             $pending = count($this->migrator->pending());
             $check($pending === 0, 'migrations up to date', "{$pending} pending: run php bin/console migrate");
         } catch (Throwable $e) {

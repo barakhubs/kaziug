@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Core;
 
-use App\Core\Database\PgArray;
+use App\Core\Database\DbTime;
+use App\Core\Database\Migrator;
 use PHPUnit\Framework\TestCase;
 
 final class EscapingAndArraysTest extends TestCase
@@ -17,12 +18,23 @@ final class EscapingAndArraysTest extends TestCase
         $this->assertSame('42', e(42));
     }
 
-    public function testPgArrayRoundTripsAwkwardValues(): void
+    public function testDbTimeStoresUtcAndReadsBackInAppTimezone(): void
     {
-        $values = ['React', 'VAT & PAYE', 'say "hi"', 'back\\slash', 'a,b', ''];
+        $kampala = new \DateTimeImmutable('2026-03-01 09:30:00', new \DateTimeZone('Africa/Kampala'));
 
-        $this->assertSame($values, PgArray::toList(PgArray::fromList($values)));
-        $this->assertSame([], PgArray::toList('{}'));
-        $this->assertSame(['plain', 'words'], PgArray::toList('{plain,words}'));
+        $this->assertSame('2026-03-01 06:30:00.000000', DbTime::toDb($kampala));
+        $this->assertSame($kampala->getTimestamp(), DbTime::fromDb(DbTime::toDb($kampala))?->getTimestamp());
+        $this->assertNull(DbTime::fromDb(null));
+        $this->assertNull(DbTime::toDb(null));
+    }
+
+    public function testMigrationSplitterIgnoresSemicolonsInQuotesAndComments(): void
+    {
+        $sql = "-- note; not a statement\nCREATE TABLE a (x TEXT DEFAULT 'a;b');\nINSERT INTO a VALUES ('it\\'s; fine');\n\n";
+
+        $this->assertSame(
+            ["CREATE TABLE a (x TEXT DEFAULT 'a;b')", "INSERT INTO a VALUES ('it\\'s; fine')"],
+            Migrator::statements($sql),
+        );
     }
 }

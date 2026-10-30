@@ -13,8 +13,8 @@ final class ContactPagesTest extends HttpTestCase
     {
         parent::setUp();
         $this->db->execute("INSERT INTO smtp_settings (id, host, port, encryption, from_email) VALUES (1, 'smtp.test', 25, 'none', 'jobs@kazi.test')");
-        $this->db->execute("UPDATE settings SET value = '\"hello@kazi.ug\"' WHERE key = 'contact_email'");
-        $this->db->execute("UPDATE settings SET value = '\"256772123456\"' WHERE key = 'whatsapp_number'");
+        $this->db->execute("UPDATE settings SET value = '\"hello@kazi.ug\"' WHERE `key` = 'contact_email'");
+        $this->db->execute("UPDATE settings SET value = '\"256772123456\"' WHERE `key` = 'whatsapp_number'");
     }
 
     /** @return array<string, string> */
@@ -64,7 +64,7 @@ final class ContactPagesTest extends HttpTestCase
 
     public function testCvRequestMentionsServiceAndPrice(): void
     {
-        $this->db->execute("UPDATE settings SET value = '150000' WHERE key = 'cv_service_price'");
+        $this->db->execute("UPDATE settings SET value = '150000' WHERE `key` = 'cv_service_price'");
 
         $this->post('/cv-help', $this->form());
 
@@ -100,7 +100,7 @@ final class ContactPagesTest extends HttpTestCase
         $this->assertStringContainsString('reach us on WhatsApp', $failed->body());
         $this->assertStringContainsString('value="Amina N."', $failed->body(), 'input is kept');
 
-        $this->db->execute("UPDATE settings SET value = '\"\"' WHERE key = 'contact_email'");
+        $this->db->execute("UPDATE settings SET value = '\"\"' WHERE `key` = 'contact_email'");
         $body = $this->get('/contact')->body();
         $this->assertStringNotContainsString('action="/contact"', $body);
         $this->assertStringContainsString('Message us on WhatsApp', $body);
@@ -116,8 +116,8 @@ final class ContactPagesTest extends HttpTestCase
         $this->assertStatus(422, $this->post('/admin/settings', [...$base, 'whatsapp_number' => '0772 123456']));
         $this->assertRedirect('/admin/settings', $this->post('/admin/settings', [...$base, 'whatsapp_number' => '+256 (772) 123-456']));
 
-        $this->assertSame('"256772123456"', $this->db->fetchValue("SELECT value::text FROM settings WHERE key = 'whatsapp_number'"));
-        $this->assertSame('120000', $this->db->fetchValue("SELECT value::text FROM settings WHERE key = 'cv_service_price'"));
+        $this->assertSame('"256772123456"', $this->db->fetchValue("SELECT value FROM settings WHERE `key` = 'whatsapp_number'"));
+        $this->assertSame('120000', $this->db->fetchValue("SELECT value FROM settings WHERE `key` = 'cv_service_price'"));
         $this->assertStringContainsString('value="+256772123456"', $this->get('/admin/settings')->body());
     }
 }

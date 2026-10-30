@@ -4,6 +4,7 @@
 /.phpunit.cache/
 /storage/logs/*
 /storage/cache/*
+/storage/exports/
 !/storage/logs/.gitkeep
 !/storage/cache/.gitkeep
 .DS_Store

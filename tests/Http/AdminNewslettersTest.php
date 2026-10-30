@@ -14,7 +14,7 @@ final class AdminNewslettersTest extends AdminHttpTestCase
     {
         parent::setUp();
         $this->db->execute("INSERT INTO smtp_settings (id, host, port, encryption, from_email) VALUES (1, 'smtp.test', 25, 'none', 'jobs@kazi.test')");
-        $this->db->execute("UPDATE settings SET value = '\"Plot 5, Kampala\"' WHERE key = 'physical_address'");
+        $this->db->execute("UPDATE settings SET value = '\"Plot 5, Kampala\"' WHERE `key` = 'physical_address'");
         $this->db->execute("INSERT INTO subscribers (email, status, unsubscribe_token) VALUES ('reader@example.com', 'active', ?)", [str_repeat('r', 43)]);
     }
 
@@ -108,7 +108,7 @@ final class AdminNewslettersTest extends AdminHttpTestCase
 
     public function testCannotSendWithoutPhysicalAddress(): void
     {
-        $this->db->execute("UPDATE settings SET value = '\"\"' WHERE key = 'physical_address'");
+        $this->db->execute("UPDATE settings SET value = '\"\"' WHERE `key` = 'physical_address'");
         $id = $this->create();
 
         $this->post("/admin/newsletters/{$id}/send");

@@ -197,7 +197,7 @@ final class AdminJobsAndCategoriesTest extends AdminHttpTestCase
         $this->assertStatus(200, $this->get("/jobs/{$slug}"));
         $this->assertStringContainsString('Closes today', $this->get("/jobs/{$slug}")->body());
 
-        $this->db->execute("UPDATE jobs SET expires_at = now() - interval '1 second'");
+        $this->db->execute("UPDATE jobs SET expires_at = NOW(6) - INTERVAL 1 SECOND");
         $this->assertStatus(404, $this->get("/jobs/{$slug}"));
     }
 

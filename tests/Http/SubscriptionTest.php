@@ -16,7 +16,7 @@ final class SubscriptionTest extends HttpTestCase
         $this->db->execute(
             "INSERT INTO smtp_settings (id, host, port, encryption, from_email) VALUES (1, 'smtp.test', 25, 'none', 'jobs@kazi.test')",
         );
-        $this->db->execute("UPDATE settings SET value = '\"Plot 5, Jinja Road, Kampala\"' WHERE key = 'physical_address'");
+        $this->db->execute("UPDATE settings SET value = '\"Plot 5, Jinja Road, Kampala\"' WHERE `key` = 'physical_address'");
     }
 
     /** @return array<string, string> */
@@ -100,7 +100,7 @@ final class SubscriptionTest extends HttpTestCase
     {
         $this->post('/subscribe', $this->form());
         $token = $this->confirmToken();
-        $this->db->execute("UPDATE subscribers SET confirm_sent_at = now() - interval '49 hours'");
+        $this->db->execute("UPDATE subscribers SET confirm_sent_at = NOW(6) - INTERVAL 49 HOUR");
 
         $this->assertStatus(404, $this->post("/subscribe/confirm/{$token}"));
         $this->assertSame('pending', $this->subscriberStatus());
@@ -176,12 +176,12 @@ final class SubscriptionTest extends HttpTestCase
     public function testUnsubscribedPersonCanSubscribeAgainWithFreshConsent(): void
     {
         $this->post('/subscribe', $this->form());
-        $this->db->execute("UPDATE subscribers SET status = 'unsubscribed', unsubscribed_at = now(), consent_at = now() - interval '1 year'");
+        $this->db->execute("UPDATE subscribers SET status = 'unsubscribed', unsubscribed_at = NOW(6), consent_at = NOW(6) - INTERVAL 1 YEAR");
 
         $this->post('/subscribe', $this->form());
 
         $this->assertSame('pending', $this->subscriberStatus());
-        $this->assertTrue((bool) $this->db->fetchValue("SELECT consent_at > now() - interval '1 minute' FROM subscribers"));
+        $this->assertTrue((bool) $this->db->fetchValue("SELECT consent_at > NOW(6) - INTERVAL 1 MINUTE FROM subscribers"));
         $this->assertCount(2, $this->mail->sent);
     }
 

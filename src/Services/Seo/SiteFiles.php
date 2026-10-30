@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Seo;
 
 use App\Core\Config;
+use App\Core\Database\DbTime;
 use App\Core\Format;
 use App\Domain\Category;
 use App\Domain\Job;
@@ -65,7 +66,7 @@ final class SiteFiles
             $urls[] = [$this->url('/jobs-in/' . $city['slug']), null, 'daily', '0.7'];
         }
         foreach ($this->jobs->sitemapEntries() as $entry) {
-            $urls[] = [$this->url('/jobs/' . $entry['slug']), (new \DateTimeImmutable($entry['updated_at']))->format(DATE_ATOM), 'weekly', '0.8'];
+            $urls[] = [$this->url('/jobs/' . $entry['slug']), DbTime::fromDb($entry['updated_at'])?->format(DATE_ATOM), 'weekly', '0.8'];
         }
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n" . '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";

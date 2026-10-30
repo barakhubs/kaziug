@@ -52,15 +52,18 @@ abstract class DatabaseTestCase extends TestCase
 
     private function resetDatabase(Config $config): void
     {
-        $tables = $this->db->fetchAll(
-            "SELECT tablename FROM pg_tables WHERE schemaname = 'public' AND tablename <> 'schema_migrations'",
-        );
-        $list = implode(', ', array_map(static fn (array $t): string => '"' . $t['tablename'] . '"', $tables));
-        $this->db->unprepared("TRUNCATE {$list} RESTART IDENTITY CASCADE");
-
-        // Restore default settings rows; the migrations' INSERTs are idempotent.
-        foreach (['0011_settings.sql', '0016_contact_settings.sql'] as $file) {
-            $this->db->unprepared((string) file_get_contents($config->string('paths.migrations') . '/' . $file));
+        $tables = array_column($this->db->fetchAll(
+            "SELECT table_name AS t FROM information_schema.tables
+             WHERE table_schema = DATABASE() AND table_type = 'BASE TABLE' AND table_name <> 'schema_migrations'",
+        ), 't');
+        // TRUNCATE resets AUTO_INCREMENT; foreign keys must be off because MySQL has no TRUNCATE ... CASCADE.
+        $this->db->unprepared('SET FOREIGN_KEY_CHECKS = 0');
+        foreach ($tables as $table) {
+            $this->db->unprepared("TRUNCATE TABLE `{$table}`");
         }
+        $this->db->unprepared('SET FOREIGN_KEY_CHECKS = 1');
+
+        // Restore default settings rows; the migration's INSERT is idempotent.
+        $this->db->unprepared((string) file_get_contents($config->string('paths.migrations') . '/0002_default_settings.sql'));
     }
 }

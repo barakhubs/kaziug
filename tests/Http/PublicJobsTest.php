@@ -53,8 +53,8 @@ final class PublicJobsTest extends HttpTestCase
         $deleted = $this->jobId('Data Analyst');
         $this->db->execute("UPDATE jobs SET status = 'draft' WHERE id = ?", [$draft]);
         $this->db->execute("UPDATE jobs SET status = 'closed' WHERE id = ?", [$closed]);
-        $this->db->execute("UPDATE jobs SET expires_at = now() - interval '1 hour' WHERE id = ?", [$expired]);
-        $this->db->execute('UPDATE jobs SET deleted_at = now() WHERE id = ?', [$deleted]);
+        $this->db->execute("UPDATE jobs SET expires_at = NOW(6) - INTERVAL 1 HOUR WHERE id = ?", [$expired]);
+        $this->db->execute('UPDATE jobs SET deleted_at = NOW(6) WHERE id = ?', [$deleted]);
 
         $body = $this->get('/', ['sort' => 'date'])->body() . $this->get('/', ['page' => '2'])->body();
         $this->assertStringContainsString('<strong>10</strong> jobs', $body);
@@ -140,7 +140,7 @@ final class PublicJobsTest extends HttpTestCase
         $this->assertStringContainsString('<h1>Sales &amp; Marketing jobs</h1>', $body);
         $this->assertSame(2, $this->cards($body));
 
-        $this->db->execute("UPDATE job_categories SET is_active = false WHERE slug = 'sales-marketing'");
+        $this->db->execute("UPDATE job_categories SET is_active = 0 WHERE slug = 'sales-marketing'");
         $this->assertStatus(404, $this->get('/categories/sales-marketing'));
         $this->assertStringNotContainsString('value="sales-marketing"', $this->get('/')->body());
     }

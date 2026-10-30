@@ -47,7 +47,7 @@ final class AdminSmtpTest extends AdminHttpTestCase
         $this->assertStringNotContainsString(self::PASSWORD, $page);
         $this->assertStringNotContainsString($stored, $page);
 
-        $audit = (string) $this->db->fetchValue("SELECT metadata::text FROM audit_logs WHERE action = 'smtp.updated'");
+        $audit = (string) $this->db->fetchValue("SELECT metadata FROM audit_logs WHERE action = 'smtp.updated'");
         $this->assertStringNotContainsString(self::PASSWORD, $audit);
         $this->assertStringContainsString('replaced', $audit);
     }

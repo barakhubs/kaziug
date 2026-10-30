@@ -22,7 +22,7 @@ final class AdminDashboardAndAuditTest extends AdminHttpTestCase
     public function testDashboardCountsAndRecentActivity(): void
     {
         $this->container->get(SeedCommand::class)->run(['--only=jobs'], new Io([], echo: false));
-        $this->db->execute("UPDATE jobs SET status = 'draft', published_at = NULL WHERE id IN (SELECT id FROM jobs ORDER BY id LIMIT 2)");
+        $this->db->execute("UPDATE jobs SET status = 'draft', published_at = NULL ORDER BY id LIMIT 2");
         $this->db->execute("INSERT INTO subscribers (email, status, unsubscribe_token) VALUES ('a@x.ug', 'active', ?), ('b@x.ug', 'pending', ?)", [str_repeat('a', 43), str_repeat('b', 43)]);
         $this->post('/admin/newsletters', ['subject' => 'Weekly <jobs>', 'body_html' => '<p>Hi</p>']);
 
@@ -42,7 +42,7 @@ final class AdminDashboardAndAuditTest extends AdminHttpTestCase
     {
         $this->post('/admin/categories', ['name' => '<img src=x onerror=alert(1)>', 'is_active' => '1']);
         $this->post('/admin/categories', ['name' => 'Plain', 'is_active' => '1']);
-        $this->db->execute("INSERT INTO audit_logs (actor, action, entity, created_at) VALUES ('console', 'old.thing', 'misc', now() - interval '10 days')");
+        $this->db->execute("INSERT INTO audit_logs (actor, action, entity, created_at) VALUES ('console', 'old.thing', 'misc', NOW(6) - INTERVAL 10 DAY)");
 
         $all = $this->get('/admin/audit')->body();
         $this->assertStringContainsString('category.created', $all);

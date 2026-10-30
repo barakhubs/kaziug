@@ -135,14 +135,14 @@ final class JobSearchCriteria
     }
 
     /**
-     * Search words for a prefix full-text query: "front dev" -> "front:* & dev:*".
-     * Only letters and digits survive, so the string is always valid tsquery syntax.
+     * Lower-cased search words, at most 8. Only letters and digits survive, so no word can carry
+     * full-text operators: "Front! dev' &" -> ['front', 'dev'].
+     * @return list<string>
      */
-    public function tsQuery(): ?string
+    public function searchWords(): array
     {
         preg_match_all('/[\p{L}\p{N}]+/u', mb_strtolower($this->q), $matches);
-        $words = array_slice(array_unique($matches[0]), 0, 8);
 
-        return $words === [] ? null : implode(' & ', array_map(static fn (string $w): string => $w . ':*', $words));
+        return array_slice(array_values(array_unique($matches[0])), 0, 8);
     }
 }

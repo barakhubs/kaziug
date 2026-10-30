@@ -1,21 +1,23 @@
-# Local development database only. Production uses Laravel Cloud's managed Postgres.
+# Local development only. Production uses the host's MySQL/MariaDB database (cPanel).
 services:
   db:
-    image: postgres:16-alpine
+    image: mysql:8.0
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
     environment:
-      POSTGRES_DB: kaziug
-      POSTGRES_USER: kaziug
-      POSTGRES_PASSWORD: kaziug
+      MYSQL_DATABASE: kaziug
+      MYSQL_USER: kaziug
+      MYSQL_PASSWORD: kaziug
+      MYSQL_ROOT_PASSWORD: kaziug-root
     ports:
-      - "${DB_PORT:-5442}:5432"
+      - "${DB_PORT:-3316}:3306"
     volumes:
-      - db-data:/var/lib/postgresql/data
-      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - db-data:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U kaziug -d kaziug"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-ukaziug", "-pkaziug"]
       interval: 5s
       timeout: 3s
-      retries: 10
+      retries: 20
 
   # Catches every email sent locally. SMTP host 127.0.0.1, port 1025, encryption "none";
   # read the mail at http://localhost:8025.
@@ -27,3 +29,4 @@ services:
 
 volumes:
   db-data:
+    name: kaziug-mysql-data

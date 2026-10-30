@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
-use App\Core\Database\PgArray;
+use App\Core\Database\DbTime;
 use App\Domain\ExperienceLevel;
 use App\Domain\Job;
 use App\Domain\JobStatus;
 use App\Domain\JobType;
 use DateTimeImmutable;
-use DateTimeZone;
 
 /** Converts a jobs row (joined with its category) into a Job. */
 final class JobRowMapper
@@ -44,7 +43,7 @@ final class JobRowMapper
             (string) $row['summary'],
             self::list($row['responsibilities']),
             self::list($row['requirements']),
-            PgArray::toList(is_string($row['skills']) ? $row['skills'] : null),
+            self::list($row['skills']),
             $row['apply_url'] === null ? null : (string) $row['apply_url'],
             $row['apply_email'] === null ? null : (string) $row['apply_email'],
             JobStatus::from((string) $row['status']),
@@ -62,16 +61,12 @@ final class JobRowMapper
 
     public static function date(mixed $value): ?DateTimeImmutable
     {
-        if (!is_string($value) || $value === '') {
-            return null;
-        }
-
-        return (new DateTimeImmutable($value))->setTimezone(new DateTimeZone(date_default_timezone_get()));
+        return DbTime::fromDb($value);
     }
 
     public static function toDb(?DateTimeImmutable $date): ?string
     {
-        return $date?->format(DATE_ATOM);
+        return DbTime::toDb($date);
     }
 
     /** @return list<string> */

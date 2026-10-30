@@ -50,11 +50,11 @@ final class JobSearchCriteriaTest extends TestCase
         $this->assertSame([100, 900], [$c->salaryMin, $c->salaryMax]);
     }
 
-    public function testTsQueryOnlyContainsWordCharacters(): void
+    public function testSearchWordsOnlyContainWordCharacters(): void
     {
-        $this->assertSame("front:* & dev:*", JobSearchCriteria::fromQuery(['q' => "Front! dev' & | :*"])->tsQuery());
-        $this->assertSame('vat:* & paye:*', JobSearchCriteria::fromQuery(['q' => 'VAT & PAYE'])->tsQuery());
-        $this->assertNull(JobSearchCriteria::fromQuery(['q' => '!!! ***'])->tsQuery());
+        $this->assertSame(['front', 'dev'], JobSearchCriteria::fromQuery(['q' => "Front! dev' & | :* +dev"])->searchWords());
+        $this->assertSame(['vat', 'paye'], JobSearchCriteria::fromQuery(['q' => 'VAT & PAYE'])->searchWords());
+        $this->assertSame([], JobSearchCriteria::fromQuery(['q' => '!!! ***'])->searchWords());
     }
 
     public function testForcedCategoryWins(): void

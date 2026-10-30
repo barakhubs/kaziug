@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Core\Config;
+use App\Core\Database\DbTime;
 use App\Core\Log\LoggerInterface;
 use App\Domain\Actor;
 use App\Domain\SmtpSettings;
@@ -16,8 +17,6 @@ use App\Repositories\Contracts\SmtpSettingsRepositoryInterface;
 use App\Services\Contracts\AuditServiceInterface;
 use App\Services\Contracts\SettingsReaderInterface;
 use App\Services\Contracts\SmtpSettingsServiceInterface;
-use DateTimeImmutable;
-use DateTimeZone;
 use RuntimeException;
 
 final class SmtpSettingsService implements SmtpSettingsServiceInterface
@@ -49,9 +48,7 @@ final class SmtpSettingsService implements SmtpSettingsServiceInterface
             (string) $row['from_name'],
             (string) $row['from_email'],
             (string) $row['reply_to'],
-            is_string($row['last_tested_at'])
-                ? (new DateTimeImmutable($row['last_tested_at']))->setTimezone(new DateTimeZone(date_default_timezone_get()))
-                : null,
+            DbTime::fromDb($row['last_tested_at']),
             $row['last_test_result'] === null ? null : (string) $row['last_test_result'],
         );
     }

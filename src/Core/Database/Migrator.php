@@ -7,13 +7,15 @@ namespace App\Core\Database;
 use RuntimeException;
 
 /**
- * Applies database/migrations/NNNN_name.sql in order. Each file runs in its own
- * transaction together with its schema_migrations row, so a failed file leaves no trace.
- * An advisory lock stops two deploys from migrating at the same time.
+ * Applies database/migrations/NNNN_name.sql in order, one statement at a time.
+ * MySQL commits schema changes (CREATE, ALTER, DROP) immediately, so a migration cannot be rolled
+ * back as a whole: its schema_migrations row is written only after every statement succeeded, and
+ * a migration that fails halfway must be cleaned up by hand using its rollback note.
+ * A named lock stops two deploys from migrating at the same time.
  */
 final class Migrator
 {
-    private const LOCK_ID = 727_001;
+    private const LOCK_NAME = 'kaziug_migrate';
 
     public function __construct(
         private readonly Database $db,
@@ -25,16 +27,17 @@ final class Migrator
     public function migrate(?callable $onApply = null): array
     {
         $this->ensureTable();
-        $this->db->fetchValue('SELECT pg_advisory_lock(?)', [self::LOCK_ID]);
+        if ((int) $this->db->fetchValue('SELECT GET_LOCK(?, 60)', [self::LOCK_NAME]) !== 1) {
+            throw new RuntimeException('Another migration is running. Try again in a minute.');
+        }
 
         try {
             $applied = [];
             foreach ($this->pending() as $version => $file) {
-                $sql = (string) file_get_contents($file);
-                $this->db->transaction(function (Database $db) use ($sql, $version): void {
-                    $db->unprepared($sql);
-                    $db->execute('INSERT INTO schema_migrations (version) VALUES (?)', [$version]);
-                });
+                foreach (self::statements((string) file_get_contents($file)) as $statement) {
+                    $this->db->unprepared($statement);
+                }
+                $this->db->execute('INSERT INTO schema_migrations (version) VALUES (?)', [$version]);
                 $applied[] = $version;
                 if ($onApply !== null) {
                     $onApply($version);
@@ -43,7 +46,7 @@ final class Migrator
 
             return $applied;
         } finally {
-            $this->db->fetchValue('SELECT pg_advisory_unlock(?)', [self::LOCK_ID]);
+            $this->db->fetchValue('SELECT RELEASE_LOCK(?)', [self::LOCK_NAME]);
         }
     }
 
@@ -74,13 +77,56 @@ final class Migrator
         return $migrations;
     }
 
+    /**
+     * Splits a migration into statements on semicolons outside quotes and comments.
+     * PDO only reports an error in the first statement of a multi-statement string, so each runs alone.
+     * @return list<string>
+     */
+    public static function statements(string $sql): array
+    {
+        $statements = [];
+        $current = '';
+        $quote = null;
+        $length = strlen($sql);
+
+        for ($i = 0; $i < $length; $i++) {
+            $char = $sql[$i];
+            if ($quote !== null) {
+                $current .= $char;
+                if ($char === '\\' && $i + 1 < $length) {
+                    $current .= $sql[++$i];
+                } elseif ($char === $quote) {
+                    $quote = null;
+                }
+                continue;
+            }
+            if ($char === '-' && ($sql[$i + 1] ?? '') === '-') {
+                $end = strpos($sql, "\n", $i);
+                $i = $end === false ? $length : $end;
+                continue;
+            }
+            if ($char === "'" || $char === '"' || $char === '`') {
+                $quote = $char;
+            }
+            if ($char === ';') {
+                $statements[] = trim($current);
+                $current = '';
+                continue;
+            }
+            $current .= $char;
+        }
+        $statements[] = trim($current);
+
+        return array_values(array_filter($statements, static fn (string $s): bool => $s !== ''));
+    }
+
     private function ensureTable(): void
     {
         $this->db->unprepared(
             'CREATE TABLE IF NOT EXISTS schema_migrations (
-                version text PRIMARY KEY,
-                applied_at timestamptz NOT NULL DEFAULT now()
-            )',
+                version VARCHAR(191) NOT NULL PRIMARY KEY,
+                applied_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci',
         );
     }
 }

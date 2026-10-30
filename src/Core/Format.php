@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Core;
 
+use App\Core\Database\DbTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 
@@ -137,11 +138,7 @@ final class Format
     /** Database timestamp string to local display. */
     public static function dbDateTime(?string $value): string
     {
-        if ($value === null || $value === '') {
-            return '';
-        }
-
-        return self::dateTime((new DateTimeImmutable($value))->setTimezone(new \DateTimeZone(date_default_timezone_get())));
+        return self::dateTime(DbTime::fromDb($value));
     }
 
     /** "Posted today", "Posted 1 day ago", "Posted 5 days ago". */

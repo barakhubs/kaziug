@@ -24,7 +24,7 @@ final class NewsletterQueueTest extends DatabaseTestCase
     {
         parent::setUp();
         $this->db->execute("INSERT INTO smtp_settings (id, host, port, encryption, from_email) VALUES (1, 'smtp.test', 25, 'none', 'jobs@kazi.test')");
-        $this->db->execute("UPDATE settings SET value = '\"Plot 5, Jinja Road, Kampala\"' WHERE key = 'physical_address'");
+        $this->db->execute("UPDATE settings SET value = '\"Plot 5, Jinja Road, Kampala\"' WHERE `key` = 'physical_address'");
         foreach (['a' => 'active', 'b' => 'active', 'c' => 'active', 'p' => 'pending', 'u' => 'unsubscribed'] as $name => $status) {
             $this->db->execute(
                 'INSERT INTO subscribers (email, status, unsubscribe_token) VALUES (?, ?, ?)',
@@ -107,7 +107,7 @@ final class NewsletterQueueTest extends DatabaseTestCase
         $this->assertSame(0, $worker->run()['sent'], 'budget for this minute is used up');
         $this->assertSame('sending', $this->newsletterStatus($id));
 
-        $this->db->execute("UPDATE newsletter_deliveries SET sent_at = now() - interval '2 minutes' WHERE status = 'sent'");
+        $this->db->execute("UPDATE newsletter_deliveries SET sent_at = NOW(6) - INTERVAL 2 MINUTE WHERE status = 'sent'");
         $this->assertSame(1, $worker->run()['sent']);
         $this->assertSame('sent', $this->newsletterStatus($id));
     }
@@ -122,16 +122,16 @@ final class NewsletterQueueTest extends DatabaseTestCase
 
         $first = $worker->run();
         $this->assertSame(1, $first['retrying']);
-        $row = $this->db->fetchOne('SELECT status, attempts, last_error, next_attempt_at > now() + interval \'50 seconds\' AS later FROM newsletter_deliveries');
-        $this->assertSame(['queued', 1, 'SMTP connect() failed.', true], [$row['status'], $row['attempts'], $row['last_error'], $row['later']]);
+        $row = $this->db->fetchOne('SELECT status, attempts, last_error, next_attempt_at > NOW(6) + INTERVAL 50 SECOND AS later FROM newsletter_deliveries');
+        $this->assertSame(['queued', 1, 'SMTP connect() failed.', true], [$row['status'], $row['attempts'], $row['last_error'], (bool) $row['later']]);
 
         $this->assertSame(0, $worker->run()['retrying'], 'not due yet: backoff');
 
-        $this->db->execute('UPDATE newsletter_deliveries SET next_attempt_at = now()');
+        $this->db->execute('UPDATE newsletter_deliveries SET next_attempt_at = NOW(6)');
         $this->assertSame(1, $worker->run()['retrying']);
-        $this->assertTrue((bool) $this->db->fetchValue("SELECT next_attempt_at > now() + interval '4 minutes' FROM newsletter_deliveries"), 'second backoff is 5 minutes');
+        $this->assertTrue((bool) $this->db->fetchValue("SELECT next_attempt_at > NOW(6) + INTERVAL 4 MINUTE FROM newsletter_deliveries"), 'second backoff is 5 minutes');
 
-        $this->db->execute('UPDATE newsletter_deliveries SET next_attempt_at = now()');
+        $this->db->execute('UPDATE newsletter_deliveries SET next_attempt_at = NOW(6)');
         $third = $worker->run();
         $this->assertSame(1, $third['failed']);
         $this->assertSame(['failed', 3], array_values($this->db->fetchOne('SELECT status, attempts FROM newsletter_deliveries')));
@@ -149,7 +149,7 @@ final class NewsletterQueueTest extends DatabaseTestCase
         $stats = $worker->run();
         $this->assertSame([2, 1], [$stats['sent'], $stats['retrying']]);
 
-        $this->db->execute("UPDATE newsletter_deliveries SET next_attempt_at = now() WHERE status = 'queued'");
+        $this->db->execute("UPDATE newsletter_deliveries SET next_attempt_at = NOW(6) WHERE status = 'queued'");
         $this->assertSame(1, $worker->run()['sent']);
         $counts = $this->service->counts($id);
         $this->assertSame([0, 3, 0], [$counts->queued, $counts->sent, $counts->failed]);
@@ -178,7 +178,7 @@ final class NewsletterQueueTest extends DatabaseTestCase
         $this->assertSame(0, $worker->run()['promoted']);
         $this->assertSame('scheduled', $this->newsletterStatus($id));
 
-        $this->db->execute("UPDATE newsletters SET scheduled_at = now() - interval '1 minute'");
+        $this->db->execute("UPDATE newsletters SET scheduled_at = NOW(6) - INTERVAL 1 MINUTE");
         $stats = $worker->run();
         $this->assertSame([1, 3], [$stats['promoted'], $stats['sent']]);
         $this->assertSame('sent', $this->newsletterStatus($id));
@@ -204,7 +204,7 @@ final class NewsletterQueueTest extends DatabaseTestCase
     public function testSendingRequiresAddressAndSmtp(): void
     {
         $id = $this->newsletter();
-        $this->db->execute("UPDATE settings SET value = '\"\"' WHERE key = 'physical_address'");
+        $this->db->execute("UPDATE settings SET value = '\"\"' WHERE `key` = 'physical_address'");
         $this->container->get(\App\Services\Contracts\SettingsReaderInterface::class)->forget();
 
         try {

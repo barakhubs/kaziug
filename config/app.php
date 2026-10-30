@@ -17,7 +17,6 @@ $dbFromUrl = [
     'username' => isset($url['user']) ? rawurldecode($url['user']) : null,
     'password' => isset($url['pass']) ? rawurldecode($url['pass']) : null,
 ];
-parse_str($url['query'] ?? '', $urlQuery);
 
 return [
     'app' => [
@@ -31,13 +30,14 @@ return [
     ],
     'db' => [
         'host' => Env::string('DB_HOST', $dbFromUrl['host'] ?? '127.0.0.1'),
-        'port' => Env::int('DB_PORT', (int) ($dbFromUrl['port'] ?? 5432)),
+        'port' => Env::int('DB_PORT', (int) ($dbFromUrl['port'] ?? 3306)),
         'database' => $env === 'testing'
             ? Env::string('DB_TEST_DATABASE', 'kaziug_test')
             : Env::string('DB_DATABASE', $dbFromUrl['database'] ?? 'kaziug'),
         'username' => Env::string('DB_USERNAME', $dbFromUrl['username'] ?? 'kaziug'),
         'password' => Env::string('DB_PASSWORD', $dbFromUrl['password'] ?? ''),
-        'sslmode' => Env::string('DB_SSLMODE', is_string($urlQuery['sslmode'] ?? null) ? $urlQuery['sslmode'] : 'prefer'),
+        // CA certificate path for TLS to a remote database server; empty for a local (localhost) server.
+        'ssl_ca' => Env::string('DB_SSL_CA'),
     ],
     'session' => [
         'cookie' => Env::string('SESSION_COOKIE', 'kaziug_session'),

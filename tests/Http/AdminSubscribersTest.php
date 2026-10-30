@@ -22,7 +22,7 @@ final class AdminSubscribersTest extends AdminHttpTestCase
         ];
         foreach ($rows as $i => [$email, $name, $status]) {
             $this->db->execute(
-                "INSERT INTO subscribers (email, name, status, consent_at, consent_ip, unsubscribe_token) VALUES (?, ?, ?, now(), '10.0.0.1', ?)",
+                "INSERT INTO subscribers (email, name, status, consent_at, consent_ip, unsubscribe_token) VALUES (?, ?, ?, NOW(6), '10.0.0.1', ?)",
                 [$email, $name, $status, str_pad((string) $i, 43, 'u')],
             );
         }
@@ -111,7 +111,7 @@ final class AdminSubscribersTest extends AdminHttpTestCase
         $this->post("/admin/subscribers/{$amina}/delete");
         $this->assertNull($this->db->fetchValue('SELECT id FROM subscribers WHERE id = ?', [$amina]));
 
-        $audit = (string) $this->db->fetchValue("SELECT metadata::text FROM audit_logs WHERE action = 'subscriber.deleted'");
+        $audit = (string) $this->db->fetchValue("SELECT metadata FROM audit_logs WHERE action = 'subscriber.deleted'");
         $this->assertStringContainsString('a***@example.com', $audit);
         $this->assertStringNotContainsString('amina@example.com', $audit);
     }

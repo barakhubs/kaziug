@@ -13,9 +13,9 @@ final class LegalPagesTest extends HttpTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->db->execute("UPDATE settings SET value = '\"privacy@kazi.ug\"' WHERE key = 'contact_email'");
-        $this->db->execute("UPDATE settings SET value = '\"256772123456\"' WHERE key = 'whatsapp_number'");
-        $this->db->execute('UPDATE settings SET value = ? WHERE key = ?', [json_encode("Plot 1, Kampala Road\nKampala"), 'physical_address']);
+        $this->db->execute("UPDATE settings SET value = '\"privacy@kazi.ug\"' WHERE `key` = 'contact_email'");
+        $this->db->execute("UPDATE settings SET value = '\"256772123456\"' WHERE `key` = 'whatsapp_number'");
+        $this->db->execute('UPDATE settings SET value = ? WHERE `key` = ?', [json_encode("Plot 1, Kampala Road\nKampala"), 'physical_address']);
     }
 
     public function testEachLegalPageRendersWithFilledPlaceholders(): void
@@ -72,10 +72,10 @@ final class LegalPagesTest extends HttpTestCase
     public function testOldRateLimitRecordsWithIpAddressesArePurged(): void
     {
         $this->db->execute(
-            "INSERT INTO login_attempts (key, failure_count, updated_at, locked_until) VALUES
-             ('subscribe:ip:10.0.0.1', 3, now() - interval '3 days', NULL),
-             ('contact:ip:10.0.0.2', 9, now() - interval '3 days', now() + interval '1 hour'),
-             ('contact:ip:10.0.0.3', 1, now() - interval '1 hour', NULL)",
+            "INSERT INTO login_attempts (`key`, failure_count, updated_at, locked_until) VALUES
+             ('subscribe:ip:10.0.0.1', 3, NOW(6) - INTERVAL 3 DAY, NULL),
+             ('contact:ip:10.0.0.2', 9, NOW(6) - INTERVAL 3 DAY, NOW(6) + INTERVAL 1 HOUR),
+             ('contact:ip:10.0.0.3', 1, NOW(6) - INTERVAL 1 HOUR, NULL)",
         );
 
         $removed = $this->container->get(ThrottleRepositoryInterface::class)->purgeOlderThan(Throttle::RETENTION_SECONDS);

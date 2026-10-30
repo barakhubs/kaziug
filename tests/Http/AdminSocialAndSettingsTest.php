@@ -101,7 +101,7 @@ final class AdminSocialAndSettingsTest extends AdminHttpTestCase
         $this->assertStringContainsString('<title>Kazi Jobs: Jobs in Uganda</title>', $home);
         $this->assertStringContainsString('Plot 1, Kampala Road<br />', $home);
         $this->assertStringContainsString('Find work across Uganda.', $home);
-        $this->assertSame(2, (int) $this->db->fetchValue("SELECT value::int FROM settings WHERE key = 'jobs_per_page'"));
+        $this->assertSame(2, (int) $this->db->fetchValue("SELECT CAST(value AS SIGNED) FROM settings WHERE `key` = 'jobs_per_page'"));
         $this->assertSame(1, $this->auditCount('settings.updated'));
         $meta = json_decode((string) $this->db->fetchValue("SELECT metadata FROM audit_logs WHERE action = 'settings.updated'"), true);
         $this->assertContains('site_name', $meta['changed']);

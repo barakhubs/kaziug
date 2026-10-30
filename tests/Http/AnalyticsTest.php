@@ -111,9 +111,9 @@ final class AnalyticsTest extends AdminHttpTestCase
         $this->get('/', ['q' => 'React', 'page' => '2']);
         $this->get('/', ['q' => 'zzzz-no-such-thing']);
 
-        $rows = $this->db->fetchAll('SELECT search_query, search_filters::text AS filters, result_count FROM analytics_events ORDER BY id');
+        $rows = $this->db->fetchAll('SELECT search_query, search_filters AS filters, result_count FROM analytics_events ORDER BY id');
         $this->assertSame('react', $rows[0]['search_query']);
-        $this->assertSame('{type,remote}', $rows[0]['filters']);
+        $this->assertSame(['type', 'remote'], json_decode((string) $rows[0]['filters'], true));
         $this->assertGreaterThan(0, $rows[0]['result_count']);
         $this->assertNull($rows[1]['result_count'], 'page 2 is not a new search');
         $this->assertSame(0, $rows[2]['result_count']);
@@ -239,7 +239,7 @@ final class AnalyticsTest extends AdminHttpTestCase
         $this->assertSame(1, $totals['applies']);
         $this->assertSame(1, $totals['searches']);
         $this->assertSame(1, $totals['zero_results']);
-        $job = $this->db->fetchOne("SELECT * FROM analytics_daily WHERE dimension = 'job' AND key = ?", [(string) $this->jobId]);
+        $job = $this->db->fetchOne("SELECT * FROM analytics_daily WHERE dimension = 'job' AND `key` = ?", [(string) $this->jobId]);
         $this->assertSame([2, 2, 1], [$job['pageviews'], $job['visitors'], $job['applies']]);
 
         // The admin's own visits to the site are not counted.
@@ -304,7 +304,7 @@ final class AnalyticsTest extends AdminHttpTestCase
     public function testRollupKeepsDailyTotalsButPurgesRawEventsPastRetention(): void
     {
         $this->get('/');
-        $this->db->execute("UPDATE analytics_events SET occurred_at = now() - interval '400 days'");
+        $this->db->execute("UPDATE analytics_events SET occurred_at = NOW(6) - INTERVAL 400 DAY");
         $old = (new DateTimeImmutable('-400 days'))->format('Y-m-d');
         $this->insertDaily($old, 7);
 
@@ -317,7 +317,7 @@ final class AnalyticsTest extends AdminHttpTestCase
 
     public function testOldSaltsAreDeletedWhenANewDayStarts(): void
     {
-        $this->db->execute("INSERT INTO analytics_salts (day, salt) VALUES (current_date - 2, decode(repeat('ab', 32), 'hex'))");
+        $this->db->execute("INSERT INTO analytics_salts (day, salt) VALUES (CURRENT_DATE - INTERVAL 2 DAY, UNHEX(REPEAT('ab', 32)))");
         $this->get('/');
 
         $this->assertSame(1, (int) $this->db->fetchValue('SELECT count(*) FROM analytics_salts'));
@@ -337,7 +337,7 @@ final class AnalyticsTest extends AdminHttpTestCase
     private function insertDaily(string $day, int $visitors): void
     {
         $this->container->get(Database::class)->execute(
-            "INSERT INTO analytics_daily (day, dimension, key, pageviews, visitors) VALUES (?, 'total', '', ?, ?)",
+            "INSERT INTO analytics_daily (day, dimension, `key`, pageviews, visitors) VALUES (?, 'total', '', ?, ?)",
             [$day, $visitors * 2, $visitors],
         );
     }
