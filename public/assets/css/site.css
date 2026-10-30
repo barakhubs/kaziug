@@ -262,6 +262,7 @@ a.btn-ghost { height: 40px; }
   .field:not(.grow) { flex-basis: auto; }
   .btn-primary { width: 100%; }
   .topnav { gap: 12px; font-size: 0.88rem; }
+  .social { width: 100%; justify-content: center; }
 }
 .btn-ghost, a.btn-ghost { font-size: 0.95rem; }
 
