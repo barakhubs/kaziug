@@ -116,7 +116,10 @@ select {
 .card:hover .title { color: var(--brand); text-decoration: underline; }
 .company { margin: 0; color: var(--muted); font-size: 0.92rem; }
 .salary { margin: 6px 0 0; font-weight: 600; color: var(--brand-dark); }
-.snippet { margin: 8px 0; color: #2f3947; font-size: 0.95rem; }
+.snippet {
+  margin: 8px 0; color: #2f3947; font-size: 0.95rem;
+  display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;
+}
 .posted { margin: 8px 0 0; color: var(--muted); font-size: 0.82rem; }
 .save {
   background: none; border: 0; font-size: 1.3rem; color: var(--brand);

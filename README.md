@@ -9,7 +9,7 @@ job pages with JSON-LD `JobPosting` and "how to apply" details, category pages, 
 browser), a double-opt-in newsletter, a Contact page and a paid CV help page (form + WhatsApp).
 
 **Back office (`/admin`):** dashboard, analytics (cookieless visitor, job view, apply-click and search statistics), jobs (status workflow, history, bulk actions, details page),
-categories, newsletters (preview, test, send now or schedule, delivery tracking), subscribers (CSV
+categories, newsletters (templates such as "Latest jobs", live preview while writing, test, send now or schedule, delivery tracking), subscribers (CSV
 import/export), Settings with tabs (General: site details, logo, WhatsApp number, CV price,
 maintenance mode · Social profiles · Email/SMTP), account and audit log. Lists are sortable,
 searchable and paginated with a rows-per-page choice.
@@ -360,6 +360,7 @@ Admin (all behind auth except login): `/admin/login`, `/admin/logout`, `/admin` 
 | WhatsApp | Number entered in international format under Settings → General; links use `https://wa.me/<digits>` with a pre-filled message. The CV price (default UGX 100,000) is set there too. |
 | Saved jobs | Stay in `localStorage` (same key as the prototype); `/saved?ids=` renders whichever are still visible. |
 | Subscriber CSV import | Imported rows become **active** only after the admin confirms that everyone in the file already consented (the import is audited). |
+| Newsletter templates | **New newsletter** starts from a template (Latest jobs, Job spotlight, Announcement, CV help promo) or a blank editor. "Latest jobs" offers the 20 newest live jobs with the newest 8 ticked. The template only fills the editor: the job list is a snapshot, nothing is saved until **Save draft**, and template HTML uses only sanitiser-allowed tags. Links are plain job URLs (no click tracking). Email styling is added inline at send time by `Mail/EmailStyler` (a paragraph holding a single link becomes a button), because Gmail and Outlook ignore `<style>`. The editor shows a live preview (desktop/phone width) rendered by `POST /admin/newsletters/preview` into the same sandboxed, CSP-locked frame as the saved preview. |
 | Confirmation emails | Sent synchronously when someone subscribes (they're one-off and transactional, not newsletters); on SMTP failure the subscriber stays pending and can submit again. |
 | Analytics | **First-party and cookieless**, no third-party script. `RecordPageView` (on public pages whose URLs hold no tokens, so not the subscription pages) and `/jobs/{slug}/apply/{link\|email}` (a redirect to the job’s stored link or `mailto:`, never to a URL from the request) write `analytics_events`. No IP or user agent is stored: the visitor id is an HMAC of IP + user agent with a random **daily salt** that is deleted when the day ends, so visitors are unique per day only. Not counted: bots (user agent), `DNT: 1` / `Sec-GPC: 1`, the signed-in admin, non-200 responses. Searches are counted on their first results page only. Raw events are kept **1 year**, then only `analytics_daily` totals remain (rebuilt by `AnalyticsRollup` on each analytics page load and by `analytics:rollup`). Newsletter emails have no open or click tracking. Privacy and Cookie policies describe all of this. |
 | Logo storage | In the database (`site_assets`), so it survives redeploys and is included in database backups. |
@@ -402,6 +403,9 @@ Coverage highlights:
   composite channel that calls the email channel and yours in `config/container.php`.
 - **Another job source** (feed, CSV): implement `Services/Import/JobSourceInterface` and pass it to
   `JobImporter::import()`, e.g. from a new console command.
+- **A newsletter template:** implement `Services/NewsletterTemplates/NewsletterTemplateInterface`
+  (build the body only from tags the sanitiser allows; `JobEmailHtml` has helpers) and add it to the
+  list in `config/container.php`. It then appears on **Newsletters → New newsletter**.
 - **A validation rule:** implement `Validation/RuleInterface` and call `Validator::register()`.
 - **A console command:** implement `Console/CommandInterface` and add it to `config/commands.php`.
 - **A schema change:** add `database/migrations/NNNN_name.sql` with a rollback note at the top. MySQL

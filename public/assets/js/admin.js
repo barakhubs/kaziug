@@ -42,6 +42,8 @@
       const text = inner(value.slice(start, end));
       area.setRangeText(before + text + after, start, end, 'end');
       area.focus();
+      // setRangeText doesn't fire "input"; the live preview listens for it.
+      area.dispatchEvent(new Event('input', { bubbles: true }));
     };
 
     toolbar.addEventListener('click', (event) => {
@@ -125,4 +127,48 @@
     });
     svg.addEventListener('pointerleave', hide);
   });
+})();
+
+(() => {
+  'use strict';
+
+  // Live newsletter preview: copies the editor's fields into a hidden form that posts to the
+  // preview endpoint with the frame as its target, so the email renders in the sandboxed frame
+  // under its own locked-down CSP. Refreshes shortly after typing stops.
+  const frame = document.querySelector('[data-live-preview]');
+  const editor = document.querySelector('form.newsletter-form');
+  if (!frame || !editor) return;
+
+  const FIELDS = ['_token', 'subject', 'preheader', 'body_html'];
+  const poster = document.createElement('form');
+  poster.method = 'post';
+  poster.action = '/admin/newsletters/preview';
+  poster.target = frame.name;
+  poster.hidden = true;
+  FIELDS.forEach((name) => {
+    const field = document.createElement('textarea');
+    field.name = name;
+    poster.append(field);
+  });
+  document.body.append(poster);
+
+  const refresh = () => {
+    FIELDS.forEach((name) => { poster.elements[name].value = editor.elements[name]?.value ?? ''; });
+    poster.submit();
+  };
+  let timer;
+  editor.addEventListener('input', () => {
+    clearTimeout(timer);
+    timer = setTimeout(refresh, 700);
+  });
+
+  const panel = document.querySelector('[data-live-preview-panel]');
+  panel.hidden = false;
+  panel.querySelectorAll('[data-preview-width]').forEach((button) => {
+    button.addEventListener('click', () => {
+      frame.style.width = button.dataset.previewWidth;
+      panel.querySelectorAll('[data-preview-width]').forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+    });
+  });
+  refresh();
 })();

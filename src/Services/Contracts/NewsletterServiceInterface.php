@@ -35,6 +35,9 @@ interface NewsletterServiceInterface
     /** The full email as a subscriber would see it (sample unsubscribe link). */
     public function previewHtml(int $id): string;
 
+    /** The email for unsaved editor content, for the live preview while writing. */
+    public function previewDraft(string $subject, string $preheader, string $bodyHtml): string;
+
     /** @throws \App\Mail\MailException */
     public function sendTest(int $id, string $to, Actor $actor): void;
 

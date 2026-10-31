@@ -394,3 +394,27 @@ meter.bar::-moz-meter-bar { background: var(--brand); border-radius: 999px; }
 @media (max-width: 1000px) {
   .analytics-grid { grid-template-columns: 1fr; }
 }
+
+/* Newsletter templates and live preview */
+.template-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin: 16px 0; align-items: start; }
+.template-card { max-width: none; margin: 0; }
+.template-card h2 { margin: 0 0 4px; font-size: 1.1rem; }
+.job-pick { border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; margin: 12px 0 0; max-height: 320px; overflow-y: auto; }
+.job-pick legend { font-weight: 600; font-size: 0.9rem; padding: 0 4px; }
+.job-pick .check { display: flex; gap: 10px; align-items: flex-start; font-weight: 400; padding: 6px 0; border-bottom: 1px solid var(--line); }
+.job-pick .check:last-child { border-bottom: 0; }
+.job-pick input { margin-top: 4px; }
+.compose-grid { display: grid; gap: 16px; align-items: start; }
+.compose-grid .newsletter-form { max-width: none; margin: 0; }
+.live-preview { max-width: none; margin: 0; }
+.live-preview-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.live-preview-head h2 { margin: 0; font-size: 1.05rem; }
+.live-preview-stage { display: flex; justify-content: center; background: #f4f6f8; border-radius: 8px; }
+.live-preview .email-preview { height: 720px; transition: width 0.2s; }
+.segmented button { padding: 7px 14px; border: 0; border-right: 1px solid var(--line); background: none; font: inherit; font-weight: 600; font-size: 0.9rem; color: var(--ink); cursor: pointer; }
+.segmented button:last-child { border-right: 0; }
+.segmented button[aria-pressed="true"] { background: var(--brand); color: #fff; }
+@media (min-width: 1280px) {
+  .compose-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .live-preview { position: sticky; top: 16px; }
+}

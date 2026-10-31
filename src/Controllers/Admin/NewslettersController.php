@@ -13,6 +13,7 @@ use App\Domain\TableQuery;
 use App\Repositories\Contracts\NewsletterRepositoryInterface;
 use App\Mail\MailException;
 use App\Services\Contracts\NewsletterServiceInterface;
+use App\Services\Contracts\NewsletterTemplateServiceInterface;
 use App\Services\Contracts\SmtpSettingsServiceInterface;
 use App\Validation\NewsletterValidator;
 use App\Validation\Rules\DateTimeRule;
@@ -27,6 +28,7 @@ final class NewslettersController
     public function __construct(
         private readonly NewsletterServiceInterface $newsletters,
         private readonly SmtpSettingsServiceInterface $smtp,
+        private readonly NewsletterTemplateServiceInterface $templates,
         private readonly NewsletterValidator $validator,
         private readonly Validator $plainValidator,
         private readonly Responder $responder,
@@ -51,9 +53,46 @@ final class NewslettersController
         ]);
     }
 
+    /** Step 1: pick a template (and jobs). "?blank=1" skips straight to an empty editor. */
     public function create(Request $request): Response
     {
-        return $this->form(null, [], []);
+        if ($request->query('blank') !== null) {
+            return $this->form(null, [], []);
+        }
+
+        return $this->picker(null);
+    }
+
+    /** Step 2: fill the editor from the chosen template. Nothing is saved until "Save draft". */
+    public function compose(Request $request): Response
+    {
+        $jobIds = $request->input('jobs');
+        $jobIds = is_array($jobIds) ? array_values(array_map('intval', array_filter($jobIds, 'is_scalar'))) : [];
+
+        try {
+            $draft = $this->templates->compose((string) $request->input('template', ''), $jobIds);
+        } catch (DomainException $e) {
+            return $this->picker($e->getMessage(), 422);
+        }
+
+        return $this->form(null, [
+            'subject' => $draft->subject,
+            'preheader' => $draft->preheader,
+            'body_html' => $draft->bodyHtml,
+            'body_text' => '',
+        ], []);
+    }
+
+    /** Live preview of the editor's unsaved content, posted into the preview frame. */
+    public function previewDraft(Request $request): Response
+    {
+        $text = static fn (mixed $value, int $max): string => is_string($value) ? mb_substr($value, 0, $max) : '';
+
+        return $this->previewResponse($this->newsletters->previewDraft(
+            $text($request->input('subject'), 200),
+            $text($request->input('preheader'), 200),
+            $text($request->input('body_html'), 200_000),
+        ));
     }
 
     public function store(Request $request): Response
@@ -116,9 +155,7 @@ final class NewslettersController
     /** The rendered email, shown in a sandboxed iframe on the newsletter page. */
     public function preview(Request $request): Response
     {
-        return Response::html($this->newsletters->previewHtml($this->id($request)))
-            ->setHeader('Content-Security-Policy', "default-src 'none'; img-src https: data:; style-src 'unsafe-inline'; frame-ancestors 'self'; base-uri 'none'; form-action 'none'")
-            ->setHeader('X-Frame-Options', 'SAMEORIGIN');
+        return $this->previewResponse($this->newsletters->previewHtml($this->id($request)));
     }
 
     public function test(Request $request): Response
@@ -204,6 +241,24 @@ final class NewslettersController
             'body_html' => (string) $data['body_html'],
             'body_text' => $data['body_text'] === null ? null : (string) $data['body_text'],
         ];
+    }
+
+    /** Email HTML for the sandboxed preview frame: no scripts, forms or outside content except images. */
+    private function previewResponse(string $html): Response
+    {
+        return Response::html($html)
+            ->setHeader('Content-Security-Policy', "default-src 'none'; img-src https: data:; style-src 'unsafe-inline'; frame-ancestors 'self'; base-uri 'none'; form-action 'none'")
+            ->setHeader('X-Frame-Options', 'SAMEORIGIN');
+    }
+
+    private function picker(?string $error, int $status = 200): Response
+    {
+        return $this->responder->view('admin/newsletters/templates', [
+            'templates' => $this->templates->templates(),
+            'jobs' => $this->templates->candidateJobs(),
+            'preselected' => NewsletterTemplateServiceInterface::PRESELECTED_JOBS,
+            'error' => $error,
+        ], $status);
     }
 
     /**

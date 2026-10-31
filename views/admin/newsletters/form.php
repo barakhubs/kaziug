@@ -14,6 +14,7 @@ $err = static fn (string $key): string => isset($errors[$key]) ? 'has-error' : '
   </div>
 </header>
 
+<div class="compose-grid">
 <form class="form-card newsletter-form" method="post" action="<?= e($newsletter === null ? '/admin/newsletters' : "/admin/newsletters/{$newsletter->id}") ?>" novalidate>
   <?= $this->insert('partials/csrf') ?>
   <label class="<?= $err('subject') ?>">Subject
@@ -52,3 +53,18 @@ $err = static fn (string $key): string => isset($errors[$key]) ? 'has-error' : '
     <button class="btn-primary" type="submit"><?= $newsletter === null ? 'Save draft' : 'Save changes' ?></button>
   </div>
 </form>
+
+<section class="form-card live-preview js-only" aria-label="Live preview" hidden data-live-preview-panel>
+  <div class="live-preview-head">
+    <h2>Preview</h2>
+    <div class="segmented" role="group" aria-label="Preview width">
+      <button type="button" data-preview-width="100%" aria-pressed="true">Desktop</button>
+      <button type="button" data-preview-width="375px" aria-pressed="false">Phone</button>
+    </div>
+  </div>
+  <p class="hint">Updates as you type. This is the email as subscribers will get it, with your footer and a sample unsubscribe link.</p>
+  <div class="live-preview-stage">
+    <iframe class="email-preview" name="newsletter-live-preview" sandbox title="Live email preview" data-live-preview></iframe>
+  </div>
+</section>
+</div>

@@ -91,6 +91,11 @@ final class NewsletterService implements NewsletterServiceInterface
         return $this->builder->buildSample($this->get($id), 'preview@example.com')->html;
     }
 
+    public function previewDraft(string $subject, string $preheader, string $bodyHtml): string
+    {
+        return $this->builder->buildDraftSample($subject, $preheader, $bodyHtml)->html;
+    }
+
     public function sendTest(int $id, string $to, Actor $actor): void
     {
         $this->mailer->send($this->builder->buildSample($this->get($id), $to, '[Test] '));

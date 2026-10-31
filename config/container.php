@@ -104,6 +104,13 @@ use App\Services\Contracts\AnalyticsExportServiceInterface;
 use App\Services\Contracts\AnalyticsRecorderInterface;
 use App\Services\Contracts\AnalyticsReportServiceInterface;
 use App\Services\Contracts\AnalyticsRollupInterface;
+use App\Services\Contracts\NewsletterTemplateServiceInterface;
+use App\Services\HtmlSanitizer;
+use App\Services\NewsletterTemplateService;
+use App\Services\NewsletterTemplates\AnnouncementTemplate;
+use App\Services\NewsletterTemplates\CvHelpTemplate;
+use App\Services\NewsletterTemplates\JobSpotlightTemplate;
+use App\Services\NewsletterTemplates\LatestJobsTemplate;
 
 /*
  * The single place where abstractions are mapped to implementations (Dependency Inversion).
@@ -187,6 +194,19 @@ return static function (Container $c, Config $config): void {
     $c->bind(SubscriptionServiceInterface::class, SubscriptionService::class);
     $c->bind(SubscriberAdminServiceInterface::class, SubscriberAdminService::class);
     $c->bind(NewsletterServiceInterface::class, NewsletterService::class);
+    // Newsletter templates, in the order the admin sees them. To add one, add its class here.
+    $c->set(NewsletterTemplateServiceInterface::class, fn (Container $c) => new NewsletterTemplateService(
+        [
+            $c->get(LatestJobsTemplate::class),
+            $c->get(JobSpotlightTemplate::class),
+            $c->get(AnnouncementTemplate::class),
+            $c->get(CvHelpTemplate::class),
+        ],
+        $c->get(JobSearchServiceInterface::class),
+        $c->get(SettingsReaderInterface::class),
+        $c->get(HtmlSanitizer::class),
+        $config->string('app.url'),
+    ));
     $c->bind(DashboardServiceInterface::class, DashboardService::class);
     $c->bind(ContactServiceInterface::class, ContactService::class);
     $c->bind(AnalyticsRecorderInterface::class, AnalyticsRecorder::class);

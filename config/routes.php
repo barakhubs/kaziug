@@ -115,6 +115,8 @@ return static function (Router $r): void {
 
         $r->get('/newsletters', [NewslettersController::class, 'index']);
         $r->get('/newsletters/new', [NewslettersController::class, 'create']);
+        $r->post('/newsletters/new', [NewslettersController::class, 'compose']);
+        $r->post('/newsletters/preview', [NewslettersController::class, 'previewDraft']);
         $r->post('/newsletters', [NewslettersController::class, 'store']);
         $r->get('/newsletters/{id:\d+}', [NewslettersController::class, 'show']);
         $r->get('/newsletters/{id:\d+}/edit', [NewslettersController::class, 'edit']);
