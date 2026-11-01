@@ -19,7 +19,7 @@ final class JobInput
      */
     public function __construct(
         public readonly string $title,
-        public readonly string $company,
+        public readonly int $companyId,
         public readonly string $location,
         public readonly bool $isRemote,
         public readonly JobType $jobType,
@@ -39,26 +39,27 @@ final class JobInput
         public readonly ?string $salaryScale = null,
         public readonly ?string $applicationInstructions = null,
         public readonly ?string $reportsTo = null,
+        public readonly bool $isUrgent = false,
     ) {
     }
 
     public static function fromJob(Job $job): self
     {
         return new self(
-            $job->title, $job->company, $job->location, $job->isRemote, $job->jobType, $job->experienceLevel,
+            $job->title, $job->companyId, $job->location, $job->isRemote, $job->jobType, $job->experienceLevel,
             $job->categoryId, $job->salaryMin, $job->salaryMax, $job->currency, $job->summary,
             $job->responsibilities, $job->requirements, $job->skills, $job->applyUrl, $job->applyEmail, $job->expiresAt,
-            $job->positions, $job->salaryScale, $job->applicationInstructions, $job->reportsTo,
+            $job->positions, $job->salaryScale, $job->applicationInstructions, $job->reportsTo, $job->isUrgent,
         );
     }
 
     public function withTitle(string $title): self
     {
         return new self(
-            $title, $this->company, $this->location, $this->isRemote, $this->jobType, $this->experienceLevel,
+            $title, $this->companyId, $this->location, $this->isRemote, $this->jobType, $this->experienceLevel,
             $this->categoryId, $this->salaryMin, $this->salaryMax, $this->currency, $this->summary,
             $this->responsibilities, $this->requirements, $this->skills, $this->applyUrl, $this->applyEmail, $this->expiresAt,
-            $this->positions, $this->salaryScale, $this->applicationInstructions, $this->reportsTo,
+            $this->positions, $this->salaryScale, $this->applicationInstructions, $this->reportsTo, $this->isUrgent,
         );
     }
 }

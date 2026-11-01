@@ -172,3 +172,191 @@
   });
   refresh();
 })();
+
+(() => {
+  'use strict';
+
+  // Company picker on the job form: type to search, pick with mouse or keyboard. The visible
+  // input posts company_name; the hidden company_id is set only when a listed company is chosen.
+  const picker = document.querySelector('[data-company-picker]');
+  if (!picker) return;
+  const input = picker.querySelector('input[role="combobox"]');
+  const hidden = picker.querySelector('input[name="company_id"]');
+  const list = picker.querySelector('[role="listbox"]');
+  const status = picker.parentElement.querySelector('.combo-status');
+  let results = [];
+  let active = -1;
+  let timer = null;
+  let request = 0;
+
+  const close = () => {
+    list.hidden = true;
+    input.setAttribute('aria-expanded', 'false');
+    input.removeAttribute('aria-activedescendant');
+    active = -1;
+  };
+
+  const choose = (company) => {
+    input.value = company.name;
+    hidden.value = String(company.id);
+    status.textContent = '';
+    close();
+  };
+
+  const highlight = (index) => {
+    active = index;
+    list.querySelectorAll('[role="option"]').forEach((option, i) => {
+      option.setAttribute('aria-selected', i === index ? 'true' : 'false');
+      if (i === index) {
+        input.setAttribute('aria-activedescendant', option.id);
+        option.scrollIntoView({ block: 'nearest' });
+      }
+    });
+  };
+
+  const render = () => {
+    list.replaceChildren(...results.map((company) => {
+      const option = document.createElement('li');
+      option.id = `companyOption${company.id}`;
+      option.setAttribute('role', 'option');
+      option.setAttribute('aria-selected', 'false');
+      if (company.logoUrl) {
+        const img = document.createElement('img');
+        img.src = company.logoUrl;
+        img.alt = '';
+        img.width = 24;
+        img.height = 24;
+        option.append(img);
+      } else {
+        const blank = document.createElement('span');
+        blank.className = 'combo-nologo';
+        option.append(blank);
+      }
+      option.append(document.createTextNode(company.name));
+      option.addEventListener('mousedown', (event) => { event.preventDefault(); choose(company); });
+      return option;
+    }));
+    const open = results.length > 0 && document.activeElement === input;
+    list.hidden = !open;
+    input.setAttribute('aria-expanded', open ? 'true' : 'false');
+    active = -1;
+  };
+
+  const updateStatus = () => {
+    const typed = input.value.trim();
+    const exact = results.find((c) => c.name.toLowerCase() === typed.toLowerCase());
+    if (exact && hidden.value === '') hidden.value = String(exact.id);
+    status.textContent = typed !== '' && hidden.value === ''
+      ? `No company called “${typed}” yet. Use + to add it.`
+      : '';
+  };
+
+  const search = async () => {
+    const mine = ++request;
+    try {
+      const url = `${picker.dataset.searchUrl}?q=${encodeURIComponent(input.value.trim())}`;
+      const response = await fetch(url, { headers: { Accept: 'application/json' }, credentials: 'same-origin' });
+      if (!response.ok || mine !== request) return;
+      results = (await response.json()).companies || [];
+      render();
+      updateStatus();
+    } catch (error) {
+      // Leave the field as plain text; the server matches the typed name on save.
+    }
+  };
+
+  input.addEventListener('input', () => {
+    hidden.value = '';
+    clearTimeout(timer);
+    timer = setTimeout(search, 200);
+  });
+  input.addEventListener('focus', search);
+  input.addEventListener('blur', () => { close(); updateStatus(); });
+  input.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault();
+      if (list.hidden) { search(); return; }
+      const step = event.key === 'ArrowDown' ? 1 : -1;
+      highlight((active + step + results.length) % results.length);
+    } else if (event.key === 'Enter' && !list.hidden && active >= 0) {
+      event.preventDefault();
+      choose(results[active]);
+    } else if (event.key === 'Escape' && !list.hidden) {
+      event.preventDefault();
+      close();
+    }
+  });
+
+  // "+" opens the add-company dialog; without JavaScript it is a link to the full form.
+  const dialog = document.getElementById('companyDialog');
+  const opener = picker.querySelector('[data-open-company-dialog]');
+  if (!dialog || !opener || typeof dialog.showModal !== 'function') return;
+  const form = dialog.querySelector('[data-company-form]');
+  const formError = form.querySelector('[data-form-error]');
+
+  const clearErrors = () => {
+    formError.hidden = true;
+    form.querySelectorAll('[data-field]').forEach((field) => {
+      field.classList.remove('has-error');
+      const message = field.querySelector('.field-error');
+      message.hidden = true;
+      message.textContent = '';
+    });
+  };
+
+  const showError = (text) => {
+    formError.textContent = text;
+    formError.hidden = false;
+  };
+
+  opener.addEventListener('click', (event) => {
+    event.preventDefault();
+    form.reset();
+    clearErrors();
+    if (hidden.value === '') form.elements.name.value = input.value.trim();
+    dialog.showModal();
+    form.elements.name.focus();
+  });
+  dialog.querySelectorAll('[data-close-dialog]').forEach((button) => button.addEventListener('click', () => dialog.close()));
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    clearErrors();
+    const submit = form.querySelector('[type="submit"]');
+    submit.disabled = true;
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { Accept: 'application/json' },
+        credentials: 'same-origin',
+      });
+      const data = await response.json().catch(() => ({}));
+      if (response.status === 201 && data.company) {
+        choose(data.company);
+        dialog.close();
+        opener.focus();
+        return;
+      }
+      let shown = false;
+      Object.entries(data.errors || {}).forEach(([name, text]) => {
+        const field = form.querySelector(`[data-field="${name}"]`);
+        if (!field) return;
+        field.classList.add('has-error');
+        const message = field.querySelector('.field-error');
+        message.textContent = text;
+        message.hidden = false;
+        shown = true;
+      });
+      if (!shown) {
+        showError(response.status === 419
+          ? 'Your session expired. Reload the page and try again.'
+          : 'The company could not be saved. Please try again.');
+      }
+    } catch (error) {
+      showError('The company could not be saved. Check your connection and try again.');
+    } finally {
+      submit.disabled = false;
+    }
+  });
+})();

@@ -6,8 +6,14 @@ use App\Core\Format;
 
 $headingTag = $inPane ? 'h2' : 'h1';
 ?>
-<<?= $headingTag ?> class="detail-title"><?php if ($inPane): ?><a href="/jobs/<?= e($job->slug) ?>"><?= e($job->title) ?></a><?php else: ?><?= e($job->title) ?><?php endif; ?></<?= $headingTag ?>>
-<p class="company"><?= e($job->company) ?> · <a href="/jobs-in/<?= e(\App\Domain\Slug::from($job->location)) ?>"><?= e($job->location) ?></a><?= $job->isRemote ? ' · Remote' : '' ?></p>
+<div class="detail-head">
+  <?= $this->insert('partials/company_logo', ['job' => $job, 'size' => 'lg']) ?>
+  <div>
+    <?php if ($job->isUrgent): ?><?= $this->insert('partials/urgent_badge') ?><?php endif; ?>
+    <<?= $headingTag ?> class="detail-title"><?php if ($inPane): ?><a href="/jobs/<?= e($job->slug) ?>"><?= e($job->title) ?></a><?php else: ?><?= e($job->title) ?><?php endif; ?></<?= $headingTag ?>>
+    <p class="company"><?= e($job->company) ?> · <a href="/jobs-in/<?= e(\App\Domain\Slug::from($job->location)) ?>"><?= e($job->location) ?></a><?= $job->isRemote ? ' · Remote' : '' ?></p>
+  </div>
+</div>
 <p class="salary"><?= e(Format::jobSalary($job)) ?><?php if ($job->positions > 1): ?> · <span class="positions"><?= e(Format::positions($job->positions)) ?></span><?php endif; ?></p>
 <?php if ($job->expiresAt !== null): $dl = Format::deadline($job->expiresAt); ?>
   <div class="deadline-box <?= e($dl['state']) ?>">

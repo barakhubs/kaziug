@@ -33,6 +33,8 @@ final class RouteSmokeTest extends AdminHttpTestCase
                 '/admin/categories/' => (string) $this->db->fetchValue('SELECT min(id) FROM job_categories'),
                 '/admin/settings/social/' => (string) $this->db->fetchValue('SELECT min(id) FROM social_profiles'),
                 '/admin/newsletters/' => (string) $this->db->fetchValue('SELECT min(id) FROM newsletters'),
+                '/admin/companies/' => (string) $this->db->fetchValue('SELECT min(id) FROM companies'),
+                '/media/companies/' => (string) $this->db->fetchValue('SELECT min(id) FROM companies'),
             ],
             'slug' => [
                 '/jobs/' => (string) $this->db->fetchValue('SELECT min(slug) FROM jobs'),

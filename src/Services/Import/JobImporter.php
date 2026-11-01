@@ -11,6 +11,7 @@ use App\Domain\Slug;
 use App\Repositories\Contracts\JobWriteRepositoryInterface;
 use App\Repositories\Contracts\TransactionManagerInterface;
 use App\Services\Contracts\CategoryServiceInterface;
+use App\Services\Contracts\CompanyServiceInterface;
 use DateTimeImmutable;
 
 /**
@@ -22,6 +23,7 @@ final class JobImporter
     public function __construct(
         private readonly JobWriteRepositoryInterface $jobs,
         private readonly CategoryServiceInterface $categories,
+        private readonly CompanyServiceInterface $companies,
         private readonly TransactionManagerInterface $tx,
     ) {
     }
@@ -42,7 +44,7 @@ final class JobImporter
             $this->tx->transactional(function () use ($record, $slug, $actor): void {
                 $category = $this->categories->ensure($record->categoryName, $actor);
                 $input = new JobInput(
-                    $record->title, $record->company, $record->location, $record->isRemote, $record->jobType,
+                    $record->title, $this->companies->idForImportedName($record->company), $record->location, $record->isRemote, $record->jobType,
                     $record->experienceLevel, $category->id, $record->salaryMin, $record->salaryMax, 'UGX',
                     $record->summary, $record->responsibilities, $record->requirements, $record->skills, $record->applyUrl,
                     $record->applyEmail === null ? null : strtolower($record->applyEmail),

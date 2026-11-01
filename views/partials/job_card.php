@@ -6,11 +6,15 @@ use App\Core\Format;
 
 $shareUrl = ($appUrl ?? '') . '/jobs/' . $job->slug;
 ?>
-<li class="card<?= $active ? ' active' : '' ?>" data-pane-url="<?= e($paneUrl) ?>">
+<li class="card<?= $active ? ' active' : '' ?><?= $job->isUrgent ? ' urgent' : '' ?>" data-pane-url="<?= e($paneUrl) ?>">
   <div class="card-top">
-    <div>
-      <h3 class="title"><a href="/jobs/<?= e($job->slug) ?>"><?= e($job->title) ?></a></h3>
-      <p class="company"><?= e($job->company) ?> · <?= e($job->location) ?><?= $job->isRemote ? ' · Remote' : '' ?></p>
+    <div class="card-head">
+      <?= $this->insert('partials/company_logo', ['job' => $job, 'size' => 'sm']) ?>
+      <div>
+        <?php if ($job->isUrgent): ?><?= $this->insert('partials/urgent_badge') ?><?php endif; ?>
+        <h3 class="title"><a href="/jobs/<?= e($job->slug) ?>"><?= e($job->title) ?></a></h3>
+        <p class="company"><?= e($job->company) ?> · <?= e($job->location) ?><?= $job->isRemote ? ' · Remote' : '' ?></p>
+      </div>
     </div>
     <div class="card-actions">
       <button class="share js-only" type="button" data-share-url="<?= e($shareUrl) ?>" data-share-title="<?= e($job->title . ' at ' . $job->company) ?>" aria-label="Share <?= e($job->title) ?>" title="Share or copy link" hidden><?= $this->insert('partials/icon_share') ?></button>

@@ -15,6 +15,7 @@ use App\Domain\Pagination;
 use App\Domain\Slug;
 use App\Domain\TableQuery;
 use App\Repositories\Contracts\CategoryRepositoryInterface;
+use App\Repositories\Contracts\CompanyRepositoryInterface;
 use App\Repositories\Contracts\JobWriteRepositoryInterface;
 use App\Repositories\Contracts\TransactionManagerInterface;
 use App\Services\Contracts\AuditServiceInterface;
@@ -25,6 +26,7 @@ final class JobService implements JobServiceInterface
     public function __construct(
         private readonly JobWriteRepositoryInterface $jobs,
         private readonly CategoryRepositoryInterface $categories,
+        private readonly CompanyRepositoryInterface $companies,
         private readonly TransactionManagerInterface $tx,
         private readonly AuditServiceInterface $audit,
     ) {
@@ -50,7 +52,8 @@ final class JobService implements JobServiceInterface
     public function create(JobInput $input, bool $publish, Actor $actor): Job
     {
         $this->assertCategoryExists($input->categoryId);
-        $status = $publish ? JobStatus::Published : JobStatus::Draft;
+        $this->assertCompanyExists($input->companyId);
+        $status =$publish ? JobStatus::Published : JobStatus::Draft;
 
         $id = $this->tx->transactional(function () use ($input, $status, $actor): int {
             $slug = Slug::unique(Slug::from($input->title), $this->jobs->slugExists(...));
@@ -68,6 +71,7 @@ final class JobService implements JobServiceInterface
     {
         $this->get($id);
         $this->assertCategoryExists($input->categoryId);
+        $this->assertCompanyExists($input->companyId);
         $this->jobs->update($id, $input);
         $this->audit->record($actor, 'job.updated', 'job', $id, ['title' => $input->title]);
     }
@@ -142,6 +146,13 @@ final class JobService implements JobServiceInterface
     {
         if ($this->categories->findById($categoryId) === null) {
             throw new DomainException('Choose a category.', 'category_id');
+        }
+    }
+
+    private function assertCompanyExists(int $companyId): void
+    {
+        if ($this->companies->findById($companyId) === null) {
+            throw new DomainException('Choose a company from the list, or add a new one with +.', 'company_id');
         }
     }
 }

@@ -36,9 +36,10 @@ final class JobValidator
     {
         $result = $this->validator->validate($input, [
             'title' => 'required|max:200',
-            'company' => 'required|max:200',
+            'company_id' => 'required|integer:1',
             'location' => 'required|max:120',
             'is_remote' => 'boolean',
+            'is_urgent' => 'boolean',
             'job_type' => 'required|in:' . implode(',', JobType::values()),
             'experience_level' => 'required|in:' . implode(',', ExperienceLevel::values()),
             'category_id' => 'required|integer:1',
@@ -60,6 +61,9 @@ final class JobValidator
         ]);
         $data = $result->data;
         $errors = $result->errors;
+        if (isset($errors['company_id'])) {
+            $errors['company_id'] = 'Choose a company from the list, or add a new one with +.';
+        }
 
         // The deadline is a calendar day: applications stay open until the end of it.
         $deadline = isset($errors['expires_at']) ? null : DateTimeRule::parse($data['expires_at'])?->setTime(23, 59, 59);
@@ -131,7 +135,7 @@ final class JobValidator
 
         return [new JobInput(
             (string) $data['title'],
-            (string) $data['company'],
+            (int) $data['company_id'],
             (string) $data['location'],
             (bool) $data['is_remote'],
             JobType::from((string) $data['job_type']),
@@ -151,6 +155,7 @@ final class JobValidator
             $salaryScale,
             self::text($data['application_instructions']),
             $data['reports_to'] === null ? null : (string) preg_replace('/\s+/', ' ', (string) $data['reports_to']),
+            (bool) $data['is_urgent'],
         ), []];
     }
 

@@ -16,6 +16,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Tests\Support\Fakes\ImmediateTransactions;
 use Tests\Support\Fakes\InMemoryCategoryRepository;
+use Tests\Support\Fakes\InMemoryCompanyRepository;
 use Tests\Support\Fakes\InMemoryJobRepository;
 use Tests\Support\Fakes\SpyAuditService;
 
@@ -26,14 +27,17 @@ final class JobServiceTest extends TestCase
     private JobService $service;
     private Actor $actor;
     private int $categoryId;
+    private int $companyId;
 
     protected function setUp(): void
     {
         $this->jobs = new InMemoryJobRepository();
         $categories = new InMemoryCategoryRepository();
         $this->categoryId = $categories->create('Technology', 'technology', '', true)->id;
+        $companies = new InMemoryCompanyRepository();
+        $this->companyId = $companies->create('Savanna Tech Labs', null);
         $this->audit = new SpyAuditService();
-        $this->service = new JobService($this->jobs, $categories, new ImmediateTransactions(), $this->audit);
+        $this->service = new JobService($this->jobs, $categories, $companies, new ImmediateTransactions(), $this->audit);
         $this->actor = new Actor(7, 'admin@kazi.ug', '127.0.0.1');
     }
 
@@ -159,7 +163,7 @@ final class JobServiceTest extends TestCase
     {
         $input = $this->input('X');
         $bad = new JobInput(
-            $input->title, $input->company, $input->location, false, $input->jobType, $input->experienceLevel, 999,
+            $input->title, $input->companyId, $input->location, false, $input->jobType, $input->experienceLevel, 999,
             null, null, 'UGX', 'S', [], [], [], null, null, null,
         );
 
@@ -171,10 +175,29 @@ final class JobServiceTest extends TestCase
         }
     }
 
+    public function testUnknownCompanyIsRejectedOnCreateAndUpdate(): void
+    {
+        $input = $this->input('X');
+        $bad = new JobInput(
+            $input->title, 999, $input->location, false, $input->jobType, $input->experienceLevel, $this->categoryId,
+            null, null, 'UGX', 'S', [], [], [], null, null, null,
+        );
+        $job = $this->service->create($input, false, $this->actor);
+
+        foreach ([fn () => $this->service->create($bad, false, $this->actor), fn () => $this->service->update($job->id, $bad, $this->actor)] as $call) {
+            try {
+                $call();
+                $this->fail('Expected DomainException');
+            } catch (DomainException $e) {
+                $this->assertSame('company_id', $e->field);
+            }
+        }
+    }
+
     private function input(string $title): JobInput
     {
         return new JobInput(
-            $title, 'Savanna Tech Labs', 'Kampala', true, JobType::FullTime, ExperienceLevel::Mid, $this->categoryId,
+            $title, $this->companyId, 'Kampala', true, JobType::FullTime, ExperienceLevel::Mid, $this->categoryId,
             3_500_000, 5_000_000, 'UGX', 'Build things.', ['Do x'], ['Know y'], ['React', 'CSS'], null, null, null,
         );
     }

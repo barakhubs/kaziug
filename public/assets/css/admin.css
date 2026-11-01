@@ -418,3 +418,30 @@ meter.bar::-moz-meter-bar { background: var(--brand); border-radius: 999px; }
   .compose-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .live-preview { position: sticky; top: 16px; }
 }
+
+.pill.urgent { background: #fdecea; color: #b42318; margin-left: 6px; vertical-align: middle; }
+.toolbar label.check { display: flex; align-items: center; gap: 6px; font-weight: 500; }
+.toolbar label.check input { width: auto; }
+
+/* Company picker on the job form */
+.company-field { display: grid; gap: 6px; font-weight: 600; font-size: 0.9rem; align-content: start; }
+.company-picker { display: flex; gap: 8px; align-items: flex-start; }
+.combo { position: relative; flex: 1; }
+.combo input { width: 100%; }
+.combo-options {
+  position: absolute; z-index: 50; left: 0; right: 0; top: calc(100% + 4px); margin: 0; padding: 4px;
+  list-style: none; background: #fff; border: 1px solid var(--line); border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12); max-height: 280px; overflow: auto; font-weight: 500;
+}
+.combo-options [role="option"] { display: flex; align-items: center; gap: 10px; padding: 7px 8px; border-radius: 6px; cursor: pointer; }
+.combo-options [role="option"]:hover, .combo-options [aria-selected="true"] { background: #eef5f2; }
+.combo-options img, .combo-nologo { width: 24px; height: 24px; border-radius: 4px; object-fit: contain; flex: none; background: #f2f4f6; }
+.btn-add {
+  min-width: 40px; height: 40px; padding: 0; display: inline-flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; text-decoration: none;
+}
+.combo-status { font-weight: 400; }
+#companyDialog { width: min(520px, calc(100vw - 32px)); }
+#companyDialog label { display: grid; gap: 6px; font-weight: 600; font-size: 0.9rem; }
+.logo-cell { width: 56px; }
+.company-thumb { width: 40px; height: 40px; object-fit: contain; border-radius: 6px; background: #fff; border: 1px solid var(--line); }

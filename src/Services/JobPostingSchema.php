@@ -30,7 +30,12 @@ final class JobPostingSchema
             'identifier' => ['@type' => 'PropertyValue', 'name' => $this->settings->site()->siteName, 'value' => (string) $job->id],
             'datePosted' => $job->publishedAt?->format(DATE_ATOM),
             'employmentType' => $job->jobType->schemaOrg(),
-            'hiringOrganization' => ['@type' => 'Organization', 'name' => $job->company],
+            'hiringOrganization' => array_filter([
+                '@type' => 'Organization',
+                'name' => $job->company,
+                'sameAs' => $job->companyWebsite,
+                'logo' => $job->companyLogoUrl() === null ? null : $this->config->string('app.url') . $job->companyLogoUrl(),
+            ], static fn (?string $v): bool => $v !== null),
             'industry' => $job->categoryName,
             'occupationalCategory' => $job->categoryName,
             // Applications happen on the employer's link or by email, not on this page.

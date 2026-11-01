@@ -12,7 +12,7 @@ $this->set('title', $job->title);
 ?>
 <header class="page-head">
   <div>
-    <h1><?= e($job->title) ?></h1>
+    <h1><?= e($job->title) ?><?php if ($job->isUrgent): ?> <span class="pill urgent">Urgent</span><?php endif; ?></h1>
     <p class="muted"><?= e($job->company) ?> · <?= e($job->location) ?><?= $job->isRemote ? ' · Remote' : '' ?></p>
   </div>
   <div class="head-actions">

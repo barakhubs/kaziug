@@ -10,7 +10,6 @@ use App\Core\Http\Response;
 use App\Domain\DomainException;
 use App\Services\Contracts\SettingsReaderInterface;
 use App\Services\Contracts\SettingsServiceInterface;
-use App\Services\ImageInspector;
 use App\Validation\SiteSettingsValidator;
 
 final class SiteSettingsController
@@ -21,6 +20,7 @@ final class SiteSettingsController
         private readonly SettingsServiceInterface $settings,
         private readonly SettingsReaderInterface $reader,
         private readonly SiteSettingsValidator $validator,
+        private readonly LogoUploadReader $uploads,
         private readonly Responder $responder,
     ) {
     }
@@ -33,11 +33,7 @@ final class SiteSettingsController
     public function update(Request $request): Response
     {
         [$values, $errors] = $this->validator->validate($request->all());
-        $logoBytes = null;
-        $upload = $request->file('logo');
-        if ($upload !== null && ($upload['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {
-            $logoBytes = $this->readUpload($upload, $errors);
-        }
+        $logoBytes = $this->uploads->read($request->file('logo'), $errors);
         if ($errors !== []) {
             return $this->form([...$this->reader->site()->toArray(), ...$request->all()], $errors, 422);
         }
@@ -55,29 +51,6 @@ final class SiteSettingsController
         $this->settings->update($values, $actor);
 
         return $this->responder->redirectWith($request, '/admin/settings', 'success', 'Site settings saved.');
-    }
-
-    /**
-     * @param array<string, mixed> $upload one $_FILES entry
-     * @param array<string, string> $errors
-     */
-    private function readUpload(array $upload, array &$errors): ?string
-    {
-        $error = (int) ($upload['error'] ?? UPLOAD_ERR_NO_FILE);
-        $size = (int) ($upload['size'] ?? 0);
-        if ($error === UPLOAD_ERR_INI_SIZE || $error === UPLOAD_ERR_FORM_SIZE || $size > ImageInspector::MAX_BYTES) {
-            $errors['logo'] = 'The logo must be 512 KB or smaller.';
-
-            return null;
-        }
-        $path = (string) ($upload['tmp_name'] ?? '');
-        if ($error !== UPLOAD_ERR_OK || $path === '' || !is_file($path)) {
-            $errors['logo'] = 'The upload failed. Please try again.';
-
-            return null;
-        }
-
-        return (string) file_get_contents($path, false, null, 0, ImageInspector::MAX_BYTES + 1);
     }
 
     /**

@@ -15,6 +15,7 @@ use App\Domain\TableQuery;
 use App\Repositories\Contracts\JobWriteRepositoryInterface;
 use App\Services\Contracts\AnalyticsReportServiceInterface;
 use App\Services\Contracts\CategoryServiceInterface;
+use App\Services\Contracts\CompanyServiceInterface;
 use App\Services\Contracts\JobServiceInterface;
 use App\Validation\JobValidator;
 
@@ -27,6 +28,7 @@ final class JobsController
     public function __construct(
         private readonly JobServiceInterface $jobs,
         private readonly CategoryServiceInterface $categories,
+        private readonly CompanyServiceInterface $companies,
         private readonly JobValidator $validator,
         private readonly Responder $responder,
         private readonly AnalyticsReportServiceInterface $analytics,
@@ -40,9 +42,12 @@ final class JobsController
             'q' => mb_substr(trim((string) $request->query('q', '')), 0, 100),
             'status' => in_array($request->query('status'), JobStatus::values(), true) ? (string) $request->query('status') : '',
             'category' => max(0, (int) $request->query('category', 0)),
+            'urgent' => $request->query('urgent') === '1' ? '1' : '',
         ];
         $table = TableQuery::fromQuery($request->queryAll(), JobWriteRepositoryInterface::SORTS, 'updated');
-        $result = $this->jobs->search(['q' => $filters['q'], 'status' => $filters['status'], 'category_id' => $filters['category']], $table);
+        $result = $this->jobs->search([
+            'q' => $filters['q'], 'status' => $filters['status'], 'category_id' => $filters['category'], 'urgent' => $filters['urgent'] === '1',
+        ], $table);
 
         return $this->responder->view('admin/jobs/index', [
             'result' => $result,
@@ -76,15 +81,16 @@ final class JobsController
 
     public function store(Request $request): Response
     {
-        [$input, $errors] = $this->validator->validate($request->all());
+        $values = $this->formInput($request);
+        [$input, $errors] = $this->validator->validate($values);
         if ($input === null) {
-            return $this->form(null, $request->all(), $errors, 422);
+            return $this->form(null, $values, $errors, 422);
         }
 
         try {
             $job = $this->jobs->create($input, $request->input('intent') === 'publish', $this->actor($request));
         } catch (DomainException $e) {
-            return $this->form(null, $request->all(), [$e->field ?? 'title' => $e->getMessage()], 422);
+            return $this->form(null, $values, [$e->field ?? 'title' => $e->getMessage()], 422);
         }
 
         $message = $job->status === JobStatus::Published ? 'Job created and published.' : 'Job saved as a draft.';
@@ -102,15 +108,16 @@ final class JobsController
     public function update(Request $request): Response
     {
         $job = $this->jobs->get($this->id($request));
-        [$input, $errors] = $this->validator->validate($request->all(), $job->expiresAt);
+        $values = $this->formInput($request);
+        [$input, $errors] = $this->validator->validate($values, $job->expiresAt);
         if ($input === null) {
-            return $this->form($job, $request->all(), $errors, 422);
+            return $this->form($job, $values, $errors, 422);
         }
 
         try {
             $this->jobs->update($job->id, $input, $this->actor($request));
         } catch (DomainException $e) {
-            return $this->form($job, $request->all(), [$e->field ?? 'title' => $e->getMessage()], 422);
+            return $this->form($job, $values, [$e->field ?? 'title' => $e->getMessage()], 422);
         }
 
         return $this->responder->redirectWith($request, "/admin/jobs/{$job->id}", 'success', 'Job updated.');
@@ -180,6 +187,22 @@ final class JobsController
         ], $status);
     }
 
+    /**
+     * The posted form. The company picker sends company_id; without JavaScript only the typed
+     * company_name arrives, so an exact (case-insensitive) name match stands in for the id.
+     * @return array<string, mixed>
+     */
+    private function formInput(Request $request): array
+    {
+        $values = $request->all();
+        $name = trim((string) ($values['company_name'] ?? ''));
+        if (($values['company_id'] ?? '') === '' && $name !== '') {
+            $values['company_id'] = (string) ($this->companies->findByName($name)?->id ?? '');
+        }
+
+        return $values;
+    }
+
     /** Where to go after an action: a same-site /admin/jobs URL from the form, or $default. */
     private function returnTo(Request $request, string $default): string
     {
@@ -199,9 +222,11 @@ final class JobsController
     {
         return [
             'title' => $job->title,
-            'company' => $job->company,
+            'company_id' => (string) $job->companyId,
+            'company_name' => $job->company,
             'location' => $job->location,
             'is_remote' => $job->isRemote ? '1' : '',
+            'is_urgent' => $job->isUrgent ? '1' : '',
             'job_type' => $job->jobType->value,
             'experience_level' => $job->experienceLevel->value,
             'category_id' => (string) $job->categoryId,

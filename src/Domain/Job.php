@@ -48,7 +48,18 @@ final class Job
         public readonly ?string $applicationInstructions = null,
         /** The post this role reports to, e.g. "Consultant – Adult Cardiology". */
         public readonly ?string $reportsTo = null,
+        /** Listed before other jobs with an "Urgent" badge. */
+        public readonly bool $isUrgent = false,
+        public readonly int $companyId = 0,
+        public readonly ?string $companyWebsite = null,
+        /** Null when the company has no logo. */
+        public readonly ?int $companyLogoVersion = null,
     ) {
+    }
+
+    public function companyLogoUrl(): ?string
+    {
+        return $this->companyLogoVersion === null ? null : Company::logoPath($this->companyId, $this->companyLogoVersion);
     }
 
     public function hasSalaryAmount(): bool

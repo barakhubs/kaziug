@@ -15,7 +15,7 @@ interface JobWriteRepositoryInterface
     public const SORTS = ['title', 'status', 'posted', 'deadline', 'updated'];
 
     /**
-     * @param array{q?: string, status?: string, category_id?: int} $filters
+     * @param array{q?: string, status?: string, category_id?: int, urgent?: bool} $filters
      * @param string $sort one of self::SORTS
      * @param 'asc'|'desc' $direction
      * @return array{items: list<Job>, total: int}
@@ -42,4 +42,7 @@ interface JobWriteRepositoryInterface
 
     /** @return array<string, int> status => count of non-deleted jobs */
     public function countByStatus(): array;
+
+    /** Rebuilds the search text of every job of a company, after the company is renamed. */
+    public function reindexCompany(int $companyId): void;
 }

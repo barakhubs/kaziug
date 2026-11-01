@@ -111,6 +111,26 @@ final class PublicJobsTest extends HttpTestCase
         $this->assertStringNotContainsString('Digital Marketing Intern', $this->get('/', ['salary_max' => '99999999', 'remote' => '1'])->body(), 'undisclosed salary excluded once a salary filter is set');
     }
 
+    public function testUrgentJobsAreListedFirstUnderEverySortWithABadge(): void
+    {
+        $this->assertStringNotContainsString('urgent-badge', $this->get('/')->body());
+        $this->db->execute('UPDATE jobs SET is_urgent = 1 WHERE id = ?', [$this->jobId('Agronomist')]);
+
+        foreach (['/', '/?sort=date', '/?sort=salary'] as $url) {
+            $this->assertSame('Agronomist', $this->firstTitle($url), $url);
+        }
+        $category = (string) $this->db->fetchValue(
+            'SELECT c.slug FROM jobs j JOIN job_categories c ON c.id = j.category_id WHERE j.id = ?',
+            [$this->jobId('Agronomist')],
+        );
+        $this->assertSame('Agronomist', $this->firstTitle("/categories/{$category}"));
+
+        $home = $this->get('/')->body();
+        $this->assertSame(1, preg_match_all('/<li class="card[^"]* urgent"/', $home));
+        $this->assertStringContainsString('class="urgent-badge"', $this->get('/jobs/' . $this->slug('Agronomist'))->body());
+        $this->assertStringNotContainsString('urgent-badge', $this->get('/jobs/' . $this->slug('Registered Nurse'))->body());
+    }
+
     public function testSortBySalaryAndFiltersKeptInPagerLinks(): void
     {
         $this->assertSame('Operations Manager', $this->firstTitle('/?sort=salary'));

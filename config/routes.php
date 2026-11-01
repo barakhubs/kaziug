@@ -7,6 +7,7 @@ use App\Controllers\Admin\AnalyticsController;
 use App\Controllers\Admin\AuditLogController;
 use App\Controllers\Admin\AuthController;
 use App\Controllers\Admin\CategoriesController;
+use App\Controllers\Admin\CompaniesController;
 use App\Controllers\Admin\DashboardController;
 use App\Controllers\Admin\JobsController;
 use App\Controllers\Admin\NewslettersController;
@@ -20,6 +21,7 @@ use App\Controllers\Public\ApplyController;
 use App\Controllers\Public\LegalPageController;
 use App\Controllers\Public\CategoryController;
 use App\Controllers\Public\CityController;
+use App\Controllers\Public\CompanyLogoController;
 use App\Controllers\Public\SiteFilesController;
 use App\Controllers\Public\ContactController;
 use App\Controllers\Public\HealthController;
@@ -74,6 +76,7 @@ return static function (Router $r): void {
     $r->get('/llms.txt', [SiteFilesController::class, 'llms']);
     $r->get('/jobs.rss', [SiteFilesController::class, 'rss']);
     $r->get('/media/logo', [MediaController::class, 'logo']);
+    $r->get('/media/companies/{id:\d+}/logo', [CompanyLogoController::class, 'show']);
 
     // --- Admin: sign-in (no auth) --------------------------------------------------------
     $r->get('/admin/login', [AuthController::class, 'showLogin']);
@@ -103,6 +106,14 @@ return static function (Router $r): void {
         $r->post('/categories/{id:\d+}/toggle', [CategoriesController::class, 'toggle']);
         $r->post('/categories/{id:\d+}/move', [CategoriesController::class, 'move']);
         $r->post('/categories/{id:\d+}/delete', [CategoriesController::class, 'delete']);
+
+        $r->get('/companies', [CompaniesController::class, 'index']);
+        $r->get('/companies/search', [CompaniesController::class, 'search']);
+        $r->get('/companies/new', [CompaniesController::class, 'create']);
+        $r->post('/companies', [CompaniesController::class, 'store']);
+        $r->get('/companies/{id:\d+}/edit', [CompaniesController::class, 'edit']);
+        $r->post('/companies/{id:\d+}', [CompaniesController::class, 'update']);
+        $r->post('/companies/{id:\d+}/delete', [CompaniesController::class, 'delete']);
 
         $r->get('/settings/social', [SocialProfilesController::class, 'index']);
         $r->get('/settings/social/new', [SocialProfilesController::class, 'create']);

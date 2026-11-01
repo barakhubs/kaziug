@@ -15,7 +15,7 @@ use App\Domain\TableQuery;
 interface JobServiceInterface
 {
     /**
-     * @param array{q?: string, status?: string, category_id?: int} $filters
+     * @param array{q?: string, status?: string, category_id?: int, urgent?: bool} $filters
      * @return Paginated<Job>
      */
     public function search(array $filters, TableQuery $table): Paginated;

@@ -33,10 +33,22 @@ $action = $job === null ? '/admin/jobs' : "/admin/jobs/{$job->id}";
         <input name="title" value="<?= e($v('title')) ?>" required maxlength="200">
         <?= $this->insert('partials/field_error', ['field' => 'title']) ?>
       </label>
-      <label class="<?= $err('company') ?>">Company
-        <input name="company" value="<?= e($v('company')) ?>" required maxlength="200">
-        <?= $this->insert('partials/field_error', ['field' => 'company']) ?>
-      </label>
+      <div class="company-field<?= $err('company_id') ?>">
+        <label for="companyName">Company</label>
+        <div class="company-picker" data-company-picker data-search-url="/admin/companies/search">
+          <div class="combo">
+            <input id="companyName" name="company_name" value="<?= e($v('company_name')) ?>" required maxlength="200"
+                   autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="companyOptions"
+                   placeholder="Type to search companies">
+            <input type="hidden" name="company_id" value="<?= e($v('company_id')) ?>">
+            <ul id="companyOptions" class="combo-options" role="listbox" hidden></ul>
+          </div>
+          <a class="btn-ghost btn-add" href="/admin/companies/new" target="_blank" data-open-company-dialog
+             aria-label="Add a new company" title="Add a new company">+</a>
+        </div>
+        <span class="hint combo-status" aria-live="polite"></span>
+        <?= $this->insert('partials/field_error', ['field' => 'company_id']) ?>
+      </div>
       <label class="<?= $err('location') ?>">Location (city)
         <input name="location" value="<?= e($v('location')) ?>" list="cityList" required maxlength="120">
         <?= $this->insert('partials/field_error', ['field' => 'location']) ?>
@@ -96,6 +108,7 @@ $action = $job === null ? '/admin/jobs' : "/admin/jobs/{$job->id}";
         <?= $this->insert('partials/field_error', ['field' => 'positions']) ?>
       </label>
       <label class="check"><input type="checkbox" name="is_remote" value="1"<?= $v('is_remote') ? ' checked' : '' ?>> Remote-friendly</label>
+      <label class="check"><input type="checkbox" name="is_urgent" value="1"<?= $v('is_urgent') ? ' checked' : '' ?>> Urgent <span class="hint">(listed first with a blinking “Urgent” badge until the deadline)</span></label>
       <label class="full<?= $err('skills') ?>">Skills (comma separated)
         <input name="skills" value="<?= e($v('skills')) ?>">
         <?= $this->insert('partials/field_error', ['field' => 'skills']) ?>
@@ -150,6 +163,8 @@ $action = $job === null ? '/admin/jobs' : "/admin/jobs/{$job->id}";
   </form>
 
 </div>
+
+<?= $this->insert('admin/companies/dialog') ?>
 
 <datalist id="cityList">
   <option value="Kampala"></option><option value="Entebbe"></option><option value="Jinja"></option>

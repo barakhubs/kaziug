@@ -105,6 +105,14 @@ final class Format
         return rtrim($cut, " ,.;:-–") . '…';
     }
 
+    /** Up to two initials for a logo placeholder: "Kampala Insights Ltd" → "KI". */
+    public static function initials(string $name): string
+    {
+        $words = preg_split('/[^\p{L}\p{N}]+/u', $name, -1, PREG_SPLIT_NO_EMPTY) ?: ['?'];
+
+        return mb_strtoupper(implode('', array_map(static fn (string $w): string => mb_substr($w, 0, 1), array_slice($words, 0, 2))));
+    }
+
     /** One plain sentence with a job's key facts, easy for people and AI answers to quote. */
     public static function jobFacts(\App\Domain\Job $job): string
     {

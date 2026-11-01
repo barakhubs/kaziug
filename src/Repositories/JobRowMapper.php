@@ -11,16 +11,17 @@ use App\Domain\JobStatus;
 use App\Domain\JobType;
 use DateTimeImmutable;
 
-/** Converts a jobs row (joined with its category) into a Job. */
+/** Converts a jobs row (joined with its category and company) into a Job. */
 final class JobRowMapper
 {
-    public const SELECT = 'j.id, j.title, j.slug, j.company, j.location, j.is_remote, j.job_type, j.experience_level,
+    public const SELECT = 'j.id, j.title, j.slug, co.name AS company, j.company_id, co.website AS company_website,
+        CASE WHEN co.logo_mime IS NULL THEN NULL ELSE co.logo_version END AS company_logo_version, j.location, j.is_remote, j.is_urgent, j.job_type, j.experience_level,
         j.category_id, c.name AS category_name, c.slug AS category_slug, j.salary_min, j.salary_max, j.currency,
         j.summary, j.responsibilities, j.requirements, j.skills, j.apply_url, j.apply_email, j.status,
         j.published_at, j.expires_at, j.deleted_at, j.created_at, j.updated_at, j.positions, j.salary_scale,
         j.application_instructions, j.reports_to';
 
-    public const FROM = 'jobs j JOIN job_categories c ON c.id = j.category_id';
+    public const FROM = 'jobs j JOIN job_categories c ON c.id = j.category_id JOIN companies co ON co.id = j.company_id';
 
     /** @param array<string, mixed> $row */
     public static function map(array $row): Job
@@ -56,6 +57,10 @@ final class JobRowMapper
             isset($row['salary_scale']) ? (string) $row['salary_scale'] : null,
             isset($row['application_instructions']) ? (string) $row['application_instructions'] : null,
             isset($row['reports_to']) ? (string) $row['reports_to'] : null,
+            (bool) ($row['is_urgent'] ?? false),
+            (int) $row['company_id'],
+            isset($row['company_website']) ? (string) $row['company_website'] : null,
+            isset($row['company_logo_version']) ? (int) $row['company_logo_version'] : null,
         );
     }
 

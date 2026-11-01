@@ -67,7 +67,8 @@ final class AdminDashboardAndAuditTest extends AdminHttpTestCase
     {
         $this->post('/admin/categories', ['name' => 'Tech', 'is_active' => '1']);
         $categoryId = (int) $this->db->fetchValue('SELECT id FROM job_categories');
-        $this->post('/admin/jobs', ['title' => 'Dev', 'company' => 'Co', 'location' => 'Kampala', 'job_type' => 'full-time',
+        $companyId = $this->db->insert("INSERT INTO companies (name) VALUES ('Co')");
+        $this->post('/admin/jobs', ['title' => 'Dev', 'company_id' => (string) $companyId, 'location' => 'Kampala', 'job_type' => 'full-time',
             'experience_level' => 'mid', 'category_id' => (string) $categoryId, 'summary' => 'S', 'intent' => 'draft',
             'apply_method' => 'email', 'apply_email' => 'jobs@co.ug', 'expires_at' => date('Y-m-d', strtotime('+14 days'))]);
         $this->post('/admin/settings/social', ['platform' => 'X', 'label' => 'X', 'url' => 'https://x.com/k', 'icon_key' => 'x']);

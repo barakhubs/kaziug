@@ -83,7 +83,8 @@ final class MysqlJobRepository implements JobWriteRepositoryInterface, JobReadRe
         $total = (int) $this->db->fetchValue('SELECT count(*) FROM ' . JobRowMapper::FROM . " WHERE {$whereSql}", $params);
 
         $orderParams = [];
-        $order = match ($criteria->sort) {
+        // Urgent jobs always come first; the chosen sort orders jobs within each group.
+        $order = 'j.is_urgent DESC, ' . match ($criteria->sort) {
             'date' => 'j.published_at DESC, j.id DESC',
             'salary' => 'coalesce(j.salary_max, j.salary_min) IS NULL, coalesce(j.salary_max, j.salary_min) DESC, j.published_at DESC',
             default => $search->against !== null
@@ -183,7 +184,7 @@ final class MysqlJobRepository implements JobWriteRepositoryInterface, JobReadRe
 
         $q = trim((string) ($filters['q'] ?? ''));
         if ($q !== '') {
-            $where[] = '(j.title LIKE ? OR j.company LIKE ? OR j.location LIKE ?)';
+            $where[] = '(j.title LIKE ? OR co.name LIKE ? OR j.location LIKE ?)';
             $like = '%' . addcslashes($q, '%_\\') . '%';
             array_push($params, $like, $like, $like);
         }
@@ -194,6 +195,9 @@ final class MysqlJobRepository implements JobWriteRepositoryInterface, JobReadRe
         if (($filters['category_id'] ?? 0) > 0) {
             $where[] = 'j.category_id = ?';
             $params[] = (int) $filters['category_id'];
+        }
+        if (($filters['urgent'] ?? false) === true) {
+            $where[] = 'j.is_urgent = 1';
         }
         $whereSql = implode(' AND ', $where);
 
@@ -225,10 +229,10 @@ final class MysqlJobRepository implements JobWriteRepositoryInterface, JobReadRe
     public function insert(JobInput $input, string $slug, JobStatus $status, ?DateTimeImmutable $publishedAt): int
     {
         return $this->db->insert(
-            'INSERT INTO jobs (title, slug, company, location, is_remote, job_type, experience_level, category_id,
+            'INSERT INTO jobs (title, slug, company_id, location, is_remote, is_urgent, job_type, experience_level, category_id,
                 salary_min, salary_max, currency, summary, responsibilities, requirements, skills, apply_url, apply_email,
                 expires_at, positions, salary_scale, application_instructions, reports_to, search_text, status, published_at)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
             [
                 ...$this->fieldValues($input, $slug),
                 $status->value,
@@ -240,7 +244,7 @@ final class MysqlJobRepository implements JobWriteRepositoryInterface, JobReadRe
     public function update(int $id, JobInput $input): void
     {
         $this->db->execute(
-            'UPDATE jobs SET title = ?, company = ?, location = ?, is_remote = ?, job_type = ?, experience_level = ?,
+            'UPDATE jobs SET title = ?, company_id = ?, location = ?, is_remote = ?, is_urgent = ?, job_type = ?, experience_level = ?,
                 category_id = ?, salary_min = ?, salary_max = ?, currency = ?, summary = ?, responsibilities = ?,
                 requirements = ?, skills = ?, apply_url = ?, apply_email = ?, expires_at = ?,
                 positions = ?, salary_scale = ?, application_instructions = ?, reports_to = ?, search_text = ?
@@ -292,14 +296,32 @@ final class MysqlJobRepository implements JobWriteRepositoryInterface, JobReadRe
         return $counts;
     }
 
+    public function reindexCompany(int $companyId): void
+    {
+        $name = $this->companyName($companyId);
+        foreach ($this->db->fetchAll('SELECT id, title, skills, summary FROM jobs WHERE company_id = ?', [$companyId]) as $row) {
+            $skills = json_decode((string) $row['skills'], true);
+            $this->db->execute('UPDATE jobs SET search_text = ? WHERE id = ?', [
+                FullTextQuery::document((string) $row['title'], is_array($skills) ? array_map('strval', $skills) : [], $name, (string) $row['summary']),
+                (int) $row['id'],
+            ]);
+        }
+    }
+
+    private function companyName(int $companyId): string
+    {
+        return (string) $this->db->fetchValue('SELECT name FROM companies WHERE id = ?', [$companyId]);
+    }
+
     /** @return list<mixed> column values in the order used by insert() and update() */
     private function fieldValues(JobInput $input, ?string $slug): array
     {
         $values = [
             $input->title,
-            $input->company,
+            $input->companyId,
             $input->location,
             $input->isRemote,
+            $input->isUrgent,
             $input->jobType->value,
             $input->experienceLevel->value,
             $input->categoryId,
@@ -317,7 +339,7 @@ final class MysqlJobRepository implements JobWriteRepositoryInterface, JobReadRe
             $input->salaryScale,
             $input->applicationInstructions,
             $input->reportsTo,
-            FullTextQuery::document($input->title, $input->skills, $input->company, $input->summary),
+            FullTextQuery::document($input->title, $input->skills, $this->companyName($input->companyId), $input->summary),
         ];
         if ($slug !== null) {
             array_splice($values, 1, 0, [$slug]);

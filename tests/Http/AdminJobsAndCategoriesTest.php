@@ -21,12 +21,20 @@ final class AdminJobsAndCategoriesTest extends AdminHttpTestCase
         return (int) $id;
     }
 
+    private function companyId(string $name = 'Kampala Insights'): int
+    {
+        $id = $this->db->fetchValue('SELECT id FROM companies WHERE name = ?', [$name]);
+
+        return $id === null ? $this->db->insert('INSERT INTO companies (name) VALUES (?)', [$name]) : (int) $id;
+    }
+
     /** @return array<string, string> */
     private function jobForm(array $overrides = []): array
     {
         return [...[
             'title' => 'Data Analyst',
-            'company' => 'Kampala Insights',
+            'company_id' => (string) $this->companyId(),
+            'company_name' => 'Kampala Insights',
             'location' => 'Kampala',
             'job_type' => 'full-time',
             'experience_level' => 'mid',
@@ -164,6 +172,23 @@ final class AdminJobsAndCategoriesTest extends AdminHttpTestCase
         $this->post("/admin/jobs/{$id}", $this->jobForm(['reports_to' => '']));
         $this->assertNull($this->db->fetchValue('SELECT reports_to FROM jobs WHERE id = ?', [$id]));
         $this->assertStringNotContainsString('Reports to:', $this->get("/jobs/{$slug}")->body());
+    }
+
+    public function testUrgentFlagIsSavedFilteredAndCleared(): void
+    {
+        $this->post('/admin/jobs', $this->jobForm(['intent' => 'publish', 'title' => 'Plain Job']));
+        $this->post('/admin/jobs', $this->jobForm(['intent' => 'publish', 'title' => 'Rush Job', 'is_urgent' => '1']));
+        $id = (int) $this->db->fetchValue('SELECT max(id) FROM jobs');
+        $this->assertSame(1, (int) $this->db->fetchValue('SELECT is_urgent FROM jobs WHERE id = ?', [$id]));
+
+        $this->assertMatchesRegularExpression('/name="is_urgent" value="1" checked/', $this->get("/admin/jobs/{$id}/edit")->body());
+        $this->assertStringContainsString('<span class="pill urgent">Urgent</span>', $this->get("/admin/jobs/{$id}")->body());
+        $urgentOnly = $this->get('/admin/jobs', ['urgent' => '1'])->body();
+        $this->assertStringContainsString('Rush Job', $urgentOnly);
+        $this->assertStringNotContainsString('Plain Job', $urgentOnly);
+
+        $this->post("/admin/jobs/{$id}", $this->jobForm(['title' => 'Rush Job']));
+        $this->assertSame(0, (int) $this->db->fetchValue('SELECT is_urgent FROM jobs WHERE id = ?', [$id]));
     }
 
     public function testDeadlineIsRequiredAndShownEverywhere(): void

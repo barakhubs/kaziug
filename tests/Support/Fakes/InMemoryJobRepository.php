@@ -23,7 +23,8 @@ final class InMemoryJobRepository implements JobWriteRepositoryInterface
     public function adminSearch(array $filters, int $limit, int $offset, string $sort = 'updated', string $direction = 'desc'): array
     {
         $items = array_values(array_filter($this->jobs, static fn (Job $j): bool => $j->deletedAt === null
-            && (($filters['status'] ?? '') === '' || $j->status->value === $filters['status'])));
+            && (($filters['status'] ?? '') === '' || $j->status->value === $filters['status'])
+            && (($filters['urgent'] ?? false) === false || $j->isUrgent)));
 
         return ['items' => array_slice($items, $offset, $limit), 'total' => count($items)];
     }
@@ -95,16 +96,24 @@ final class InMemoryJobRepository implements JobWriteRepositoryInterface
         return $counts;
     }
 
+    /** @var list<int> company ids passed to reindexCompany() */
+    public array $reindexed = [];
+
+    public function reindexCompany(int $companyId): void
+    {
+        $this->reindexed[] = $companyId;
+    }
+
     private function build(int $id, JobInput $in, string $slug, JobStatus $status, ?DateTimeImmutable $publishedAt, ?DateTimeImmutable $deletedAt): Job
     {
         $now = new DateTimeImmutable();
 
         return new Job(
-            $id, $in->title, $slug, $in->company, $in->location, $in->isRemote, $in->jobType, $in->experienceLevel,
+            $id, $in->title, $slug, 'Company ' . $in->companyId, $in->location, $in->isRemote, $in->jobType, $in->experienceLevel,
             $in->categoryId, 'Category', 'category', $in->salaryMin, $in->salaryMax, $in->currency, $in->summary,
             $in->responsibilities, $in->requirements, $in->skills, $in->applyUrl, $in->applyEmail, $status,
             $publishedAt, $in->expiresAt, $deletedAt, $now, $now, $in->positions, $in->salaryScale,
-            $in->applicationInstructions, $in->reportsTo,
+            $in->applicationInstructions, $in->reportsTo, $in->isUrgent, $in->companyId,
         );
     }
 }

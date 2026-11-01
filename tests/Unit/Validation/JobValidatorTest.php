@@ -211,7 +211,7 @@ final class JobValidatorTest extends TestCase
     {
         return [...[
             'title' => 'Customer Support Agent',
-            'company' => 'Savanna Tech Labs',
+            'company_id' => '1',
             'location' => 'Kampala',
             'job_type' => 'contract',
             'experience_level' => 'entry',

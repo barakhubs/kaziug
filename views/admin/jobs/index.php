@@ -39,6 +39,7 @@ $sort = fn (string $key, string $label, string $first = 'asc'): string => $this-
       <option value="<?= e($category->id) ?>"<?= $filters['category'] === $category->id ? ' selected' : '' ?>><?= e($category->name) ?></option>
     <?php endforeach; ?>
   </select>
+  <label class="check"><input type="checkbox" name="urgent" value="1"<?= $filters['urgent'] === '1' ? ' checked' : '' ?> data-autosubmit> Urgent only</label>
   <?php if ($table->perPage !== 20): ?><input type="hidden" name="per_page" value="<?= e($table->perPage) ?>"><?php endif; ?>
   <button class="btn-ghost" type="submit">Search</button>
   <?php if ($filterQuery !== []): ?><a class="link-reset" href="/admin/jobs">Clear</a><?php endif; ?>
@@ -77,6 +78,7 @@ $sort = fn (string $key, string $label, string $first = 'asc'): string => $this-
         <td><input type="checkbox" name="ids[]" value="<?= e($job->id) ?>" form="bulk" aria-label="Select <?= e($job->title) ?>"></td>
         <td>
           <strong><a href="/admin/jobs/<?= e($job->id) ?>"><?= e($job->title) ?></a></strong>
+          <?php if ($job->isUrgent): ?><span class="pill urgent">Urgent</span><?php endif; ?>
           <div class="sub"><?= e($job->company) ?> · <?= e($job->categoryName) ?><?= $job->isExpired() ? ' · expired' : '' ?></div>
         </td>
         <td><span class="pill <?= e($job->status->value) ?>"><?= e($job->status->label()) ?></span></td>
