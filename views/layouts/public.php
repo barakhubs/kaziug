@@ -6,6 +6,8 @@
 /** @var string|null $canonical */
 /** @var string|null $head extra head markup captured by the page (JSON-LD, OpenGraph) */
 /** @var string|null $robots */
+/** @var string|null $ogImage site-relative share image; the site logo when unset */
+/** @var string|null $ogImageAlt */
 $fullTitle = isset($pageTitle) && $pageTitle !== '' ? $pageTitle . ' · ' . $site->siteName : $site->siteName . ': ' . $site->tagline;
 ?>
 <!doctype html>
@@ -23,14 +25,12 @@ $fullTitle = isset($pageTitle) && $pageTitle !== '' ? $pageTitle . ' · ' . $sit
   <meta property="og:description" content="<?= e($metaDescription ?? $site->metaDescription) ?>">
   <meta property="og:locale" content="en_UG">
   <?php if (isset($canonical)): ?><meta property="og:url" content="<?= e($canonical) ?>"><?php endif; ?>
-  <meta property="og:image" content="<?= e(($appUrl ?? '') . $site->logoPath()) ?>">
+  <meta property="og:image" content="<?= e(($appUrl ?? '') . ($ogImage ?? $site->logoPath())) ?>">
+  <meta property="og:image:alt" content="<?= e($ogImageAlt ?? $site->siteName) ?>">
   <meta name="twitter:card" content="summary">
   <?= $this->insert('partials/favicons') ?>
   <link rel="alternate" type="application/rss+xml" title="<?= e($site->siteName) ?> latest jobs" href="/jobs.rss">
   <?= $head ?? '' ?>
-  <link rel="stylesheet" href="/assets/vendor/fontawesome/css/fontawesome.min.css">
-  <link rel="stylesheet" href="/assets/vendor/fontawesome/css/brands.min.css">
-  <link rel="stylesheet" href="/assets/vendor/fontawesome/css/solid.min.css">
   <link rel="stylesheet" href="/assets/css/site.css">
   <script src="/assets/js/js-flag.js"></script>
   <script src="/assets/js/site.js" defer></script>
@@ -55,7 +55,7 @@ $fullTitle = isset($pageTitle) && $pageTitle !== '' ? $pageTitle . ' · ' . $sit
 
   <?= $this->insert('partials/public_footer') ?>
   <?php if ($site->hasWhatsappChannel()): ?>
-    <a class="wa-float" href="<?= e($site->whatsappChannelUrl) ?>" target="_blank" rel="noopener" aria-label="Join our WhatsApp channel"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i><span>Join our channel</span></a>
+    <a class="wa-float" href="<?= e($site->whatsappChannelUrl) ?>" target="_blank" rel="noopener" aria-label="Join our WhatsApp channel"><?= \App\Core\Icon::svg('brands/whatsapp') ?><span>Join our channel</span></a>
   <?php endif; ?>
 </body>
 </html>

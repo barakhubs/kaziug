@@ -1,4 +1,4 @@
 <?php
 /** @var \App\Domain\SocialIcon $icon */
 ?>
-<i class="<?= e($icon->faClass()) ?>" aria-hidden="true"></i>
+<?= \App\Core\Icon::svg($icon->iconName()) ?>

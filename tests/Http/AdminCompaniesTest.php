@@ -190,5 +190,11 @@ final class AdminCompaniesTest extends AdminHttpTestCase
         $org = json_decode($m[1], true)['hiringOrganization'];
         $this->assertSame('https://insights.example', $org['sameAs']);
         $this->assertStringEndsWith($logoUrl, $org['logo']);
+        $this->assertMatchesRegularExpression('#<meta property="og:image" content="[^"]*' . preg_quote($logoUrl, '#') . '">#', $page);
+        $this->assertStringContainsString('<meta property="og:image:alt" content="Kampala Insights logo">', $page);
+
+        // A company without a logo keeps the site logo as the share image.
+        $plumber = $this->get('/jobs/' . $this->db->fetchValue("SELECT slug FROM jobs WHERE title = 'Plumber'"))->body();
+        $this->assertDoesNotMatchRegularExpression('#og:image" content="[^"]*/media/companies/#', $plumber);
     }
 }

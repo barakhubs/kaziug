@@ -33,9 +33,6 @@ $isActive = static fn (string $href): bool => $href === $activeHref;
   <meta name="robots" content="noindex, nofollow">
   <title><?= e(($title ?? 'Back office') . ' · KaziUG') ?></title>
   <?= $this->insert('partials/favicons') ?>
-  <link rel="stylesheet" href="/assets/vendor/fontawesome/css/fontawesome.min.css">
-  <link rel="stylesheet" href="/assets/vendor/fontawesome/css/brands.min.css">
-  <link rel="stylesheet" href="/assets/vendor/fontawesome/css/solid.min.css">
   <link rel="stylesheet" href="/assets/css/admin.css">
   <script src="/assets/js/admin.js" defer></script>
 </head>

@@ -310,6 +310,7 @@ final class AdminJobsAndCategoriesTest extends AdminHttpTestCase
         $eng = $this->categoryId('Engineering');
         $design = $this->categoryId('Design');
         $this->assertSame('engineering', $this->db->fetchValue('SELECT slug FROM job_categories WHERE id = ?', [$eng]));
+        $this->assertStringContainsString("<a class=\"pill draft\" href=\"/admin/categories/{$eng}/edit\">No description</a>", $this->get('/admin/categories')->body());
 
         $dupSlug = $this->post("/admin/categories/{$design}", ['name' => 'Design', 'slug' => 'engineering']);
         $this->assertStatus(422, $dupSlug);

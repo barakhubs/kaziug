@@ -143,7 +143,7 @@ select {
   padding: 12px 18px 12px 14px; border-radius: 999px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
 }
-.wa-float i { font-size: 1.6rem; }
+.wa-float .icon { font-size: 1.6rem; }
 .wa-float:hover, .wa-float:focus-visible { background: #1ebe5b; color: #fff; }
 .filters-open .wa-float { display: none; }
 .empty { padding: 40px; text-align: center; color: var(--muted); background: #fff; border-radius: var(--radius); border: 1px dashed var(--line); }
@@ -242,7 +242,7 @@ a.btn-ghost { height: 40px; }
   border-radius: 999px; background: #eef3f1; color: var(--brand-dark);
 }
 .social a:hover { background: var(--brand); color: #fff; }
-.social i { font-size: 17px; line-height: 1; }
+.social .icon { font-size: 17px; }
 
 /* Static pages (confirm, unsubscribe, maintenance, errors) */
 .page { max-width: 640px; padding-top: 32px; }
@@ -507,7 +507,7 @@ a.btn-ghost { height: 40px; }
   /* Icon only, so it covers less of the list. */
   .wa-float { padding: 12px; right: 14px; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); }
   .wa-float span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-  .wa-float i { font-size: 1.9rem; }
+  .wa-float .icon { font-size: 1.9rem; }
   /* Room so the floating button never hides the last card's closing date. */
   body:has(.wa-float) .site-footer { padding-bottom: 72px; }
 }
@@ -547,3 +547,6 @@ a.btn-ghost { height: 40px; }
   .company-logo.sm { width: 36px; height: 36px; }
   .company-logo.lg { width: 48px; height: 48px; }
 }
+
+/* Inline SVG icons (App\Core\Icon): sized by font-size, coloured by the text colour */
+.icon { display: inline-block; vertical-align: -0.125em; flex: none; overflow: visible; }

@@ -8,7 +8,8 @@ $last = count($categories) - 1;
   <h1>Categories</h1>
   <div class="head-actions"><a class="btn-primary" href="/admin/categories/new">+ New category</a></div>
 </header>
-<p class="hint">Categories with jobs can't be deleted (deleted jobs still count). Deactivate a category to hide it from the public site instead.</p>
+<p class="hint">Categories with jobs can't be deleted (deleted jobs still count). Deactivate a category to hide it from the public site instead.
+  A description is shown on the category page; categories without one get only a generated sentence there, which gives search engines and AI assistants little to work with.</p>
 
 <div class="table-wrap">
   <table>
@@ -26,7 +27,7 @@ $last = count($categories) - 1;
             <button type="submit" name="direction" value="down"<?= $i === $last ? ' disabled' : '' ?> aria-label="Move <?= e($category->name) ?> down">↓</button>
           </form>
         </td>
-        <td><strong><?= e($category->name) ?></strong><?php if ($category->description !== ''): ?><div class="muted small"><?= e($category->description) ?></div><?php endif; ?></td>
+        <td><strong><?= e($category->name) ?></strong><?php if ($category->description !== ''): ?><div class="muted small"><?= e($category->description) ?></div><?php else: ?> <a class="pill draft" href="/admin/categories/<?= e($category->id) ?>/edit">No description</a><?php endif; ?></td>
         <td class="small"><?= e($category->slug) ?></td>
         <td><?= e($category->jobCount) ?></td>
         <td><span class="pill <?= $category->isActive ? 'active' : 'inactive' ?>"><?= $category->isActive ? 'Active' : 'Inactive' ?></span></td>

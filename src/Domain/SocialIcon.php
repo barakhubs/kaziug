@@ -32,19 +32,19 @@ enum SocialIcon: string
         };
     }
 
-    /** Font Awesome classes for the icon (self-hosted in public/assets/vendor/fontawesome). */
-    public function faClass(): string
+    /** The inline SVG icon name (a file in views/icons), rendered by App\Core\Icon. */
+    public function iconName(): string
     {
         return match ($this) {
-            self::Facebook => 'fa-brands fa-facebook-f',
-            self::X => 'fa-brands fa-x-twitter',
-            self::Instagram => 'fa-brands fa-instagram',
-            self::LinkedIn => 'fa-brands fa-linkedin-in',
-            self::YouTube => 'fa-brands fa-youtube',
-            self::TikTok => 'fa-brands fa-tiktok',
-            self::WhatsApp => 'fa-brands fa-whatsapp',
-            self::Telegram => 'fa-brands fa-telegram',
-            self::Website => 'fa-solid fa-globe',
+            self::Facebook => 'brands/facebook-f',
+            self::X => 'brands/x-twitter',
+            self::Instagram => 'brands/instagram',
+            self::LinkedIn => 'brands/linkedin-in',
+            self::YouTube => 'brands/youtube',
+            self::TikTok => 'brands/tiktok',
+            self::WhatsApp => 'brands/whatsapp',
+            self::Telegram => 'brands/telegram',
+            self::Website => 'solid/globe',
         };
     }
 

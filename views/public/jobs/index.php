@@ -160,7 +160,7 @@ $otherCities = array_values(array_filter($cities, static fn (array $c): bool => 
     <div class="results-head">
       <?php $activeFilters = $criteria->activeFilterCount($includeCategory); ?>
       <button type="button" class="filters-toggle" aria-controls="filters" aria-expanded="false">
-        <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+        <?= \App\Core\Icon::svg('solid/sliders') ?>
         Filters<?php if ($activeFilters > 0): ?> <span class="badge"><?= e($activeFilters) ?></span><?php endif; ?>
       </button>
       <p id="resultsSummary" aria-live="polite">

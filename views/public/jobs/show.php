@@ -12,6 +12,11 @@ $this->layout('layouts/public');
 $this->set('pageTitle', $job->title . ' at ' . $job->company . ', ' . $job->location);
 $this->set('metaDescription', Format::excerpt(Format::jobFacts($job) . ' ' . $job->summary));
 $this->set('canonical', $appUrl . '/jobs/' . $job->slug);
+if ($job->companyLogoUrl() !== null) {
+    // Shared links (WhatsApp, LinkedIn, X) preview the employer's logo rather than ours.
+    $this->set('ogImage', $job->companyLogoUrl());
+    $this->set('ogImageAlt', $job->company . ' logo');
+}
 $this->start('head');
 ?>
   <script type="application/ld+json"><?= $jsonLd ?></script>

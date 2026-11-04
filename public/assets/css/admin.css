@@ -258,7 +258,7 @@ form.inline { display: inline; }
 input.short { max-width: 120px; }
 td a { color: var(--ink); }
 @media (max-width: 1000px) { .edit-layout { grid-template-columns: 1fr; } }
-.icon-cell i, .icon-option i { width: 20px; font-size: 18px; text-align: center; color: var(--brand-dark); }
+.icon-cell .icon, .icon-option .icon { font-size: 18px; color: var(--brand-dark); }
 .icon-picker { border: 0; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
 .icon-picker legend { font-weight: 600; font-size: 0.9rem; margin-bottom: 6px; }
 .icon-option {
@@ -445,3 +445,6 @@ meter.bar::-moz-meter-bar { background: var(--brand); border-radius: 999px; }
 #companyDialog label { display: grid; gap: 6px; font-weight: 600; font-size: 0.9rem; }
 .logo-cell { width: 56px; }
 .company-thumb { width: 40px; height: 40px; object-fit: contain; border-radius: 6px; background: #fff; border: 1px solid var(--line); }
+
+/* Inline SVG icons (App\Core\Icon): sized by font-size, coloured by the text colour */
+.icon { display: inline-block; vertical-align: -0.125em; flex: none; overflow: visible; }
