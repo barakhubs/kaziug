@@ -7,13 +7,21 @@ namespace App\Controllers\Public;
 use App\Core\Http\Request;
 use App\Core\Http\Response;
 use App\Domain\SiteSettings;
+use App\Services\Seo\BlogFeed;
 use App\Services\Seo\SiteFiles;
 
-/** /robots.txt, /sitemap.xml, /llms.txt and /jobs.rss, generated from live data. */
+/** /robots.txt, /sitemap.xml, /llms.txt, /jobs.rss and /blog.rss, generated from live data. */
 final class SiteFilesController
 {
-    public function __construct(private readonly SiteFiles $files)
+    public function __construct(
+        private readonly SiteFiles $files,
+        private readonly BlogFeed $blogFeed,
+    ) {
+    }
+
+    public function blogRss(Request $request): Response
     {
+        return $this->text($this->blogFeed->rss(), 'application/rss+xml; charset=UTF-8');
     }
 
     public function robots(Request $request): Response

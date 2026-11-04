@@ -20,6 +20,7 @@ $this->set('title', $job->title);
     <?php if ($job->isPubliclyVisible()): ?>
       <a class="btn-ghost" href="/jobs/<?= e($job->slug) ?>" target="_blank" rel="noopener">View on site ↗</a>
     <?php endif; ?>
+    <a class="btn-ghost" href="/admin/jobs/new">+ New job</a>
     <a class="btn-primary" href="/admin/jobs/<?= e($job->id) ?>/edit">Edit</a>
   </div>
 </header>

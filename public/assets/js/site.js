@@ -214,3 +214,80 @@
 
   renderSaved();
 })();
+
+/*
+ * Marketing popup (home and job pages only): opens once per visitor. The browser remembers the
+ * popup's id and version in localStorage; nothing is sent to the server. If storage is blocked we
+ * can't remember, so the popup stays closed rather than reappearing on every page.
+ */
+(() => {
+  'use strict';
+
+  const SEEN_KEY = 'kazi-popup-seen';
+  const dialog = document.getElementById('promo');
+  if (!dialog || typeof dialog.showModal !== 'function') return;
+  const key = dialog.dataset.promoKey;
+
+  try {
+    if (localStorage.getItem(SEEN_KEY) === key) return;
+    localStorage.setItem('kazi-storage-test', '1');
+    localStorage.removeItem('kazi-storage-test');
+  } catch { return; }
+
+  // On phones it slides up from the bottom and leaves the page usable (Google demotes pages
+  // whose content is covered by a popup on mobile); on larger screens it is a centred modal.
+  const phone = window.matchMedia('(max-width: 640px)').matches;
+  const hasMouse = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  let opened = false;
+  let returnFocus = null;
+
+  function open() {
+    if (opened) return;
+    opened = true;
+    try { localStorage.setItem(SEEN_KEY, key); } catch { /* shown once this visit at least */ }
+    returnFocus = document.activeElement;
+    dialog.classList.toggle('promo-sheet', phone);
+    if (phone) { dialog.show(); } else { dialog.showModal(); }
+    dialog.querySelector('.promo-close').focus();
+  }
+
+  function close() {
+    if (dialog.open) dialog.close();
+  }
+
+  dialog.addEventListener('close', () => { if (returnFocus instanceof HTMLElement) returnFocus.focus(); });
+  // Buttons close it; the call-to-action link also closes it and then follows its href as usual.
+  dialog.querySelectorAll('[data-promo-close]').forEach((el) => el.addEventListener('click', close));
+  // A click on the dimmed backdrop (the dialog element itself, outside its content) closes the modal.
+  dialog.addEventListener('click', (event) => { if (event.target === dialog) close(); });
+  // A non-modal dialog (phones) doesn't close on Escape by itself.
+  document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && dialog.open) close(); });
+
+  const delay = Math.max(0, Number(dialog.dataset.delay) || 0) * 1000;
+  const trigger = dialog.dataset.trigger;
+
+  if (trigger === 'scroll') {
+    const check = () => {
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      // Short pages can't be scrolled halfway: open after the delay instead.
+      if (scrollable <= 0) { window.removeEventListener('scroll', check); setTimeout(open, delay); return; }
+      if (window.scrollY / scrollable >= 0.5) { window.removeEventListener('scroll', check); open(); }
+    };
+    window.addEventListener('scroll', check, { passive: true });
+    check();
+  } else if (trigger === 'exit' && hasMouse) {
+    // Exit intent: the pointer leaves through the top of the window (towards the tabs or address bar).
+    // Ignored for the first few seconds so it doesn't fire while the visitor is still arriving.
+    const armedAt = Date.now() + 3000;
+    const onLeave = (event) => {
+      if (event.relatedTarget === null && event.clientY <= 0 && Date.now() >= armedAt) {
+        document.removeEventListener('mouseout', onLeave);
+        open();
+      }
+    };
+    document.addEventListener('mouseout', onLeave);
+  } else {
+    // "delay", and "exit" on touch devices, which have no pointer to leave the window.
+    setTimeout(open, delay);
+  }
+})();

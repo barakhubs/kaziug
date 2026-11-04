@@ -360,3 +360,64 @@
     }
   });
 })();
+
+(() => {
+  'use strict';
+
+  // Live character counts: <input data-count-ideal="155"> shows "120 / 155" and warns past the ideal length.
+  document.querySelectorAll('[data-count-ideal]').forEach((field) => {
+    const ideal = Number(field.dataset.countIdeal);
+    const count = document.createElement('span');
+    count.className = 'char-count';
+    count.setAttribute('aria-live', 'polite');
+    field.insertAdjacentElement('afterend', count);
+    const update = () => {
+      const length = field.value.trim().length;
+      count.textContent = `${length} / ${ideal}`;
+      count.classList.toggle('over', length > ideal);
+    };
+    field.addEventListener('input', update);
+    update();
+  });
+})();
+
+(() => {
+  'use strict';
+
+  // Blog editor: Quill (public/assets/vendor/quill) edits the article; its HTML is copied into the
+  // textarea on submit. Without JavaScript, or if Quill fails to load, the textarea takes plain HTML.
+  const holder = document.querySelector('[data-rich-editor]');
+  if (!holder || typeof window.Quill !== 'function') return;
+  const textarea = document.getElementById(holder.dataset.richEditor);
+  const form = textarea.form;
+
+  holder.hidden = false;
+  textarea.hidden = true;
+  textarea.required = false;
+  const quill = new window.Quill(holder, {
+    theme: 'snow',
+    placeholder: 'Write the article…',
+    modules: {
+      // Only formats the server-side sanitiser keeps: headings, emphasis, links, lists and quotes.
+      toolbar: [
+        [{ header: [2, 3, false] }],
+        ['bold', 'italic', 'underline'],
+        ['link', 'blockquote'],
+        [{ list: 'ordered' }, { list: 'bullet' }],
+        ['clean'],
+      ],
+    },
+    formats: ['header', 'bold', 'italic', 'underline', 'link', 'blockquote', 'list'],
+  });
+  if (textarea.value.trim() !== '') {
+    quill.clipboard.dangerouslyPasteHTML(textarea.value, 'silent');
+  }
+
+  form.addEventListener('submit', () => {
+    // Apply edits Quill hasn't processed yet, so a word typed just before "Save" isn't lost.
+    quill.update('user');
+    // Quill 2 writes every space as &nbsp; in its semantic HTML; plain spaces let text wrap normally.
+    const html = quill.getSemanticHTML().replace(/&nbsp;/g, ' ');
+    textarea.value = quill.getText().trim() === '' ? '' : html;
+  });
+})();

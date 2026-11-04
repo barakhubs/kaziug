@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Seo;
 
 use App\Core\Config;
+use App\Domain\BlogPost;
 use App\Domain\SiteSettings;
 use App\Domain\SocialProfile;
 use App\Services\Contracts\SettingsReaderInterface;
@@ -12,7 +13,8 @@ use App\Services\Contracts\SocialProfileServiceInterface;
 
 /**
  * schema.org JSON-LD for search engines and AI assistants: who the site is (Organization),
- * how to search it (WebSite), where a page sits (BreadcrumbList), the CV service and its FAQ.
+ * how to search it (WebSite), where a page sits (BreadcrumbList), the CV service and its FAQ,
+ * and blog articles (BlogPosting).
  * Every method returns JSON that is safe to place inside <script type="application/ld+json">.
  */
 final class StructuredData
@@ -141,6 +143,36 @@ final class StructuredData
                 'acceptedAnswer' => ['@type' => 'Answer', 'text' => $item['answer']],
             ], $faq),
         ]);
+    }
+
+    /** A blog article, published by the site's Organization. */
+    public function blogPosting(BlogPost $post): string
+    {
+        $site = $this->settings->site();
+        $organization = ['@id' => $this->url('/') . '#organization', '@type' => 'Organization', 'name' => $site->siteName];
+        $url = $this->url('/blog/' . $post->slug);
+        $data = [
+            '@context' => 'https://schema.org',
+            '@type' => 'BlogPosting',
+            'headline' => mb_substr($post->title, 0, 110),
+            'description' => $post->description(),
+            'url' => $url,
+            'mainEntityOfPage' => ['@type' => 'WebPage', '@id' => $url],
+            'datePublished' => $post->publishedAt?->format(DATE_ATOM),
+            'dateModified' => $post->updatedAt->format(DATE_ATOM),
+            'inLanguage' => 'en-UG',
+            'wordCount' => count(preg_split('/\s+/u', $post->plainText(), -1, PREG_SPLIT_NO_EMPTY) ?: []),
+            'author' => $organization,
+            'publisher' => [...$organization, 'logo' => ['@type' => 'ImageObject', 'url' => $this->url($site->logoPath())]],
+        ];
+        if ($post->coverUrl() !== null) {
+            $data['image'] = $this->url($post->coverUrl());
+        }
+        if ($post->jobCategoryName !== null) {
+            $data['about'] = $post->jobCategoryName . ' jobs in Uganda';
+        }
+
+        return $this->encode(array_filter($data, static fn (mixed $v): bool => $v !== null));
     }
 
     public function url(string $path): string

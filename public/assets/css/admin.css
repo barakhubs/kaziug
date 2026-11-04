@@ -90,12 +90,26 @@ input:focus, select:focus, textarea:focus, button:focus-visible {
 }
 .side-nav { display: grid; gap: 4px; }
 .nav-btn {
-  display: block; width: 100%; text-align: left; background: none; border: 0;
+  display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; background: none; border: 0;
   color: #e6f2ef; padding: 10px 12px; border-radius: 8px; text-decoration: none;
   font-weight: 500;
 }
+/* Every glyph gets the same box, so the labels line up whatever the icon's proportions. */
+.nav-btn .icon, .nav-quick .icon { width: 1.15em; height: 1.05em; opacity: 0.85; }
 .nav-btn:hover { background: rgba(255, 255, 255, 0.08); }
 .nav-btn.active { background: rgba(255, 255, 255, 0.16); color: #fff; font-weight: 600; }
+.nav-btn.active .icon { opacity: 1; }
+.nav-group { display: grid; gap: 2px; }
+.nav-group + .nav-group { margin-top: 10px; }
+.nav-heading {
+  margin: 0 0 2px; padding: 0 12px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: #8fbdb1;
+}
+.nav-quick {
+  display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 10px; padding: 10px 12px;
+  border-radius: 8px; background: #f0b429; color: #1f2a37; font-weight: 700; text-decoration: none;
+}
+.nav-quick:hover { background: #f5c451; }
 .logout { margin-top: auto; }
 
 .main { padding: 28px 32px 60px; min-width: 0; }
@@ -180,6 +194,10 @@ textarea { resize: vertical; }
   .app { grid-template-columns: 1fr; }
   .side { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 10px; padding: 12px; position: static; height: auto; overflow: visible; }
   .side-nav { display: flex; gap: 4px; flex-wrap: wrap; }
+  /* On narrow screens the groups flow as one row of links; headings would only add height. */
+  .nav-group { display: contents; }
+  .nav-heading { display: none; }
+  .nav-quick { margin: 0 6px 0 0; }
   .logout { margin-top: 0; margin-left: auto; }
   .side-brand small { display: none; }
   .main { padding: 20px 16px 60px; }
@@ -448,3 +466,31 @@ meter.bar::-moz-meter-bar { background: var(--brand); border-radius: 999px; }
 
 /* Inline SVG icons (App\Core\Icon): sized by font-size, coloured by the text colour */
 .icon { display: inline-block; vertical-align: -0.125em; flex: none; overflow: visible; }
+
+/* Blog editor */
+.blog-grid { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 20px; align-items: start; }
+.blog-main.form-card, .blog-side .form-card { max-width: none; }
+.blog-side { display: grid; gap: 16px; position: sticky; top: 16px; }
+.blog-main input[name="title"] { font-size: 1.25rem; font-weight: 700; }
+.editor-field { display: grid; gap: 6px; font-weight: 600; font-size: 0.9rem; }
+.rich-editor { background: #fff; font-weight: 400; }
+.rich-editor.short .ql-editor { min-height: 160px; }
+.rich-editor .ql-editor { min-height: 420px; font-size: 1rem; line-height: 1.65; font-family: inherit; }
+.rich-editor .ql-editor h2 { font-size: 1.4rem; margin: 1.2em 0 0.4em; }
+.rich-editor .ql-editor h3 { font-size: 1.15rem; margin: 1em 0 0.3em; }
+.ql-toolbar.ql-snow, .ql-container.ql-snow { border-color: var(--line); }
+.ql-toolbar.ql-snow { border-radius: 8px 8px 0 0; background: #fafbfc; position: sticky; top: 0; z-index: 2; }
+.ql-container.ql-snow { border-radius: 0 0 8px 8px; }
+.has-error .ql-container.ql-snow, .has-error .ql-toolbar.ql-snow { border-color: var(--danger); }
+.form-actions.stacked { flex-direction: column; align-items: stretch; }
+.form-actions.stacked button { width: 100%; justify-content: center; }
+.cover-preview { width: 100%; aspect-ratio: 1200 / 630; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); margin-bottom: 8px; }
+.cover-thumb { width: 64px; height: 36px; object-fit: cover; border-radius: 4px; border: 1px solid var(--line); }
+.char-count { font-weight: 400; font-size: 0.8rem; color: var(--muted); justify-self: end; }
+.char-count.over { color: #b54708; }
+.pill.scheduled { background: #e8eefc; color: #1f3d6b; }
+.danger-zone { margin-top: 24px; }
+@media (max-width: 1000px) {
+  .blog-grid { grid-template-columns: 1fr; }
+  .blog-side { position: static; }
+}

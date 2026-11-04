@@ -18,6 +18,7 @@ $action = $job === null ? '/admin/jobs' : "/admin/jobs/{$job->id}";
   <h1><?= $job === null ? 'New job' : 'Edit job' ?></h1>
   <div class="head-actions">
     <a class="btn-ghost" href="<?= e($job === null ? '/admin/jobs' : "/admin/jobs/{$job->id}") ?>">← <?= $job === null ? 'All jobs' : 'Job details' ?></a>
+    <?php if ($job !== null): ?><a class="btn-ghost" href="/admin/jobs/new">+ New job</a><?php endif; ?>
   </div>
 </header>
 

@@ -11,6 +11,7 @@ enum PageType: string
     case Category = 'category';
     case City = 'city';
     case Job = 'job';
+    case Blog = 'blog';
     case Page = 'page';
 
     public function label(): string
@@ -20,6 +21,7 @@ enum PageType: string
             self::Category => 'Category pages',
             self::City => 'City pages',
             self::Job => 'Job pages',
+            self::Blog => 'Blog articles',
             self::Page => 'Other pages',
         };
     }

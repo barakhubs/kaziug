@@ -9,6 +9,7 @@ use App\Core\Database\DbTime;
 use App\Core\Format;
 use App\Domain\Category;
 use App\Domain\Job;
+use App\Services\Contracts\BlogReaderInterface;
 use App\Services\Contracts\CategoryServiceInterface;
 use App\Services\Contracts\JobSearchServiceInterface;
 use App\Services\Contracts\SettingsReaderInterface;
@@ -32,6 +33,7 @@ final class SiteFiles
         private readonly SettingsReaderInterface $settings,
         private readonly JobSearchServiceInterface $jobs,
         private readonly CategoryServiceInterface $categories,
+        private readonly BlogReaderInterface $blog,
     ) {
     }
 
@@ -58,6 +60,7 @@ final class SiteFiles
             [$this->url('/terms'), null, 'yearly', '0.2'],
             [$this->url('/cookies'), null, 'yearly', '0.2'],
             [$this->url('/contact'), null, 'yearly', '0.3'],
+            [$this->url('/blog'), null, 'weekly', '0.6'],
         ];
         foreach ($this->activeCategories() as $category) {
             $urls[] = [$this->url('/categories/' . $category->slug), null, 'daily', '0.7'];
@@ -67,6 +70,9 @@ final class SiteFiles
         }
         foreach ($this->jobs->sitemapEntries() as $entry) {
             $urls[] = [$this->url('/jobs/' . $entry['slug']), DbTime::fromDb($entry['updated_at'])?->format(DATE_ATOM), 'weekly', '0.8'];
+        }
+        foreach ($this->blog->sitemapEntries() as $entry) {
+            $urls[] = [$this->url('/blog/' . $entry['slug']), DbTime::fromDb($entry['updated_at'])?->format(DATE_ATOM), 'monthly', '0.6'];
         }
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n" . '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
@@ -95,6 +101,7 @@ final class SiteFiles
             . '- [About us](' . $this->url('/about') . "): who runs the site and what it offers\n"
             . '- [Contact](' . $this->url('/contact') . ")\n"
             . '- [Jobs feed (RSS)](' . $this->url('/jobs.rss') . "): the newest " . self::FEED_SIZE . " open jobs\n"
+            . '- [Career advice blog](' . $this->url('/blog') . "): articles for job seekers in Uganda\n"
             . '- [Sitemap](' . $this->url('/sitemap.xml') . ")\n";
 
         $cities = $this->jobs->cities();
@@ -118,6 +125,13 @@ final class SiteFiles
             foreach ($latest as $job) {
                 $out .= "- [{$job->title} at {$job->company}](" . $this->url('/jobs/' . $job->slug) . '): '
                     . Format::jobFacts($job) . ' Posted ' . Format::date($job->publishedAt) . ".\n";
+            }
+        }
+        $articles = $this->blog->latest(20);
+        if ($articles !== []) {
+            $out .= "\n## Articles\n\n";
+            foreach ($articles as $post) {
+                $out .= "- [{$post->title}](" . $this->url('/blog/' . $post->slug) . '): ' . $post->description() . "\n";
             }
         }
         if ($site->contactEmail !== '' || $site->hasWhatsapp()) {

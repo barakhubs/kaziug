@@ -22,6 +22,7 @@ final class RouteSmokeTest extends AdminHttpTestCase
         $this->container->get(SeedCommand::class)->run([], new Io([], echo: false));
         $this->db->execute("INSERT INTO subscribers (email, status, unsubscribe_token) VALUES ('s@x.ug', 'active', ?)", [str_repeat('k', 43)]);
         $this->post('/admin/newsletters', ['subject' => 'Smoke', 'body_html' => '<p>x</p>']);
+        $this->db->execute("INSERT INTO blog_posts (title, slug, body_html, status, published_at) VALUES ('Smoke', 'smoke', '<p>x</p>', 'published', NOW(6))");
     }
 
     /** @return list<string> concrete paths for every GET route */
@@ -35,8 +36,13 @@ final class RouteSmokeTest extends AdminHttpTestCase
                 '/admin/newsletters/' => (string) $this->db->fetchValue('SELECT min(id) FROM newsletters'),
                 '/admin/companies/' => (string) $this->db->fetchValue('SELECT min(id) FROM companies'),
                 '/media/companies/' => (string) $this->db->fetchValue('SELECT min(id) FROM companies'),
+                '/admin/blog/' => (string) $this->db->fetchValue('SELECT min(id) FROM blog_posts'),
+                '/media/blog/' => (string) $this->db->fetchValue('SELECT min(id) FROM blog_posts'),
+                '/admin/popups/' => '1',
+                '/media/popups/' => '1',
             ],
             'slug' => [
+                '/blog/' => 'smoke',
                 '/jobs/' => (string) $this->db->fetchValue('SELECT min(slug) FROM jobs'),
                 '/categories/' => 'technology',
                 '/jobs-in/' => 'kampala',

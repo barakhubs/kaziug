@@ -43,6 +43,7 @@ $fullTitle = isset($pageTitle) && $pageTitle !== '' ? $pageTitle . ' · ' . $sit
         <img src="<?= e($site->logoPath()) ?>" alt="<?= e($site->siteName) ?>" class="brand-logo" width="134" height="48">
       </a>
       <nav class="topnav" aria-label="Main">
+        <a href="/blog"<?= str_starts_with($currentPath ?? '', '/blog') ? ' class="active"' . (($currentPath ?? '') === '/blog' ? ' aria-current="page"' : '') : '' ?>>Blog</a>
         <a href="/cv-help"<?= ($currentPath ?? '') === '/cv-help' ? ' class="active" aria-current="page"' : '' ?>>CV help</a>
         <a href="/about"<?= ($currentPath ?? '') === '/about' ? ' class="active" aria-current="page"' : '' ?>>About</a>
         <a href="/contact"<?= ($currentPath ?? '') === '/contact' ? ' class="active" aria-current="page"' : '' ?>>Contact</a>
@@ -56,6 +57,9 @@ $fullTitle = isset($pageTitle) && $pageTitle !== '' ? $pageTitle . ' · ' . $sit
   <?= $this->insert('partials/public_footer') ?>
   <?php if ($site->hasWhatsappChannel()): ?>
     <a class="wa-float" href="<?= e($site->whatsappChannelUrl) ?>" target="_blank" rel="noopener" aria-label="Join our WhatsApp channel"><?= \App\Core\Icon::svg('brands/whatsapp') ?><span>Join our channel</span></a>
+  <?php endif; ?>
+  <?php if (($marketingPopup ?? null) !== null): ?>
+    <?= $this->insert('partials/marketing_popup', ['popup' => $marketingPopup]) ?>
   <?php endif; ?>
 </body>
 </html>

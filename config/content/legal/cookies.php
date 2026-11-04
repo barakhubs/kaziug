@@ -40,6 +40,7 @@ return [
                 'head' => ['Name', 'Purpose', 'How long it lasts'],
                 'rows' => [
                     ['kazi-saved-jobs (local storage)', 'Remembers the jobs you save with the star, so you can find them again. It stays on your device; we only receive the list of saved job numbers when you open the Saved jobs page.', 'Until you remove the jobs or clear your browser data'],
+                    ['kazi-popup-seen (local storage)', 'Remembers which announcement popup you have already seen, so it is shown to you only once. It holds only the popup’s number, stays on your device and is never sent to us.', 'Until you clear your browser data'],
                 ],
             ],
         ],

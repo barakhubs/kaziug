@@ -6,11 +6,13 @@ use App\Controllers\Admin\AccountController;
 use App\Controllers\Admin\AnalyticsController;
 use App\Controllers\Admin\AuditLogController;
 use App\Controllers\Admin\AuthController;
+use App\Controllers\Admin\BlogController as AdminBlogController;
 use App\Controllers\Admin\CategoriesController;
 use App\Controllers\Admin\CompaniesController;
 use App\Controllers\Admin\DashboardController;
 use App\Controllers\Admin\JobsController;
 use App\Controllers\Admin\NewslettersController;
+use App\Controllers\Admin\PopupsController;
 use App\Controllers\Admin\SiteSettingsController;
 use App\Controllers\Admin\SmtpSettingsController;
 use App\Controllers\Admin\SocialProfilesController;
@@ -19,6 +21,8 @@ use App\Controllers\Public\SubscriptionController;
 use App\Controllers\Public\AboutController;
 use App\Controllers\Public\ApplyController;
 use App\Controllers\Public\LegalPageController;
+use App\Controllers\Public\BlogController;
+use App\Controllers\Public\BlogCoverController;
 use App\Controllers\Public\CategoryController;
 use App\Controllers\Public\CityController;
 use App\Controllers\Public\CompanyLogoController;
@@ -28,11 +32,13 @@ use App\Controllers\Public\HealthController;
 use App\Controllers\Public\JobListController;
 use App\Controllers\Public\JobShowController;
 use App\Controllers\Public\MediaController;
+use App\Controllers\Public\PopupImageController;
 use App\Controllers\Public\SavedJobsController;
 use App\Core\Http\Router;
 use App\Middleware\Authenticate;
 use App\Middleware\IdleTimeout;
 use App\Middleware\RecordPageView;
+use App\Middleware\ShareMarketingPopup;
 use App\Middleware\SharePublicData;
 
 /*
@@ -44,8 +50,11 @@ return static function (Router $r): void {
     $r->group('', [SharePublicData::class], function (Router $r): void {
         // Page views are counted here only: the subscription pages below have tokens in their URLs.
         $r->group('', [RecordPageView::class], function (Router $r): void {
-            $r->get('/', [JobListController::class, 'index']);
-            $r->get('/jobs/{slug:[a-z0-9-]+}', [JobShowController::class, 'show']);
+            // The marketing popup may appear on these two pages only.
+            $r->group('', [ShareMarketingPopup::class], function (Router $r): void {
+                $r->get('/', [JobListController::class, 'index']);
+                $r->get('/jobs/{slug:[a-z0-9-]+}', [JobShowController::class, 'show']);
+            });
             $r->get('/categories/{slug:[a-z0-9-]+}', [CategoryController::class, 'show']);
             $r->get('/jobs-in/{slug:[a-z0-9-]+}', [CityController::class, 'show']);
             $r->get('/saved', [SavedJobsController::class, 'index']);
@@ -56,6 +65,8 @@ return static function (Router $r): void {
             $r->get('/cookies', [LegalPageController::class, 'cookies']);
             $r->get('/contact', [ContactController::class, 'showContact']);
             $r->get('/cv-help', [ContactController::class, 'showCvHelp']);
+            $r->get('/blog', [BlogController::class, 'index']);
+            $r->get('/blog/{slug:[a-z0-9-]+}', [BlogController::class, 'show']);
         });
         $r->post('/contact', [ContactController::class, 'sendContact']);
         $r->post('/cv-help', [ContactController::class, 'sendCvHelp']);
@@ -75,8 +86,11 @@ return static function (Router $r): void {
     $r->get('/sitemap.xml', [SiteFilesController::class, 'sitemap']);
     $r->get('/llms.txt', [SiteFilesController::class, 'llms']);
     $r->get('/jobs.rss', [SiteFilesController::class, 'rss']);
+    $r->get('/blog.rss', [SiteFilesController::class, 'blogRss']);
     $r->get('/media/logo', [MediaController::class, 'logo']);
     $r->get('/media/companies/{id:\d+}/logo', [CompanyLogoController::class, 'show']);
+    $r->get('/media/blog/{id:\d+}/cover', [BlogCoverController::class, 'show']);
+    $r->get('/media/popups/{id:\d+}/image', [PopupImageController::class, 'show']);
 
     // --- Admin: sign-in (no auth) --------------------------------------------------------
     $r->get('/admin/login', [AuthController::class, 'showLogin']);
@@ -106,6 +120,24 @@ return static function (Router $r): void {
         $r->post('/categories/{id:\d+}/toggle', [CategoriesController::class, 'toggle']);
         $r->post('/categories/{id:\d+}/move', [CategoriesController::class, 'move']);
         $r->post('/categories/{id:\d+}/delete', [CategoriesController::class, 'delete']);
+
+        $r->get('/blog', [AdminBlogController::class, 'index']);
+        $r->get('/blog/new', [AdminBlogController::class, 'create']);
+        $r->post('/blog', [AdminBlogController::class, 'store']);
+        $r->get('/blog/{id:\d+}/edit', [AdminBlogController::class, 'edit']);
+        $r->post('/blog/{id:\d+}', [AdminBlogController::class, 'update']);
+        $r->post('/blog/{id:\d+}/delete', [AdminBlogController::class, 'delete']);
+        $r->get('/blog/{id:\d+}/cover', [BlogCoverController::class, 'showForAdmin']);
+
+        $r->get('/popups', [PopupsController::class, 'index']);
+        $r->get('/popups/new', [PopupsController::class, 'create']);
+        $r->post('/popups', [PopupsController::class, 'store']);
+        $r->get('/popups/{id:\d+}/edit', [PopupsController::class, 'edit']);
+        $r->post('/popups/{id:\d+}', [PopupsController::class, 'update']);
+        $r->post('/popups/{id:\d+}/activate', [PopupsController::class, 'activate']);
+        $r->post('/popups/{id:\d+}/deactivate', [PopupsController::class, 'deactivate']);
+        $r->post('/popups/{id:\d+}/delete', [PopupsController::class, 'delete']);
+        $r->get('/popups/{id:\d+}/image', [PopupImageController::class, 'showForAdmin']);
 
         $r->get('/companies', [CompaniesController::class, 'index']);
         $r->get('/companies/search', [CompaniesController::class, 'search']);
